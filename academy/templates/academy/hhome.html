@@ -1,0 +1,1362 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Brilliant Mind Academy - Your pathway to academic excellence.">
+    <title>Home - Brilliant Mind Academy</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --blue: #123b78;
+            --dark-blue: #071d40;
+            --light-blue: #e8f1ff;
+            --yellow: #facc15;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            animation: academyPageEnter .9s ease both;
+        }
+
+        @keyframes academyPageEnter {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes academyFloat {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .academy-float { animation: academyFloat 5s ease-in-out infinite; }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            border: 2px solid var(--blue);
+            border-radius: 10px;
+            color: var(--blue);
+            font-weight: 700;
+            transition: .3s;
+        }
+
+        .btn:hover { background: var(--blue); color: white; }
+
+        section { position: relative; }
+
+        /* PROMOTIONAL POPUP */
+
+        .promo-popup {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: min(780px, calc(100vw - 30px));
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+            z-index: 99999;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(35px) scale(.96);
+            transition: .4s ease;
+        }
+
+        .promo-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .promo-container {
+            display: flex;
+            align-items: stretch;
+            padding: 30px 20px 22px;
+            gap: 15px;
+        }
+
+        .promo-item {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+            padding: 8px 5px;
+        }
+
+        .promo-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 13px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .whatsapp-item .promo-icon { color: #25D366; background: #e7fbed; }
+        .telegram-item .promo-icon { color: #229ED9; background: #e5f5fc; }
+        .app-item .promo-icon { color: #174A8B; background: #e8f1ff; }
+
+        .promo-item h3 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #102b50;
+            margin-bottom: 8px;
+        }
+
+        .promo-item p {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .promo-btn {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 5px;
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: 800;
+            text-decoration: none;
+            text-align: center;
+            transition: .3s;
+        }
+
+        .promo-btn:hover { transform: translateY(-3px); opacity: .9; }
+        .whatsapp-btn { background: #25D366; color: white; }
+        .telegram-btn { background: #229ED9; color: white; }
+        .app-btn { background: #174A8B; color: white; }
+
+        .promo-divider {
+            width: 1px;
+            background: #e2e8f0;
+        }
+
+        .promo-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            width: 29px;
+            height: 29px;
+            border: none;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .promo-close:hover { background: #e2e8f0; }
+
+        /* COMMUNITY POPUP */
+
+        .community-popup {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-40%) scale(.9);
+            width: 350px;
+            max-width: calc(100% - 30px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all .5s ease;
+        }
+
+        .community-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .popup-content {
+            position: relative;
+            background: rgba(255,255,255,.97);
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+            text-align: center;
+            border: 1px solid rgba(37,99,235,.15);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            border: none;
+            background: #eef2ff;
+            color: #1e40af;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 23px;
+            cursor: pointer;
+        }
+
+        .popup-label {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            padding: 7px 13px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .popup-content h3 {
+            color: #0f172a;
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .popup-content p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .popup-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 13px 18px;
+            border-radius: 10px;
+            color: white !important;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none !important;
+            transition: .3s ease;
+        }
+
+        .popup-btn:hover { transform: translateY(-3px); filter: brightness(1.08); }
+
+        /* COURSES */
+
+        .course-card {
+            position: relative;
+            padding: 28px;
+            border: 1px solid #dce8f8;
+            border-radius: 20px;
+            background: linear-gradient(145deg,#fff,#f8fbff);
+            box-shadow: 0 8px 25px rgba(6,63,47,.045);
+            transition: .3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-7px);
+            border-color: #a9c9f2;
+            box-shadow: 0 18px 38px rgba(6,63,47,.11);
+        }
+
+        .course-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            margin-bottom: 22px;
+            border-radius: 16px;
+            font-size: 25px;
+        }
+
+        .course-label {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #174a8b;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+        }
+
+        .course-card h3 {
+            margin-bottom: 12px;
+            color: #102b50;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .course-card p {
+            min-height: 75px;
+            margin-bottom: 22px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .course-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #174a8b;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .course-link i { transition: .25s; }
+        .course-card:hover .course-link i { transform: translateX(5px); }
+
+        /* TUTORS */
+
+        .tutor-slider {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .tutor-slider::-webkit-scrollbar { display: none; }
+
+        .tutor-card {
+            position: relative;
+            flex: 0 0 calc(33.333% - 11px);
+            border-radius: 15px;
+            overflow: hidden;
+            height: 400px;
+            min-width: 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,.1);
+        }
+
+        .tutor-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tutor-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent,rgba(5,20,45,.95));
+            color: white;
+            padding: 25px 16px 18px;
+            box-sizing: border-box;
+        }
+
+        .tutor-info h3 { color: white; font-size: 17px; font-weight: 800; }
+        .tutor-info p { color: #dbeafe; font-size: 13px; }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #123b78;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 43px;
+            height: 43px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        }
+
+        .slider-arrow:hover { background: #facc15; color: #123b78; }
+
+        /* TESTIMONIALS */
+
+        .testimonial-slider { display: flex; transition: transform .7s ease; }
+
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 33.333%;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .testimonial-inner {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            text-align: center;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .testimonial-inner img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 4px solid #2563eb;
+        }
+
+        .testimonial-stars { color: #f5c518; font-size: 20px; margin-bottom: 12px; }
+
+        @media(max-width:768px) {
+            .tutor-card { flex: 0 0 100%; height: 330px; }
+            .testimonial-card { width: 100%; }
+            .course-card p { min-height: auto; }
+
+            .community-popup {
+                position: absolute;
+                top: auto;
+                bottom: 25px;
+                left: 50%;
+                right: auto;
+                width: 330px;
+                transform: translate(-50%,20px) scale(.95);
+            }
+
+            .community-popup.show { transform: translate(-50%,0) scale(1); }
+            .popup-content { padding: 25px 20px; }
+            .popup-content h3 { font-size: 20px; }
+        }
+
+        @media(max-width:600px) {
+            .promo-popup {
+                right: 10px;
+                bottom: 12px;
+                width: calc(100vw - 20px);
+            }
+
+            .promo-container { padding: 32px 9px 15px; gap: 7px; }
+            .promo-item { padding: 5px 2px; }
+            .promo-item h3 { font-size: 11px; }
+            .promo-item p { font-size: 10px; line-height: 1.5; }
+            .promo-btn { font-size: 9px; padding: 10px 3px; }
+            .promo-icon { width: 38px; height: 38px; font-size: 20px; }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- PROMOTIONAL POPUP -->
+<div id="promoPopup" class="promo-popup">
+    <button class="promo-close" onclick="closePromo()" aria-label="Close popup">&times;</button>
+
+    <div class="promo-container">
+
+        <div class="promo-item whatsapp-item">
+            <div class="promo-icon"><i class="fab fa-whatsapp"></i></div>
+            <h3>Join WhatsApp</h3>
+            <p>Connect with fellow learners and receive important academic updates.</p>
+            <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_LINK" target="_blank" rel="noopener noreferrer" class="promo-btn whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> Join Community
+            </a>
+        </div>
+
+        <div class="promo-divider"></div>
+
+        <div class="promo-item telegram-item">
+            <div class="promo-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h3>Join Telegram</h3>
+            <p>Get academic updates, announcements, and learning resources.</p>
+            <a href="https://t.me/YOUR_TELEGRAM_USERNAME" target="_blank" rel="noopener noreferrer" class="promo-btn telegram-btn">
+                <i class="fab fa-telegram-plane"></i> Join Telegram
+            </a>
+        </div>
+
+        <div class="promo-divider"></div>
+
+        <div class="promo-item app-item">
+            <div class="promo-icon"><i class="fas fa-mobile-alt"></i></div>
+            <h3>Download App</h3>
+            <p>Access learning materials and enjoy a better learning experience.</p>
+            <a href="#" class="promo-btn app-btn">
+                <i class="fas fa-download"></i> Download App
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- HERO SECTION -->
+<section id="home" class="relative w-full min-h-screen overflow-hidden bg-blue-950">
+
+    <!-- COMMUNITY POPUP -->
+    <div id="communityPopup" class="community-popup">
+        <div class="popup-content">
+
+            <button class="popup-close" id="closePopup" aria-label="Close popup">&times;</button>
+
+            <span class="popup-label">JOIN OUR COMMUNITY</span>
+
+            <h3>Stay Connected with Us!</h3>
+
+            <p>Join our online community for learning resources, academic updates, announcements and educational support.</p>
+
+            <div class="popup-buttons">
+                <a href="https://wa.me/234XXXXXXXXXX" target="_blank" rel="noopener noreferrer" class="popup-btn whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> Join WhatsApp
+                </a>
+
+                <a href="https://t.me/YOUR_TELEGRAM_USERNAME" target="_blank" rel="noopener noreferrer" class="popup-btn telegram-btn">
+                    <i class="fab fa-telegram"></i> Join Telegram
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND VIDEO -->
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+        <source src="assets/videos/hero-video.mp4" type="video/mp4">
+    </video>
+
+    <!-- OVERLAY -->
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-950/65 to-blue-950/50 z-[1]"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto min-h-screen px-5 sm:px-8 lg:px-12 pt-32 pb-16 flex items-center">
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_270px] gap-10 xl:gap-16 items-center w-full">
+
+            <div class="text-center lg:text-left max-w-3xl mx-auto lg:mx-0" data-aos="fade-right">
+
+                <div class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md px-4 py-2 mb-6">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <span class="text-xs sm:text-sm font-semibold tracking-wide text-blue-100">
+                        Your Pathway to Academic Excellence
+                    </span>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-6 leading-tight">
+                    Welcome to
+                    <span class="block bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                        Brilliant Mind Academy
+                    </span>
+                    <span class="block text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-100 mt-4">
+                        Learn Today. Excel Tomorrow.
+                    </span>
+                </h1>
+
+                <p class="text-base sm:text-lg lg:text-xl text-blue-50/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    Empowering students with quality education, experienced tutors and effective learning resources to achieve academic excellence.
+                </p>
+
+                <div class="flex flex-wrap justify-center lg:justify-start gap-3 mt-6">
+                    <a href="#download" class="inline-flex items-center gap-2 rounded-xl font-bold bg-gradient-to-r from-yellow-400 to-amber-500 text-blue-950 shadow-xl hover:-translate-y-1 transition px-7 py-4">
+                        <i class="fas fa-download"></i> Download App
+                    </a>
+
+                    <a href="#about" class="inline-flex items-center gap-2 rounded-xl font-bold text-white border border-white/40 bg-white/5 hover:bg-white hover:text-blue-950 transition px-7 py-4">
+                        <i class="fas fa-play"></i> Learn More
+                    </a>
+                </div>
+            </div>
+
+            <!-- ACADEMIC PROGRAMMES -->
+            <aside class="w-full max-w-sm mx-auto lg:max-w-none" data-aos="fade-left">
+
+                <div class="rounded-3xl p-[1px] bg-gradient-to-br from-yellow-300 via-white/20 to-blue-400/50 shadow-2xl">
+
+                    <div class="rounded-3xl bg-blue-950/85 backdrop-blur-2xl border border-white/10 p-6">
+
+                        <div class="text-center mb-6">
+                            <div class="mx-auto mb-3 flex items-center justify-center w-12 h-12 rounded-2xl bg-yellow-400/15 border border-yellow-300/30">
+                                <i class="fas fa-graduation-cap text-yellow-400 text-xl"></i>
+                            </div>
+
+                            <h2 class="text-xl font-black text-white">Academic Programmes</h2>
+                            <p class="text-xs text-blue-200 mt-1">Your journey starts here</p>
+                        </div>
+
+                        <div class="flex flex-col gap-3">
+
+                            <div class="flex items-center gap-3 rounded-2xl p-3.5 bg-white/[0.06] border border-white/10">
+                                <div class="w-11 h-11 rounded-xl bg-yellow-400/15 flex items-center justify-center text-yellow-300">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-white">WAEC</h3>
+                                    <p class="text-xs text-blue-200">Secondary School Exams</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 rounded-2xl p-3.5 bg-white/[0.06] border border-white/10">
+                                <div class="w-11 h-11 rounded-xl bg-yellow-400/15 flex items-center justify-center text-yellow-300">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-white">JAMB</h3>
+                                    <p class="text-xs text-blue-200">University Entrance</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 rounded-2xl p-3.5 bg-white/[0.06] border border-white/10">
+                                <div class="w-11 h-11 rounded-xl bg-yellow-400/15 flex items-center justify-center text-yellow-300">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-white">A-LEVEL</h3>
+                                    <p class="text-xs text-blue-200">IJMB & JUPEB</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 rounded-2xl p-3.5 bg-white/[0.06] border border-white/10">
+                                <div class="w-11 h-11 rounded-xl bg-yellow-400/15 flex items-center justify-center text-yellow-300">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-white">UNIVERSITY</h3>
+                                    <p class="text-xs text-blue-200">Undergraduate Tutorials</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-white/10 text-center">
+                            <p class="text-xs font-bold text-yellow-300">LEARN TODAY. EXCEL TOMORROW.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ABOUT US -->
+<section id="about" class="py-20 bg-gradient-to-br from-white via-blue-50/30 to-yellow-50/20">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16" data-aos="fade-up">
+
+            <div class="flex items-center justify-center mb-4">
+                <span class="h-px w-16 bg-blue-600 mr-3"></span>
+                <span class="text-2xl font-black uppercase tracking-wider text-[#164A9C]">About Us</span>
+                <span class="h-px w-16 bg-blue-600 ml-3"></span>
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-black text-blue-900 mb-6">
+                About Brilliant Mind Academy
+                <span class="block text-blue-700">Building Minds. Inspiring Excellence.</span>
+            </h2>
+
+            <p class="text-lg text-blue-700 max-w-3xl mx-auto leading-relaxed">
+                Brilliant Mind Academy is committed to providing quality education through effective teaching, practical learning and academic support.
+            </p>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100 transition hover:-translate-y-2" data-aos="fade-up">
+                <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-blue-100 text-blue-700 text-3xl">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="text-xl font-bold text-blue-900 mb-4">Quality Education</h3>
+                <p class="text-blue-600 leading-relaxed">We provide structured and engaging lessons that help students understand challenging academic concepts.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100 transition hover:-translate-y-2" data-aos="fade-up">
+                <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-yellow-100 text-yellow-700 text-3xl">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="text-xl font-bold text-blue-900 mb-4">Experienced Tutors</h3>
+                <p class="text-blue-600 leading-relaxed">Learn from dedicated educators who are passionate about helping students achieve their academic goals.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100 transition hover:-translate-y-2" data-aos="fade-up">
+                <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-green-100 text-green-700 text-3xl">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3 class="text-xl font-bold text-blue-900 mb-4">Academic Excellence</h3>
+                <p class="text-blue-600 leading-relaxed">We inspire confidence, discipline and consistent academic improvement among our learners.</p>
+            </div>
+
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl p-8 md:p-12 text-white grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-20">
+
+            <div data-aos="fade-up">
+                <div class="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">500+</div>
+                <div class="text-blue-100">Students Reached</div>
+            </div>
+
+            <div data-aos="fade-up">
+                <div class="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">20+</div>
+                <div class="text-blue-100">Dedicated Tutors</div>
+            </div>
+
+            <div data-aos="fade-up">
+                <div class="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">10+</div>
+                <div class="text-blue-100">Courses</div>
+            </div>
+
+            <div data-aos="fade-up">
+                <div class="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">100%</div>
+                <div class="text-blue-100">Commitment</div>
+            </div>
+
+        </div>
+
+        <!-- VISION AND MISSION -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100" data-aos="fade-up">
+                <h3 class="text-2xl font-bold text-blue-900 mb-4">Our Vision</h3>
+                <p class="text-blue-700 leading-relaxed">
+                    To become a leading educational platform that nurtures brilliant minds and empowers learners to achieve excellence in their academic and professional pursuits.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100" data-aos="fade-up" data-aos-delay="150">
+                <h3 class="text-2xl font-bold text-blue-900 mb-4">Our Mission</h3>
+                <p class="text-blue-700 leading-relaxed">
+                    To deliver accessible, engaging and high-quality education through innovative teaching methods, dedicated tutors and effective learning resources.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- AVAILABLE COURSES -->
+<section id="courses" class="bg-white py-20 px-5 sm:px-8 lg:px-12">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
+
+            <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-100 px-4 py-2 text-sm font-bold text-blue-800">
+                <i class="fas fa-graduation-cap"></i> LEARN WITH CONFIDENCE
+            </span>
+
+            <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-black text-blue-950">
+                Explore Our <span class="text-blue-700">Courses</span>
+            </h2>
+
+            <p class="mt-4 text-gray-600 text-base sm:text-lg leading-relaxed">
+                Discover courses designed to strengthen your foundation, improve your understanding and help you excel academically.
+            </p>
+
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <article class="course-card" data-aos="fade-up">
+                <div class="course-icon bg-blue-50 text-blue-700"><i class="fas fa-calculator"></i></div>
+                <span class="course-label">MATHEMATICS</span>
+                <h3>General Mathematics</h3>
+                <p>Build strong mathematical foundations through clear explanations, worked examples and practice.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+            <article class="course-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="course-icon bg-blue-50 text-blue-700"><i class="fas fa-atom"></i></div>
+                <span class="course-label">PHYSICAL SCIENCES</span>
+                <h3>Physics</h3>
+                <p>Understand physical principles, solve numerical problems and connect theories with real-life applications.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+            <article class="course-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="course-icon bg-amber-50 text-amber-700"><i class="fas fa-flask"></i></div>
+                <span class="course-label">CHEMICAL SCIENCES</span>
+                <h3>Chemistry</h3>
+                <p>Learn chemical concepts, equations, calculations and essential principles step by step.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+            <article class="course-card" data-aos="fade-up">
+                <div class="course-icon bg-emerald-50 text-emerald-700"><i class="fas fa-dna"></i></div>
+                <span class="course-label">LIFE SCIENCES</span>
+                <h3>Biology</h3>
+                <p>Explore living organisms, biological systems and important concepts through engaging lessons.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+            <article class="course-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="course-icon bg-purple-50 text-purple-700"><i class="fas fa-laptop-code"></i></div>
+                <span class="course-label">COMPUTING</span>
+                <h3>Computer Studies</h3>
+                <p>Develop your understanding of computer fundamentals, digital technology and computing concepts.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+            <article class="course-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="course-icon bg-rose-50 text-rose-700"><i class="fas fa-book-open"></i></div>
+                <span class="course-label">GENERAL STUDIES</span>
+                <h3>General Studies (GST)</h3>
+                <p>Strengthen your academic skills and prepare for university general studies courses.</p>
+                <a href="courses.html" class="course-link">Explore Course <i class="fas fa-arrow-right"></i></a>
+            </article>
+
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="courses.html" class="inline-flex items-center gap-3 rounded-xl bg-blue-800 hover:bg-blue-900 text-white font-bold px-8 py-4 shadow-lg transition hover:-translate-y-1">
+                Explore All Courses <i class="fas fa-arrow-right"></i>
+            </a>
+            <p class="mt-4 text-sm text-gray-500">Find the right course for your academic journey.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- MEET THE FOUNDER -->
+<section id="founder" class="relative overflow-hidden bg-white py-20 sm:py-24">
+
+    <div class="absolute -top-24 -right-20 h-72 w-72 rounded-full bg-blue-100 blur-3xl opacity-70"></div>
+
+    <div class="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:px-12">
+
+        <div class="relative mx-auto w-full max-w-md" data-aos="fade-right">
+
+            <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-blue-700 to-blue-300 opacity-20 blur-xl"></div>
+
+            <div class="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-blue-50 shadow-2xl academy-float">
+                <img src="assets/images/founder.jpg" alt="Founder of Brilliant Mind Academy" class="h-[420px] w-full object-cover">
+            </div>
+
+            <div class="absolute -bottom-6 -right-4 rounded-2xl bg-yellow-400 px-6 py-4 shadow-xl">
+                <p class="text-xs font-black uppercase tracking-widest text-blue-950">Leadership</p>
+                <p class="text-lg font-extrabold text-blue-950">Driven by Purpose</p>
+            </div>
+
+        </div>
+
+        <div class="pt-6 lg:pt-0" data-aos="fade-left">
+
+            <span class="inline-flex rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-xs font-extrabold uppercase tracking-[.2em] text-blue-800">
+                The Person Behind the Vision
+            </span>
+
+            <h2 class="mt-5 text-left text-4xl font-black leading-tight text-blue-950 sm:text-5xl">
+                Meet The <span class="text-blue-700">Founder</span>
+            </h2>
+
+            <p class="mt-5 text-lg leading-relaxed text-slate-600">
+                Brilliant Mind Academy is built on a commitment to making quality learning accessible, engaging and effective. Our founder's vision is to help learners build confidence, master difficult concepts and reach their academic potential.
+            </p>
+
+            <h3 class="mt-7 text-2xl font-extrabold text-blue-950">Damilare O. Adebayo</h3>
+
+            <p class="mt-1 font-semibold text-blue-700">Founder, Brilliant Mind Academy</p>
+
+            <blockquote class="mt-6 border-l-4 border-yellow-400 pl-5 italic leading-relaxed text-slate-600">
+                "Education is not simply about acquiring knowledge; it is about developing minds capable of transforming the world."
+            </blockquote>
+
+            <a href="#tutors" class="mt-8 inline-flex items-center gap-3 rounded-xl bg-blue-800 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-blue-950">
+                Meet the Team <i class="fas fa-arrow-right"></i>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- STUDENT RESULTS -->
+<section id="student-results" class="bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 py-20 text-white">
+
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+
+        <div class="mx-auto mb-12 max-w-3xl text-center" data-aos="fade-up">
+
+            <span class="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[.2em] text-blue-100">
+                Our Impact in Action
+            </span>
+
+            <h2 class="mt-5 text-4xl font-black text-white sm:text-5xl">
+                Our Student <span class="text-yellow-400">Results</span>
+            </h2>
+
+            <p class="mt-4 text-lg leading-relaxed text-blue-100">
+                Celebrating the hard work, progress and academic milestones of our learners.
+            </p>
+
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+            <article class="group overflow-hidden rounded-2xl border border-white/10 bg-white text-blue-950 shadow-xl transition duration-300 hover:-translate-y-2" data-aos="zoom-in">
+                <img src="assets/images/results/student-1.jpg" alt="Student achievement" class="h-52 w-full object-cover">
+                <div class="p-6">
+                    <p class="text-xs font-black uppercase tracking-[.18em] text-blue-600">WAEC</p>
+                    <h3 class="mt-2 text-xl font-extrabold">Student Name</h3>
+                    <p class="mt-2 leading-relaxed text-slate-600">Outstanding performance in the West African Senior School Certificate Examination.</p>
+                    <div class="mt-5 inline-flex rounded-full bg-yellow-100 px-4 py-2 text-sm font-extrabold text-blue-950">Excellent Result</div>
+                </div>
+            </article>
+
+            <article class="group overflow-hidden rounded-2xl border border-white/10 bg-white text-blue-950 shadow-xl transition duration-300 hover:-translate-y-2" data-aos="zoom-in">
+                <img src="assets/images/results/student-2.jpg" alt="Student achievement" class="h-52 w-full object-cover">
+                <div class="p-6">
+                    <p class="text-xs font-black uppercase tracking-[.18em] text-blue-600">JAMB</p>
+                    <h3 class="mt-2 text-xl font-extrabold">Student Name</h3>
+                    <p class="mt-2 leading-relaxed text-slate-600">A remarkable UTME performance achieved through dedication and consistent preparation.</p>
+                    <div class="mt-5 inline-flex rounded-full bg-yellow-100 px-4 py-2 text-sm font-extrabold text-blue-950">300+ Score</div>
+                </div>
+            </article>
+
+            <article class="group overflow-hidden rounded-2xl border border-white/10 bg-white text-blue-950 shadow-xl transition duration-300 hover:-translate-y-2" data-aos="zoom-in">
+                <img src="assets/images/results/student-3.jpg" alt="Student achievement" class="h-52 w-full object-cover">
+                <div class="p-6">
+                    <p class="text-xs font-black uppercase tracking-[.18em] text-blue-600">UNIVERSITY</p>
+                    <h3 class="mt-2 text-xl font-extrabold">Student Name</h3>
+                    <p class="mt-2 leading-relaxed text-slate-600">Recognising an impressive academic achievement through commitment to learning.</p>
+                    <div class="mt-5 inline-flex rounded-full bg-yellow-100 px-4 py-2 text-sm font-extrabold text-blue-950">Academic Excellence</div>
+                </div>
+            </article>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- MEET OUR TUTORS -->
+<section id="tutors" class="py-20 bg-gradient-to-br from-white via-blue-50/30 to-yellow-50/20">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16" data-aos="fade-up">
+
+            <div class="flex items-center justify-center mb-4">
+                <span class="h-px w-16 bg-blue-600 mr-3"></span>
+                <span class="text-2xl font-black uppercase tracking-wider text-blue-700">Meet Our Tutors</span>
+                <span class="h-px w-16 bg-blue-600 ml-3"></span>
+            </div>
+
+            <h2 class="text-4xl font-black text-blue-950">
+                Learn From <span class="text-blue-700">Experienced Tutors</span>
+            </h2>
+
+            <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                Meet the dedicated educators committed to helping students achieve academic excellence.
+            </p>
+        </div>
+
+        <div class="relative">
+
+            <div class="tutor-slider" id="tutorSlider">
+
+                <div class="tutor-card" data-aos="fade-up">
+                    <img src="assets/images/tutors/tutor-1.jpg" alt="Tutor">
+                    <div class="tutor-info">
+                        <h3>Tutor Name</h3>
+                        <p>Senior Mathematics Tutor</p>
+                        <p>Course: Mathematics</p>
+                    </div>
+                </div>
+
+                <div class="tutor-card" data-aos="fade-up">
+                    <img src="assets/images/tutors/tutor-2.jpg" alt="Tutor">
+                    <div class="tutor-info">
+                        <h3>Tutor Name</h3>
+                        <p>Physics Tutor</p>
+                        <p>Course: Physics</p>
+                    </div>
+                </div>
+
+                <div class="tutor-card" data-aos="fade-up">
+                    <img src="assets/images/tutors/tutor-3.jpg" alt="Tutor">
+                    <div class="tutor-info">
+                        <h3>Tutor Name</h3>
+                        <p>Chemistry Tutor</p>
+                        <p>Course: Chemistry</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <button id="prevBtn" class="slider-arrow" style="left:-15px;" aria-label="Previous tutor">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <button id="nextBtn" class="slider-arrow" style="right:-15px;" aria-label="Next tutor">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- STUDENT TESTIMONIALS -->
+<section id="testimonials" class="py-20 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+
+    <div class="text-center mb-16" data-aos="fade-up">
+
+        <div class="flex items-center justify-center mb-4">
+            <span class="h-px w-16 bg-blue-600 mr-3"></span>
+            <span class="text-xl sm:text-2xl font-black uppercase tracking-wider text-blue-700">
+                What Our Students Are Saying
+            </span>
+            <span class="h-px w-16 bg-blue-600 ml-3"></span>
+        </div>
+
+        <h2 class="text-4xl font-black text-blue-950">
+            Real Experiences. <span class="text-blue-700">Real Results.</span>
+        </h2>
+
+        <p class="mt-4 text-slate-600">
+            Hear directly from students who have experienced our learning environment.
+        </p>
+
+    </div>
+
+    <div class="relative max-w-6xl mx-auto overflow-hidden">
+
+        <div id="testimonialSlider" class="testimonial-slider">
+
+            <div class="testimonial-card">
+                <div class="testimonial-inner">
+                    <img src="assets/images/testimonials/student-1.jpg" alt="Student">
+                    <div>
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="text-blue-700 mb-4 text-base leading-relaxed">
+                            "The lessons helped me understand difficult concepts and improve my academic performance."
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-blue-800">Student Name</h4>
+                        <p class="text-blue-600 text-sm">University Student</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-inner">
+                    <img src="assets/images/testimonials/student-2.jpg" alt="Student">
+                    <div>
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="text-blue-700 mb-4 text-base leading-relaxed">
+                            "Brilliant Mind Academy has made learning more interesting, practical and understandable."
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-blue-800">Student Name</h4>
+                        <p class="text-blue-600 text-sm">WAEC Candidate</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-inner">
+                    <img src="assets/images/testimonials/student-3.jpg" alt="Student">
+                    <div>
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="text-blue-700 mb-4 text-base leading-relaxed">
+                            "The tutors are dedicated and explain topics in ways that make difficult subjects easier."
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-blue-800">Student Name</h4>
+                        <p class="text-blue-600 text-sm">JAMB Candidate</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <button id="testimonialPrev" class="slider-arrow" style="left:5px;" aria-label="Previous testimonial">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button id="testimonialNext" class="slider-arrow" style="right:5px;" aria-label="Next testimonial">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+    </div>
+</section>
+
+
+<!-- CALL TO ACTION -->
+<section class="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative overflow-hidden">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+        <div class="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-4 py-2 mb-6">
+            <span class="text-yellow-200 text-sm font-medium">Start Your Academic Journey</span>
+        </div>
+
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+            Your Success
+            <span class="block bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+                Begins Here
+            </span>
+        </h2>
+
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-8 leading-relaxed">
+            Take the next step towards academic excellence. Join Brilliant Mind Academy and discover the difference quality education can make.
+        </p>
+
+        <a href="courses.html" class="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-blue-950 px-10 py-4 font-bold text-lg transition hover:scale-105 shadow-2xl">
+            <i class="fas fa-arrow-right"></i> Get Started
+        </a>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+
+            <div class="text-center group">
+                <div class="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-300 text-2xl">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Quality Learning</h3>
+                <p class="text-blue-200">Learn with structured academic resources.</p>
+            </div>
+
+            <div class="text-center group">
+                <div class="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-300 text-2xl">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Expert Tutors</h3>
+                <p class="text-blue-200">Get guidance from dedicated educators.</p>
+            </div>
+
+            <div class="text-center group">
+                <div class="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-300 text-2xl">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Academic Success</h3>
+                <p class="text-blue-200">Develop the confidence to excel.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- DOWNLOAD OUR APP -->
+<section id="download" class="py-20 bg-gradient-to-br from-yellow-50 via-white to-blue-50/30">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 md:p-16 text-center relative overflow-hidden shadow-2xl">
+
+            <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10">
+
+                <div class="w-20 h-20 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i class="fas fa-download text-4xl text-yellow-400"></i>
+                </div>
+
+                <h2 class="font-black text-4xl md:text-5xl text-white mb-6">
+                    Download Our
+                    <span class="block text-yellow-400">Mobile App</span>
+                </h2>
+
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Access learning materials and enjoy a better learning experience wherever you are.
+                </p>
+
+                <a href="#" class="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-blue-950 px-10 py-4 rounded-full font-bold text-lg transition hover:scale-105 shadow-2xl">
+                    <i class="fas fa-download"></i> Download App
+                </a>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-2xl mx-auto">
+
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-book-open text-yellow-400 text-2xl"></i>
+                        <div class="text-left">
+                            <h4 class="font-bold text-white">Learning Resources</h4>
+                            <p class="text-blue-200 text-sm">Access educational materials.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-mobile-alt text-yellow-400 text-2xl"></i>
+                        <div class="text-left">
+                            <h4 class="font-bold text-white">Learn Anywhere</h4>
+                            <p class="text-blue-200 text-sm">Study conveniently on your device.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="bg-blue-950 text-white py-10">
+    <div class="max-w-7xl mx-auto px-5 text-center">
+        <h2 class="text-2xl font-black text-white">BRILLIANT MIND ACADEMY</h2>
+        <p class="mt-3 text-blue-200">Training Scientific Minds for World Development.</p>
+
+        <div class="flex justify-center gap-6 mt-6 text-xl">
+            <a href="https://facebook.com/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/234XXXXXXXXXX" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://t.me/YOUR_TELEGRAM_USERNAME" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+        </div>
+
+        <p class="mt-8 text-sm text-blue-300">
+            &copy; <span id="currentYear"></span> Brilliant Mind Academy. All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
+
+<!-- AOS SCRIPT -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Promotional popup
+    const promoPopup = document.getElementById("promoPopup");
+
+    if (promoPopup) {
+        setTimeout(() => {
+            promoPopup.classList.add("show");
+        }, 2000);
+    }
+
+    window.closePromo = function () {
+        promoPopup?.classList.remove("show");
+    };
+
+
+    // Community popup
+    const communityPopup = document.getElementById("communityPopup");
+    const closePopup = document.getElementById("closePopup");
+
+    if (communityPopup) {
+        setTimeout(() => {
+            communityPopup.classList.add("show");
+        }, 1500);
+    }
+
+    closePopup?.addEventListener("click", function () {
+        communityPopup?.classList.remove("show");
+    });
+
+
+    // AOS animations
+    if (window.AOS) {
+        AOS.init({
+            duration: 900,
+            easing: "ease-out-cubic",
+            once: true,
+            mirror: false,
+            offset: 70,
+            disable: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        });
+
+        AOS.refreshHard();
+    }
+
+
+    // Tutor slider
+    const tutorSlider = document.getElementById("tutorSlider");
+    const nextTutor = document.getElementById("nextBtn");
+    const prevTutor = document.getElementById("prevBtn");
+
+    if (tutorSlider && nextTutor && prevTutor) {
+
+        function scrollTutor(direction) {
+            const card = tutorSlider.querySelector(".tutor-card");
+            if (!card) return;
+
+            tutorSlider.scrollBy({
+                left: direction * (card.offsetWidth + 16),
+                behavior: "smooth"
+            });
+        }
+
+        nextTutor.addEventListener("click", () => scrollTutor(1));
+        prevTutor.addEventListener("click", () => scrollTutor(-1));
+    }
+
+
+    // Testimonial slider
+    const testimonialSlider = document.getElementById("testimonialSlider");
+    const testimonialNext = document.getElementById("testimonialNext");
+    const testimonialPrev = document.getElementById("testimonialPrev");
+
+    if (testimonialSlider && testimonialNext && testimonialPrev) {
+
+        let testimonialIndex = 0;
+
+        function updateTestimonials() {
+
+            const cards = testimonialSlider.querySelectorAll(".testimonial-card");
+            if (!cards.length) return;
+
+            const visibleCards = window.innerWidth <= 768 ? 1 : 3;
+            const maxIndex = Math.max(0, cards.length - visibleCards);
+
+            testimonialIndex = Math.max(0, Math.min(testimonialIndex, maxIndex));
+
+            const cardWidth = cards[0].getBoundingClientRect().width;
+
+            testimonialSlider.style.transform =
+                `translateX(-${testimonialIndex * cardWidth}px)`;
+
+            testimonialPrev.style.display = cards.length > visibleCards ? "block" : "none";
+            testimonialNext.style.display = cards.length > visibleCards ? "block" : "none";
+        }
+
+        testimonialNext.addEventListener("click", function () {
+            const cards = testimonialSlider.querySelectorAll(".testimonial-card");
+            const visibleCards = window.innerWidth <= 768 ? 1 : 3;
+            const maxIndex = Math.max(0, cards.length - visibleCards);
+
+            testimonialIndex = testimonialIndex < maxIndex ? testimonialIndex + 1 : 0;
+            updateTestimonials();
+        });
+
+        testimonialPrev.addEventListener("click", function () {
+            const cards = testimonialSlider.querySelectorAll(".testimonial-card");
+            const visibleCards = window.innerWidth <= 768 ? 1 : 3;
+            const maxIndex = Math.max(0, cards.length - visibleCards);
+
+            testimonialIndex = testimonialIndex > 0 ? testimonialIndex - 1 : maxIndex;
+            updateTestimonials();
+        });
+
+        window.addEventListener("resize", updateTestimonials);
+        updateTestimonials();
+    }
+
+
+    // Automatic year
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+});
+</script>
+
+</body>
+</html>

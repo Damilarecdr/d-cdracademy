@@ -1,0 +1,258 @@
+{% extends "academy/base.html" %}
+
+{% block title %}Create Quiz | {{ lesson.title }}{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <a
+                href="{% url 'tutor_lesson_edit' lesson.id %}"
+                class="back-link"
+            >
+                ← Back to Lesson
+            </a>
+
+            <h1>Create Lesson Quiz</h1>
+
+            <p>
+                {{ course.title }} · {{ lesson.title }}
+            </p>
+        </div>
+    </div>
+
+
+    <div class="quiz-card">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="title">
+                    Quiz Title
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value="{{ request.POST.title|default:'Lesson Quiz' }}"
+                    placeholder="e.g. Algebra Basics Quiz"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="description">
+                    Instructions
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    placeholder="Tell students what they need to know before starting..."
+                >{{ request.POST.description }}</textarea>
+            </div>
+
+
+            <div class="settings-grid">
+
+                <div class="form-group">
+                    <label for="pass_mark">
+                        Pass Mark (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="pass_mark"
+                        name="pass_mark"
+                        value="{{ request.POST.pass_mark|default:'50' }}"
+                        min="0"
+                        max="100"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="time_limit">
+                        Time Limit (minutes)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="time_limit"
+                        name="time_limit"
+                        value="{{ request.POST.time_limit|default:'0' }}"
+                        min="0"
+                    >
+
+                    <small>
+                        Enter 0 for no time limit.
+                    </small>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="max_attempts">
+                        Maximum Attempts
+                    </label>
+
+                    <input
+                        type="number"
+                        id="max_attempts"
+                        name="max_attempts"
+                        value="{{ request.POST.max_attempts|default:'0' }}"
+                        min="0"
+                    >
+
+                    <small>
+                        Enter 0 for unlimited attempts.
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'tutor_lesson_edit' lesson.id %}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Create Quiz
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 35px 24px;
+}
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.back-link {
+    color: #033d30;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-header h1 {
+    margin: 12px 0 5px;
+    font-size: 32px;
+}
+
+.page-header p {
+    color: #6b7280;
+}
+
+.quiz-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #033d30;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #6b7280;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #033d30;
+    color: white;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+@media (max-width: 700px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-card {
+        padding: 20px;
+    }
+}
+
+</style>
+
+{% endblock %}

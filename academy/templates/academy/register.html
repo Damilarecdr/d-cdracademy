@@ -1,0 +1,1161 @@
+
+{% extends "academy/base.html" %}
+{% block title %}Register | D-Cdr Academy{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   D-CDR ACADEMY — REGISTER PAGE
+   PREMIUM BLUE & GOLD THEME
+   ========================================================= */
+
+:root {
+    --edu-deep: #020817;
+    --edu-green: #0B2250;
+    --edu-primary: #174EA6;
+    --edu-light: #3B82F6;
+    --edu-pale: #EFF6FF;
+    --edu-gold: #FACC15;
+    --edu-gold-light: #FFE580;
+
+    --edu-text: #172B4D;
+    --edu-muted: #64748B;
+    --edu-border: rgba(11, 34, 80, 0.10);
+
+    --edu-radius: 16px;
+    --edu-radius-sm: 12px;
+
+    --edu-shadow:
+        0 1px 3px rgba(2, 8, 23, 0.05),
+        0 1px 2px rgba(2, 8, 23, 0.03);
+
+    --edu-shadow-md:
+        0 6px 18px rgba(2, 8, 23, 0.08);
+
+    --edu-shadow-lg:
+        0 12px 34px rgba(2, 8, 23, 0.12);
+
+    --edu-shadow-xl:
+        0 24px 55px rgba(2, 8, 23, 0.16);
+
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================================
+   PAGE WRAPPER
+   ========================================================= */
+
+.auth-page {
+    min-height: calc(100vh - 76px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 2.5rem 1.5rem 3.5rem;
+
+    background:
+        radial-gradient(
+            circle at 12% 12%,
+            rgba(59, 130, 246, 0.10),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 88% 88%,
+            rgba(250, 204, 21, 0.09),
+            transparent 45%
+        ),
+        linear-gradient(
+            180deg,
+            #F8FAFF 0%,
+            #EFF6FF 100%
+        );
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    color: var(--edu-text);
+}
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+
+    padding: 2.25rem 2rem 2rem;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--edu-border);
+    border-radius: 22px;
+
+    box-shadow: var(--edu-shadow-xl);
+
+    position: relative;
+    overflow: hidden;
+
+    animation: authCardIn 0.5s var(--transition-smooth) both;
+}
+
+.auth-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 5px;
+
+    background: linear-gradient(
+        90deg,
+        #020817,
+        #0B2250,
+        #174EA6,
+        #3B82F6,
+        #FACC15
+    );
+}
+
+.auth-card-wide {
+    max-width: 560px;
+}
+
+@keyframes authCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.auth-heading {
+    text-align: center;
+    margin-bottom: 1.85rem;
+}
+
+.auth-heading .eyebrow {
+    display: inline-block;
+
+    padding: 0.35rem 0.75rem;
+    margin-bottom: 0.9rem;
+
+    color: #174EA6;
+
+    background: #EFF6FF;
+
+    border: 1px solid rgba(23, 78, 166, 0.15);
+    border-radius: 999px;
+
+    font-size: 0.68rem;
+    font-weight: 850;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.auth-heading h1 {
+    margin: 0;
+
+    color: var(--edu-deep);
+
+    font-size: clamp(1.5rem, 3.5vw, 1.85rem);
+    font-weight: 950;
+
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+}
+
+.auth-heading p {
+    margin: 0.6rem 0 0;
+
+    color: var(--edu-muted);
+
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.auth-card form > label {
+    display: block;
+
+    margin-top: 0.85rem;
+    margin-bottom: 0.45rem;
+
+    color: var(--edu-deep);
+
+    font-size: 0.82rem;
+    font-weight: 750;
+
+    letter-spacing: -0.005em;
+}
+
+.auth-card form > label:first-of-type {
+    margin-top: 0;
+}
+
+/* =========================================================
+   FORM INPUTS
+   ========================================================= */
+
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="tel"],
+.auth-card select,
+.auth-card textarea {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 0.75rem 1rem;
+
+    color: var(--edu-text);
+    background: #FFFFFF;
+
+    border: 1.5px solid rgba(11, 34, 80, 0.14);
+    border-radius: var(--edu-radius-sm);
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    transition:
+        border-color 0.2s var(--transition-smooth),
+        box-shadow 0.2s var(--transition-smooth),
+        background 0.2s var(--transition-smooth);
+
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.auth-card input::placeholder {
+    color: rgba(100, 116, 139, 0.65);
+}
+
+.auth-card input[type="text"]:hover,
+.auth-card input[type="email"]:hover,
+.auth-card input[type="password"]:hover,
+.auth-card select:hover {
+    border-color: rgba(59, 130, 246, 0.45);
+}
+
+.auth-card input[type="text"]:focus,
+.auth-card input[type="email"]:focus,
+.auth-card input[type="password"]:focus,
+.auth-card select:focus,
+.auth-card textarea:focus {
+    outline: none;
+
+    border-color: var(--edu-light);
+    background: #FFFFFF;
+
+    box-shadow:
+        0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.auth-card .errorlist {
+    list-style: none;
+
+    padding: 0;
+    margin: 0.4rem 0 0;
+
+    color: #B91C1C;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.auth-card .errorlist li {
+    padding: 0.4rem 0.65rem;
+
+    background: #FEF2F2;
+
+    border: 1px solid rgba(185, 28, 28, 0.14);
+    border-radius: 8px;
+
+    line-height: 1.45;
+}
+
+.form-errors {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+
+    color: #B91C1C;
+    background: #FEF2F2;
+
+    border: 1px solid rgba(185, 28, 28, 0.16);
+    border-left: 4px solid #B91C1C;
+
+    border-radius: 10px;
+
+    font-size: 0.83rem;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+/* =========================================================
+   TWO COLUMN LAYOUT
+   ========================================================= */
+
+.auth-card .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 0.9rem;
+    margin-top: 0.85rem;
+}
+
+.auth-card .two-col > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-card .two-col label {
+    display: block;
+
+    margin-bottom: 0.45rem;
+
+    color: var(--edu-deep);
+
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+/* =========================================================
+   ROLE SELECTION
+   ========================================================= */
+
+.role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 0.75rem;
+    margin: 0.35rem 0 0.5rem;
+}
+
+.role-option {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    padding: 1rem 0.85rem;
+
+    background: #FFFFFF;
+
+    border: 1.5px solid rgba(11, 34, 80, 0.14);
+    border-radius: 14px;
+
+    font-size: 0.86rem;
+    font-weight: 750;
+
+    color: var(--edu-text);
+
+    cursor: pointer;
+    text-align: center;
+
+    transition:
+        border-color 0.2s var(--transition-smooth),
+        background 0.2s var(--transition-smooth),
+        transform 0.15s var(--transition-smooth),
+        box-shadow 0.2s var(--transition-smooth);
+
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.role-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.role-option:hover {
+    border-color: rgba(59, 130, 246, 0.45);
+    background: var(--edu-pale);
+    transform: translateY(-1px);
+}
+
+.role-option:has(input:checked),
+.role-option input:checked ~ span {
+    color: var(--edu-primary);
+}
+
+.role-option input[type="radio"]:checked + span {
+    color: var(--edu-primary);
+}
+
+.role-option:has(input:checked) {
+    border-color: var(--edu-primary);
+
+    background: linear-gradient(
+        135deg,
+        rgba(23, 78, 166, 0.07),
+        rgba(59, 130, 246, 0.12)
+    );
+
+    box-shadow:
+        0 4px 14px rgba(23, 78, 166, 0.12);
+}
+
+.role-option::before {
+    content: "";
+
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+
+    width: 18px;
+    height: 18px;
+
+    border: 2px solid rgba(11, 34, 80, 0.20);
+    border-radius: 50%;
+
+    background: #FFFFFF;
+
+    transition: all 0.2s var(--transition-smooth);
+}
+
+.role-option:has(input:checked)::before {
+    border-color: var(--edu-primary);
+    background: var(--edu-primary);
+
+    box-shadow: inset 0 0 0 4px #FFFFFF;
+}
+
+/* =========================================================
+   CONDITIONAL FIELDS
+   ========================================================= */
+
+.conditional-fields {
+    margin-top: 1rem;
+    padding: 1.15rem;
+
+    background: linear-gradient(
+        135deg,
+        #F8FAFF,
+        #EFF6FF
+    );
+
+    border: 1px solid rgba(23, 78, 166, 0.13);
+    border-radius: 14px;
+
+    animation: fieldReveal 0.25s ease both;
+}
+
+.conditional-fields[hidden] {
+    display: none !important;
+}
+
+@keyframes fieldReveal {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-title {
+    display: block;
+
+    margin-bottom: 1rem;
+
+    color: #174EA6;
+
+    font-size: 0.85rem;
+    font-weight: 850;
+
+    letter-spacing: 0.01em;
+}
+
+.conditional-fields .field-group {
+    margin-bottom: 0.9rem;
+}
+
+.conditional-fields .field-group:last-child {
+    margin-bottom: 0;
+}
+
+.conditional-fields label {
+    display: block;
+
+    margin-bottom: 0.45rem;
+
+    color: var(--edu-deep);
+
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+.conditional-fields select {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 0.75rem 1rem;
+
+    color: var(--edu-text);
+    background: #FFFFFF;
+
+    border: 1.5px solid rgba(11, 34, 80, 0.14);
+    border-radius: 12px;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+
+    cursor: pointer;
+}
+
+.conditional-fields select:focus {
+    outline: none;
+
+    border-color: var(--edu-light);
+
+    box-shadow:
+        0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.field-description {
+    margin: 0.4rem 0 0;
+
+    color: var(--edu-muted);
+
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    min-height: 50px;
+    padding: 0.85rem 1.35rem;
+
+    border: 0;
+    border-radius: var(--edu-radius-sm);
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 850;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s var(--transition-smooth),
+        box-shadow 0.2s var(--transition-smooth),
+        background 0.2s var(--transition-smooth);
+
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: 0.01em;
+}
+
+.btn-primary {
+    color: #FFFFFF;
+
+    background: linear-gradient(
+        135deg,
+        #020817,
+        #0B2250 50%,
+        #174EA6
+    );
+
+    box-shadow:
+        0 10px 24px rgba(2, 8, 23, 0.20);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(250, 204, 21, 0.18),
+        transparent
+    );
+
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 32px rgba(2, 8, 23, 0.27);
+
+    color: #FFFFFF;
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+
+    box-shadow:
+        0 6px 16px rgba(2, 8, 23, 0.20);
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 1.35rem;
+}
+
+/* =========================================================
+   AUTH LINKS
+   ========================================================= */
+
+.auth-links {
+    margin-top: 1.5rem;
+    padding-top: 1.35rem;
+
+    border-top: 1px solid var(--edu-border);
+
+    text-align: center;
+
+    font-size: 0.85rem;
+    color: var(--edu-muted);
+}
+
+.auth-links a {
+    color: var(--edu-primary);
+
+    font-weight: 800;
+    text-decoration: none;
+
+    transition: color 0.2s var(--transition-smooth);
+}
+
+.auth-links a:hover {
+    color: var(--edu-light);
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.auth-page a:focus-visible,
+.auth-page button:focus-visible,
+.auth-page input:focus-visible,
+.auth-page select:focus-visible,
+.auth-page label:focus-within {
+    outline: 3px solid rgba(59, 130, 246, 0.30);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+    .auth-page {
+        padding: 1.75rem 1rem 2.75rem;
+        align-items: flex-start;
+    }
+
+    .auth-card {
+        padding: 1.85rem 1.5rem 1.75rem;
+        border-radius: 20px;
+    }
+
+    .auth-card-wide {
+        max-width: 100%;
+    }
+
+    .auth-heading {
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-heading h1 {
+        font-size: 1.5rem;
+    }
+
+    .auth-heading p {
+        font-size: 0.85rem;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .auth-page {
+        padding: 1.25rem 0.85rem 2.5rem;
+    }
+
+    .auth-card {
+        padding: 1.65rem 1.25rem 1.5rem;
+        border-radius: 18px;
+    }
+
+    .auth-card .two-col {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+
+    .role-grid {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .role-option {
+        padding: 0.9rem 0.75rem;
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 2.6rem;
+    }
+
+    .role-option::before {
+        left: 0.85rem;
+        right: auto;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .auth-heading h1 {
+        font-size: 1.4rem;
+    }
+
+    .btn {
+        min-height: 48px;
+        font-size: 0.86rem;
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .auth-page *,
+    .auth-page *::before,
+    .auth-page *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+
+}
+</style>
+
+
+<!-- =========================================================
+     REGISTRATION PAGE
+     ========================================================= -->
+
+<section class="auth-page">
+
+    <div class="auth-card auth-card-wide">
+
+        <!-- HEADING -->
+
+        <div class="auth-heading">
+
+            <span class="eyebrow">
+                Join D-Cdr Academy
+            </span>
+
+            <h1>
+                Create your account
+            </h1>
+
+            <p>
+                Choose the learning path that matches you
+                and start growing today.
+            </p>
+
+        </div>
+
+
+        <!-- REGISTRATION FORM -->
+
+        <form method="post" novalidate>
+
+            {% csrf_token %}
+
+            <!-- NON FIELD ERRORS -->
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+
+            <!-- FULL NAME -->
+
+            <label for="{{ form.full_name.id_for_label }}">
+                Full name
+            </label>
+
+            {{ form.full_name }}
+            {{ form.full_name.errors }}
+
+
+            <!-- EMAIL -->
+
+            <label for="{{ form.email.id_for_label }}">
+                Email address
+            </label>
+
+            {{ form.email }}
+            {{ form.email.errors }}
+
+
+            <!-- PASSWORD -->
+
+            <div class="two-col">
+
+                <div>
+
+                    <label for="{{ form.password.id_for_label }}">
+                        Password
+                    </label>
+
+                    {{ form.password }}
+                    {{ form.password.errors }}
+
+                </div>
+
+
+                <div>
+
+                    <label for="{{ form.confirm_password.id_for_label }}">
+                        Confirm password
+                    </label>
+
+                    {{ form.confirm_password }}
+                    {{ form.confirm_password.errors }}
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT TYPE -->
+
+            <label>
+                Register as
+            </label>
+
+            <div class="role-grid">
+
+                {% for value, label in form.role.field.choices %}
+
+                    <label
+                        class="role-option"
+                        for="id_role_{{ forloop.counter0 }}"
+                    >
+
+                        <input
+                            type="radio"
+                            id="id_role_{{ forloop.counter0 }}"
+                            name="role"
+                            value="{{ value }}"
+                            {% if form.role.value == value %}checked{% endif %}
+                        >
+
+                        <span>{{ label }}</span>
+
+                    </label>
+
+                {% endfor %}
+
+            </div>
+
+            {{ form.role.errors }}
+
+
+            <!-- =================================================
+                 JAMB CATEGORY
+                 ================================================= -->
+
+            <div
+                class="conditional-fields"
+                id="jamb-fields"
+                hidden
+            >
+
+                <span class="section-title">
+                    JAMB Registration Details
+                </span>
+
+                <div class="field-group">
+
+                    <label for="{{ form.jamb_category.id_for_label }}">
+                        Select your JAMB category
+                    </label>
+
+                    {{ form.jamb_category }}
+                    {{ form.jamb_category.errors }}
+
+                    <p class="field-description">
+                        Choose your preferred examination category.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 A-LEVEL CATEGORY
+                 ================================================= -->
+
+            <div
+                class="conditional-fields"
+                id="alevel-fields"
+                hidden
+            >
+
+                <span class="section-title">
+                    A-Level Registration Details
+                </span>
+
+                <div class="field-group">
+
+                    <label for="{{ form.alevel_category.id_for_label }}">
+                        Select your A-Level category
+                    </label>
+
+                    {{ form.alevel_category }}
+                    {{ form.alevel_category.errors }}
+
+                    <p class="field-description">
+                        Choose your preferred A-Level category.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 UNIVERSITY DETAILS
+                 ================================================= -->
+
+            <div
+                class="conditional-fields"
+                id="university-fields"
+                hidden
+            >
+
+                <span class="section-title">
+                    University Registration Details
+                </span>
+
+
+                <!-- UNIVERSITY CATEGORY -->
+
+                <div class="field-group">
+
+                    <label for="{{ form.university_category.id_for_label }}">
+                        Select your faculty/category
+                    </label>
+
+                    {{ form.university_category }}
+                    {{ form.university_category.errors }}
+
+                    <p class="field-description">
+                        Choose Science or Engineering.
+                    </p>
+
+                </div>
+
+
+                <!-- UNIVERSITY LEVEL -->
+
+                <div class="field-group">
+
+                    <label for="{{ form.university_level.id_for_label }}">
+                        Select your current level
+                    </label>
+
+                    {{ form.university_level }}
+                    {{ form.university_level.errors }}
+
+                    <p class="field-description">
+                        Select your current university academic level.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBMIT BUTTON -->
+
+            <button
+                class="btn btn-primary btn-full"
+                type="submit"
+            >
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <!-- LOGIN LINK -->
+
+        <div class="auth-links">
+
+            Already registered?
+
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DYNAMIC REGISTRATION FIELDS
+     ========================================================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const roleInputs = document.querySelectorAll(
+        'input[name="role"]'
+    );
+
+    const panels = {
+        JAMB: document.getElementById("jamb-fields"),
+        ALEVEL: document.getElementById("alevel-fields"),
+        UNIVERSITY: document.getElementById("university-fields")
+    };
+
+
+    function updateRegistrationFields(clearInactive = false) {
+
+        const selectedRole = document.querySelector(
+            'input[name="role"]:checked'
+        );
+
+        const role = selectedRole ? selectedRole.value : null;
+
+
+        Object.entries(panels).forEach(([panelRole, panel]) => {
+
+            const isActive = panelRole === role;
+
+            panel.hidden = !isActive;
+
+
+            // Clear selections from inactive categories
+            if (!isActive && clearInactive) {
+
+                panel.querySelectorAll("select").forEach(select => {
+
+                    select.selectedIndex = 0;
+
+                });
+
+            }
+
+        });
+
+    }
+
+
+    // Listen for account type changes
+
+    roleInputs.forEach(input => {
+
+        input.addEventListener("change", function () {
+
+            updateRegistrationFields(true);
+
+        });
+
+    });
+
+
+    // Restore correct fields after form validation errors
+
+    updateRegistrationFields(false);
+
+});
+</script>
+
+{% endblock %}

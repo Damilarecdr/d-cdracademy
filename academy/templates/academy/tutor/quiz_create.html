@@ -1,0 +1,2917 @@
+{% extends "academy/base.html" %}
+
+{% block title %}Create Quiz | {{ lesson.title }}{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   EDUSPHERE — TUTOR CREATE QUIZ
+   ========================================================= */
+
+:root {
+    --quiz-deep: #033d30;
+    --quiz-green: #087a60;
+    --quiz-primary: #10b981;
+    --quiz-light: #34d399;
+    --quiz-pale: #ecfdf5;
+
+    --quiz-bg: #f5f8f7;
+    --quiz-card: #ffffff;
+
+    --quiz-text: #17352d;
+    --quiz-muted: #71827d;
+
+    --quiz-border: #e4ebe8;
+
+    --quiz-danger: #dc2626;
+    --quiz-warning: #d97706;
+
+    --quiz-sidebar: 270px;
+
+    --quiz-radius: 18px;
+
+    --quiz-shadow:
+        0 1px 2px rgba(3, 61, 48, 0.03),
+        0 8px 30px rgba(3, 61, 48, 0.055);
+
+    --quiz-shadow-lg:
+        0 18px 45px rgba(3, 61, 48, 0.10);
+
+    --quiz-transition:
+        cubic-bezier(.4, 0, .2, 1);
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.quiz-page,
+.quiz-page *,
+.quiz-page *::before,
+.quiz-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.quiz-page {
+    width: 100%;
+    min-height: calc(100vh - 76px);
+
+    background:
+        radial-gradient(
+            circle at 85% 0%,
+            rgba(16, 185, 129, .045),
+            transparent 30%
+        ),
+        var(--quiz-bg);
+
+    color: var(--quiz-text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.quiz-layout {
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+    min-height: calc(100vh - 76px);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.quiz-sidebar {
+    width: var(--quiz-sidebar);
+    min-width: var(--quiz-sidebar);
+    max-width: var(--quiz-sidebar);
+
+    flex: 0 0 var(--quiz-sidebar);
+
+    height: calc(100vh - 76px);
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+
+    border-right: 1px solid var(--quiz-border);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    z-index: 50;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(3,61,48,.14)
+        transparent;
+}
+
+.quiz-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.quiz-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(3,61,48,.13);
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.quiz-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 22px 20px 20px;
+
+    border-bottom: 1px solid var(--quiz-border);
+}
+
+.quiz-brand-icon {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #087a60,
+            #10b981
+        );
+
+    color: #fff;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    box-shadow:
+        0 7px 18px
+        rgba(3,61,48,.16);
+}
+
+.quiz-brand-title {
+    margin: 0;
+
+    color: var(--quiz-deep);
+
+    font-size: 16px;
+    font-weight: 850;
+
+    letter-spacing: -.02em;
+}
+
+.quiz-brand-subtitle {
+    margin: 3px 0 0;
+
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   USER
+   ========================================================= */
+
+.quiz-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 16px 14px 9px;
+
+    padding: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f2fbf7,
+            #f7fcfa
+        );
+
+    border: 1px solid #e1f0e9;
+
+    border-radius: 13px;
+}
+
+.quiz-avatar {
+    width: 39px;
+    height: 39px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #10b981
+        );
+
+    color: #fff;
+
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.quiz-user-info {
+    min-width: 0;
+}
+
+.quiz-user-info strong {
+    display: block;
+
+    color: var(--quiz-deep);
+
+    font-size: 12px;
+    font-weight: 750;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quiz-user-info span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.quiz-nav {
+    display: flex;
+    flex-direction: column;
+
+    padding: 7px 10px 15px;
+}
+
+.quiz-nav-label {
+    display: block;
+
+    padding: 13px 9px 7px;
+
+    color: #8a9994;
+
+    font-size: 9px;
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: .13em;
+}
+
+.quiz-nav-item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    width: 100%;
+
+    padding: 10px 11px;
+
+    margin-bottom: 3px;
+
+    border-radius: 11px;
+
+    color: #435650;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background .2s var(--quiz-transition),
+        color .2s var(--quiz-transition),
+        transform .2s var(--quiz-transition);
+}
+
+.quiz-nav-item:hover {
+    color: var(--quiz-green);
+
+    background: #f0faf6;
+
+    transform: translateX(1px);
+}
+
+.quiz-nav-item.active {
+    color: var(--quiz-green);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(16,185,129,.12),
+            rgba(16,185,129,.04)
+        );
+
+    font-weight: 750;
+}
+
+.quiz-nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 50%;
+
+    width: 3px;
+    height: 21px;
+
+    transform: translateY(-50%);
+
+    border-radius: 0 4px 4px 0;
+
+    background: var(--quiz-primary);
+}
+
+.quiz-nav-icon {
+    width: 22px;
+    height: 22px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.quiz-sidebar-footer {
+    margin-top: auto;
+
+    padding: 15px;
+
+    border-top: 1px solid var(--quiz-border);
+}
+
+.quiz-back-course {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 9px 12px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #087a60
+        );
+
+    color: #fff;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 5px 15px
+        rgba(3,61,48,.14);
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+.quiz-back-course:hover {
+    color: #fff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(3,61,48,.20);
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.quiz-main {
+    flex: 1 1 auto;
+
+    width: calc(100% - var(--quiz-sidebar));
+
+    min-width: 0;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.quiz-container {
+    width: 100%;
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 35px 46px 90px;
+}
+
+
+/* =========================================================
+   MOBILE HEADER
+   ========================================================= */
+
+.quiz-mobile-bar {
+    display: none;
+
+    height: 62px;
+
+    padding: 0 18px;
+
+    align-items: center;
+    justify-content: space-between;
+
+    background: #fff;
+
+    border-bottom: 1px solid var(--quiz-border);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+}
+
+.quiz-mobile-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--quiz-deep);
+
+    font-size: 15px;
+    font-weight: 850;
+}
+
+.quiz-mobile-brand span {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #10b981
+        );
+
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.quiz-menu-btn {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid var(--quiz-border);
+
+    border-radius: 11px;
+
+    background: #fff;
+
+    color: var(--quiz-deep);
+
+    font-size: 19px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   OVERLAY
+   ========================================================= */
+
+.quiz-overlay {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(3,61,48,.48);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 105;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity .25s var(--quiz-transition);
+}
+
+.quiz-overlay.active {
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.quiz-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    color: var(--quiz-muted);
+
+    font-size: 11px;
+}
+
+.quiz-breadcrumb a {
+    color: var(--quiz-green);
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.quiz-breadcrumb a:hover {
+    color: var(--quiz-primary);
+}
+
+.quiz-breadcrumb .separator {
+    color: #aab6b2;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.quiz-hero {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 29px 31px;
+
+    margin-bottom: 22px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 88% 10%,
+            rgba(52,211,153,.23),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #033d30,
+            #075b48 55%,
+            #08745a
+        );
+
+    box-shadow: var(--quiz-shadow-lg);
+}
+
+.quiz-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+    height: 330px;
+
+    right: -130px;
+    top: -180px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 35px rgba(255,255,255,.025),
+        0 0 0 70px rgba(255,255,255,.015);
+}
+
+.quiz-hero-content {
+    position: relative;
+
+    z-index: 2;
+}
+
+.quiz-hero-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 10px;
+
+    color: #a7f3d0;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: .15em;
+}
+
+.quiz-hero-label::before {
+    content: "✦";
+
+    color: #6ee7b7;
+
+    font-size: 11px;
+}
+
+.quiz-hero h1 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size:
+        clamp(1.55rem, 3vw, 2.2rem);
+
+    font-weight: 900;
+
+    line-height: 1.12;
+
+    letter-spacing: -.04em;
+}
+
+.quiz-hero p {
+    max-width: 720px;
+
+    margin: 9px 0 0;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+.quiz-course-pill {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 15px;
+
+    padding: 7px 10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color: rgba(255,255,255,.82);
+
+    font-size: 10px;
+}
+
+.quiz-course-pill strong {
+    color: #fff;
+}
+
+
+/* =========================================================
+   CONTENT GRID
+   ========================================================= */
+
+.quiz-content-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        300px;
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.quiz-form-card {
+    background: #fff;
+
+    border:
+        1px solid
+        var(--quiz-border);
+
+    border-radius: var(--quiz-radius);
+
+    box-shadow: var(--quiz-shadow);
+
+    overflow: hidden;
+}
+
+.quiz-card-header {
+    padding: 21px 24px;
+
+    border-bottom:
+        1px solid
+        var(--quiz-border);
+}
+
+.quiz-card-header h2 {
+    margin: 0;
+
+    color: var(--quiz-deep);
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    letter-spacing: -.025em;
+}
+
+.quiz-card-header p {
+    margin: 5px 0 0;
+
+    color: var(--quiz-muted);
+
+    font-size: 11px;
+
+    line-height: 1.55;
+}
+
+.quiz-form-body {
+    padding: 25px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.quiz-form-group {
+    margin-bottom: 20px;
+}
+
+.quiz-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--quiz-deep);
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.quiz-form-group input,
+.quiz-form-group textarea {
+    display: block;
+
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius: 10px;
+
+    background: #fff;
+
+    color: var(--quiz-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    outline: none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s,
+        background .2s;
+}
+
+.quiz-form-group input {
+    min-height: 45px;
+}
+
+.quiz-form-group textarea {
+    min-height: 135px;
+
+    resize: vertical;
+
+    line-height: 1.65;
+}
+
+.quiz-form-group input::placeholder,
+.quiz-form-group textarea::placeholder {
+    color: #a1ada9;
+}
+
+.quiz-form-group input:hover,
+.quiz-form-group textarea:hover {
+    border-color: #b9ccc4;
+}
+
+.quiz-form-group input:focus,
+.quiz-form-group textarea:focus {
+    border-color: var(--quiz-primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(16,185,129,.10);
+}
+
+.quiz-form-group small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SETTINGS SECTION
+   ========================================================= */
+
+.settings-section {
+    margin-top: 7px;
+    margin-bottom: 23px;
+
+    padding: 20px;
+
+    border:
+        1px solid
+        #e5eeea;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f9fdfb,
+            #f5faf8
+        );
+}
+
+.settings-section-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+.settings-icon {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #dff8ed;
+
+    color: var(--quiz-green);
+
+    font-size: 15px;
+}
+
+.settings-section-header h3 {
+    margin: 0;
+
+    color: var(--quiz-deep);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.settings-section-header p {
+    margin: 2px 0 0;
+
+    color: var(--quiz-muted);
+
+    font-size: 9px;
+}
+
+.settings-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+.settings-grid .quiz-form-group {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.quiz-form-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        var(--quiz-border);
+}
+
+.quiz-action-left {
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+}
+
+.quiz-action-buttons {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.quiz-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 43px;
+
+    padding: 10px 17px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        background .2s,
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.quiz-btn-primary {
+    border: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b9f75,
+            #10b981
+        );
+
+    color: #fff;
+
+    box-shadow:
+        0 7px 17px
+        rgba(16,185,129,.20);
+}
+
+.quiz-btn-primary:hover {
+    color: #fff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 22px
+        rgba(16,185,129,.27);
+}
+
+.quiz-btn-secondary {
+    border:
+        1px solid
+        #d6e4df;
+
+    background: #fff;
+
+    color: var(--quiz-green);
+}
+
+.quiz-btn-secondary:hover {
+    color: var(--quiz-deep);
+
+    background: #f5fbf8;
+
+    border-color: #bdd6cc;
+}
+
+
+/* =========================================================
+   RIGHT INFORMATION CARDS
+   ========================================================= */
+
+.quiz-side-tools {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+
+    position: sticky;
+    top: 24px;
+}
+
+.quiz-info-card {
+    padding: 19px;
+
+    background: #fff;
+
+    border:
+        1px solid
+        var(--quiz-border);
+
+    border-radius: var(--quiz-radius);
+
+    box-shadow: var(--quiz-shadow);
+}
+
+.quiz-info-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.quiz-info-icon {
+    width: 37px;
+    height: 37px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: var(--quiz-pale);
+
+    color: var(--quiz-green);
+
+    font-size: 16px;
+}
+
+.quiz-info-header h3 {
+    margin: 0;
+
+    color: var(--quiz-deep);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.quiz-info-header span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--quiz-muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   STEPS
+   ========================================================= */
+
+.quiz-steps {
+    display: flex;
+    flex-direction: column;
+
+    gap: 13px;
+}
+
+.quiz-step {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+.quiz-step-number {
+    width: 24px;
+    height: 24px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #e9f9f2;
+
+    color: var(--quiz-green);
+
+    font-size: 9px;
+
+    font-weight: 850;
+}
+
+.quiz-step-content strong {
+    display: block;
+
+    color: var(--quiz-deep);
+
+    font-size: 10px;
+
+    font-weight: 750;
+}
+
+.quiz-step-content span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--quiz-muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   QUIZ SUMMARY
+   ========================================================= */
+
+.quiz-summary-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.quiz-summary-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+
+    padding-bottom: 9px;
+
+    border-bottom:
+        1px solid
+        #edf1ef;
+}
+
+.quiz-summary-row:last-child {
+    padding-bottom: 0;
+
+    border-bottom: none;
+}
+
+.quiz-summary-row span {
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+}
+
+.quiz-summary-row strong {
+    color: var(--quiz-deep);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   TIP CARD
+   ========================================================= */
+
+.quiz-tip {
+    background:
+        linear-gradient(
+            145deg,
+            #033d30,
+            #087a60
+        );
+
+    border: none;
+
+    color: #fff;
+}
+
+.quiz-tip .quiz-info-icon {
+    background:
+        rgba(255,255,255,.12);
+
+    color: #a7f3d0;
+}
+
+.quiz-tip h3 {
+    color: #fff;
+}
+
+.quiz-tip .quiz-info-header span {
+    color: rgba(255,255,255,.55);
+}
+
+.quiz-tip p {
+    margin: 0;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.quiz-error {
+    margin-bottom: 20px;
+
+    padding: 12px 14px;
+
+    border:
+        1px solid
+        #fecaca;
+
+    border-left:
+        3px solid
+        var(--quiz-danger);
+
+    border-radius: 9px;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BOTTOM SAVE BAR
+   ========================================================= */
+
+.quiz-save-bar {
+    position: sticky;
+
+    bottom: 14px;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 22px;
+
+    padding: 11px 14px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    backdrop-filter: blur(14px);
+
+    border:
+        1px solid
+        rgba(3,61,48,.10);
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(3,61,48,.12);
+}
+
+.quiz-save-message {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--quiz-muted);
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.quiz-save-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--quiz-primary);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1150px) {
+
+    .quiz-container {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .quiz-content-grid {
+        grid-template-columns:
+            minmax(0, 1fr)
+            270px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .quiz-page {
+        min-height: 100vh;
+    }
+
+    .quiz-layout {
+        display: block;
+
+        min-height: calc(100vh - 62px);
+    }
+
+    .quiz-mobile-bar {
+        display: flex;
+    }
+
+    .quiz-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 285px;
+        min-width: 285px;
+        max-width: 285px;
+
+        height: 100vh;
+        height: 100dvh;
+
+        z-index: 110;
+
+        transform: translateX(-100%);
+
+        transition:
+            transform .3s var(--quiz-transition);
+
+        box-shadow:
+            8px 0 30px
+            rgba(0,0,0,.14);
+
+        border-right: none;
+    }
+
+    .quiz-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .quiz-overlay {
+        display: block;
+    }
+
+    .quiz-main {
+        width: 100%;
+
+        min-height:
+            calc(100vh - 62px);
+    }
+
+    .quiz-container {
+        padding:
+            24px
+            20px
+            60px;
+    }
+
+    .quiz-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-side-tools {
+        position: static;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .quiz-container {
+        padding:
+            20px
+            15px
+            55px;
+    }
+
+    .quiz-hero {
+        padding: 23px;
+
+        border-radius: 17px;
+    }
+
+    .quiz-hero h1 {
+        font-size: 1.45rem;
+    }
+
+    .quiz-form-body {
+        padding: 19px;
+    }
+
+    .quiz-card-header {
+        padding: 18px;
+    }
+
+    .settings-section {
+        padding: 16px;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-side-tools {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-form-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .quiz-action-left {
+        text-align: center;
+    }
+
+    .quiz-action-buttons {
+        width: 100%;
+    }
+
+    .quiz-action-buttons .quiz-btn {
+        flex: 1;
+    }
+
+    .quiz-save-bar {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        bottom: 8px;
+    }
+
+    .quiz-save-bar .quiz-btn {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .quiz-container {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .quiz-hero {
+        padding: 19px;
+    }
+
+    .quiz-hero h1 {
+        font-size: 1.3rem;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.quiz-page a:focus-visible,
+.quiz-page button:focus-visible,
+.quiz-page input:focus-visible,
+.quiz-page textarea:focus-visible {
+    outline:
+        3px solid
+        rgba(16,185,129,.25);
+
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .quiz-page *,
+    .quiz-page *::before,
+    .quiz-page *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+
+}
+
+</style>
+
+
+<div class="quiz-page">
+
+
+    <!-- =====================================================
+         MOBILE BAR
+         ===================================================== -->
+
+    <div class="quiz-mobile-bar">
+
+        <div class="quiz-mobile-brand">
+
+            <span>E</span>
+
+            <strong>
+                EduSphere
+            </strong>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="quiz-menu-btn"
+            id="quizMenuBtn"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+    </div>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        class="quiz-overlay"
+        id="quizOverlay"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================================
+         MAIN LAYOUT
+         ===================================================== -->
+
+    <div class="quiz-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            class="quiz-sidebar"
+            id="quizSidebar"
+        >
+
+
+            <!-- BRAND -->
+
+            <div class="quiz-sidebar-brand">
+
+                <div class="quiz-brand-icon">
+                    E
+                </div>
+
+                <div>
+
+                    <h2 class="quiz-brand-title">
+                        EduSphere
+                    </h2>
+
+                    <p class="quiz-brand-subtitle">
+                        Tutor Portal
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- USER -->
+
+            <div class="quiz-user">
+
+                <div class="quiz-avatar">
+
+                    {{ user.first_name|first|default:"T" }}{{ user.last_name|first|default:"" }}
+
+                </div>
+
+
+                <div class="quiz-user-info">
+
+                    <strong>
+                        {{ user.first_name|default:user.email|truncatechars:20 }}
+                    </strong>
+
+                    <span>
+                        Tutor Account
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAV -->
+
+            <nav class="quiz-nav">
+
+
+                <span class="quiz-nav-label">
+                    Workspace
+                </span>
+
+
+                <a
+                    href="{% url 'tutor-dashboard' %}"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'tutor-courses' %}"
+                    class="quiz-nav-item active"
+                >
+
+                    <span class="quiz-nav-icon">
+                        📚
+                    </span>
+
+                    <span>
+                        My Courses
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        👥
+                    </span>
+
+                    <span>
+                        Students
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        📝
+                    </span>
+
+                    <span>
+                        Lessons
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        📈
+                    </span>
+
+                    <span>
+                        Analytics
+                    </span>
+
+                </a>
+
+
+                <span class="quiz-nav-label">
+                    Account
+                </span>
+
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        👤
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        🔔
+                    </span>
+
+                    <span>
+                        Notifications
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="quiz-nav-item"
+                >
+
+                    <span class="quiz-nav-icon">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- FOOTER -->
+
+            <div class="quiz-sidebar-footer">
+
+                <a
+                    href="{% url 'tutor-course-detail' course.id %}"
+                    class="quiz-back-course"
+                >
+
+                    <span>
+                        ←
+                    </span>
+
+                    <span>
+                        Back to Course
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+
+        <main class="quiz-main">
+
+
+            <div class="quiz-container">
+
+
+                <!-- =================================================
+                     BREADCRUMB
+                     ================================================= -->
+
+                <nav class="quiz-breadcrumb">
+
+                    <a href="{% url 'tutor-dashboard' %}">
+                        Dashboard
+                    </a>
+
+                    <span class="separator">
+                        /
+                    </span>
+
+                    <a href="{% url 'tutor-courses' %}">
+                        My Courses
+                    </a>
+
+                    <span class="separator">
+                        /
+                    </span>
+
+                    <a href="{% url 'tutor-course-detail' course.id %}">
+                        {{ course.title|truncatechars:30 }}
+                    </a>
+
+                    <span class="separator">
+                        /
+                    </span>
+
+                    <span>
+                        {{ lesson.title|truncatechars:30 }}
+                    </span>
+
+                    <span class="separator">
+                        /
+                    </span>
+
+                    <span>
+                        Create Quiz
+                    </span>
+
+                </nav>
+
+
+                <!-- =================================================
+                     HERO
+                     ================================================= -->
+
+                <section class="quiz-hero">
+
+                    <div class="quiz-hero-content">
+
+                        <div class="quiz-hero-label">
+                            Assessment Builder
+                        </div>
+
+
+                        <h1>
+                            Create Lesson Quiz
+                        </h1>
+
+
+                        <p>
+                            Create a quiz that helps students test
+                            their understanding of this lesson.
+                            You can configure the passing score,
+                            time limit and number of attempts.
+                        </p>
+
+
+                        <div class="quiz-course-pill">
+
+                            <span>
+                                📚
+                            </span>
+
+                            <span>
+                                {{ course.title }}
+                            </span>
+
+                            <span>
+                                ·
+                            </span>
+
+                            <strong>
+                                {{ lesson.title }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     CONTENT
+                     ================================================= -->
+
+                <div class="quiz-content-grid">
+
+
+                    <!-- =============================================
+                         FORM
+                         ============================================= -->
+
+                    <section class="quiz-form-card">
+
+
+                        <div class="quiz-card-header">
+
+                            <h2>
+                                Quiz Details
+                            </h2>
+
+                            <p>
+                                Set up the basic information and
+                                rules students will see when taking
+                                this quiz.
+                            </p>
+
+                        </div>
+
+
+                        <div class="quiz-form-body">
+
+
+                            {% if form.errors %}
+
+                                <div class="quiz-error">
+
+                                    Please review the form and
+                                    correct the highlighted fields
+                                    before continuing.
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <form
+                                method="post"
+                                id="createQuizForm"
+                            >
+
+                                {% csrf_token %}
+
+
+                                <!-- QUIZ TITLE -->
+
+                                <div class="quiz-form-group">
+
+                                    <label for="title">
+                                        Quiz Title
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="title"
+                                        name="title"
+                                        value="{{ request.POST.title|default:'Lesson Quiz' }}"
+                                        placeholder="e.g. Algebra Basics Quiz"
+                                        required
+                                    >
+
+                                    <small>
+                                        Choose a short, descriptive
+                                        title students will recognize.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <div class="quiz-form-group">
+
+                                    <label for="description">
+                                        Instructions
+                                    </label>
+
+                                    <textarea
+                                        id="description"
+                                        name="description"
+                                        rows="5"
+                                        placeholder="Tell students what they need to know before starting..."
+                                    >{{ request.POST.description }}</textarea>
+
+                                    <small>
+                                        Explain what students should
+                                        do before or during the quiz.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- SETTINGS -->
+
+                                <div class="settings-section">
+
+
+                                    <div class="settings-section-header">
+
+                                        <div class="settings-icon">
+                                            ⚙️
+                                        </div>
+
+                                        <div>
+
+                                            <h3>
+                                                Quiz Settings
+                                            </h3>
+
+                                            <p>
+                                                Configure how students
+                                                complete the assessment.
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="settings-grid">
+
+
+                                        <!-- PASS MARK -->
+
+                                        <div class="quiz-form-group">
+
+                                            <label for="pass_mark">
+                                                Pass Mark (%)
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                id="pass_mark"
+                                                name="pass_mark"
+                                                value="{{ request.POST.pass_mark|default:'50' }}"
+                                                min="0"
+                                                max="100"
+                                                required
+                                            >
+
+                                            <small>
+                                                Minimum percentage required
+                                                to pass.
+                                            </small>
+
+                                        </div>
+
+
+                                        <!-- TIME -->
+
+                                        <div class="quiz-form-group">
+
+                                            <label for="time_limit">
+                                                Time Limit
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                id="time_limit"
+                                                name="time_limit"
+                                                value="{{ request.POST.time_limit|default:'0' }}"
+                                                min="0"
+                                            >
+
+                                            <small>
+                                                Minutes. 0 means unlimited.
+                                            </small>
+
+                                        </div>
+
+
+                                        <!-- ATTEMPTS -->
+
+                                        <div class="quiz-form-group">
+
+                                            <label for="max_attempts">
+                                                Maximum Attempts
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                id="max_attempts"
+                                                name="max_attempts"
+                                                value="{{ request.POST.max_attempts|default:'0' }}"
+                                                min="0"
+                                            >
+
+                                            <small>
+                                                0 means unlimited attempts.
+                                            </small>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ACTIONS -->
+
+                                <div class="quiz-form-actions">
+
+
+                                    <div class="quiz-action-left">
+
+                                        You can add questions after
+                                        creating the quiz.
+
+                                    </div>
+
+
+                                    <div class="quiz-action-buttons">
+
+
+                                        <a
+                                            href="{% url 'tutor-course-detail' course.id %}"
+                                            class="quiz-btn quiz-btn-secondary"
+                                        >
+
+                                            ← Cancel
+
+                                        </a>
+
+
+                                        <button
+                                            type="submit"
+                                            class="quiz-btn quiz-btn-primary"
+                                        >
+
+                                            ✓
+
+                                            <span>
+                                                Create Quiz
+                                            </span>
+
+                                        </button>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- =============================================
+                         SIDE INFORMATION
+                         ============================================= -->
+
+                    <aside class="quiz-side-tools">
+
+
+                        <!-- HOW IT WORKS -->
+
+                        <section class="quiz-info-card">
+
+
+                            <div class="quiz-info-header">
+
+                                <div class="quiz-info-icon">
+                                    ✨
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        How It Works
+                                    </h3>
+
+                                    <span>
+                                        Build your assessment
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="quiz-steps">
+
+
+                                <div class="quiz-step">
+
+                                    <div class="quiz-step-number">
+                                        1
+                                    </div>
+
+                                    <div class="quiz-step-content">
+
+                                        <strong>
+                                            Create the quiz
+                                        </strong>
+
+                                        <span>
+                                            Add a title, instructions
+                                            and assessment settings.
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="quiz-step">
+
+                                    <div class="quiz-step-number">
+                                        2
+                                    </div>
+
+                                    <div class="quiz-step-content">
+
+                                        <strong>
+                                            Add questions
+                                        </strong>
+
+                                        <span>
+                                            Create questions and define
+                                            the correct answers.
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="quiz-step">
+
+                                    <div class="quiz-step-number">
+                                        3
+                                    </div>
+
+                                    <div class="quiz-step-content">
+
+                                        <strong>
+                                            Publish
+                                        </strong>
+
+                                        <span>
+                                            Students can take the quiz
+                                            from the lesson.
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+                        <!-- SETTINGS SUMMARY -->
+
+                        <section class="quiz-info-card">
+
+
+                            <div class="quiz-info-header">
+
+                                <div class="quiz-info-icon">
+                                    ⚙️
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Default Settings
+                                    </h3>
+
+                                    <span>
+                                        Current configuration
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="quiz-summary-list">
+
+
+                                <div class="quiz-summary-row">
+
+                                    <span>
+                                        Pass mark
+                                    </span>
+
+                                    <strong>
+                                        <span id="passMarkPreview">
+                                            50
+                                        </span>%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="quiz-summary-row">
+
+                                    <span>
+                                        Time limit
+                                    </span>
+
+                                    <strong>
+                                        <span id="timePreview">
+                                            Unlimited
+                                        </span>
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="quiz-summary-row">
+
+                                    <span>
+                                        Attempts
+                                    </span>
+
+                                    <strong>
+                                        <span id="attemptPreview">
+                                            Unlimited
+                                        </span>
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+                        <!-- TIP -->
+
+                        <section class="quiz-info-card quiz-tip">
+
+
+                            <div class="quiz-info-header">
+
+                                <div class="quiz-info-icon">
+                                    💡
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Tutor Tip
+                                    </h3>
+
+                                    <span>
+                                        Create better assessments
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <p>
+                                Keep quiz questions closely connected
+                                to the lesson objectives. A focused
+                                quiz makes it easier for students to
+                                understand what they have learned.
+                            </p>
+
+
+                        </section>
+
+
+                    </aside>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     BOTTOM BAR
+                     ================================================= -->
+
+                <div class="quiz-save-bar">
+
+
+                    <div class="quiz-save-message">
+
+                        <span class="quiz-save-dot"></span>
+
+                        <span>
+                            Configure your quiz before creating it.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="quiz-btn quiz-btn-primary"
+                        id="bottomCreateQuiz"
+                    >
+
+                        ✓
+
+                        <span>
+                            Create Quiz
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /* =====================================================
+       MOBILE SIDEBAR
+       ===================================================== */
+
+    const menuBtn =
+        document.getElementById("quizMenuBtn");
+
+    const sidebar =
+        document.getElementById("quizSidebar");
+
+    const overlay =
+        document.getElementById("quizOverlay");
+
+
+    function openSidebar() {
+
+        if (!sidebar || !overlay || !menuBtn) {
+            return;
+        }
+
+        sidebar.classList.add("open");
+
+        overlay.classList.add("active");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            "Close navigation"
+        );
+
+        menuBtn.innerHTML = "✕";
+
+        document.body.style.overflow = "hidden";
+    }
+
+
+    function closeSidebar() {
+
+        if (!sidebar || !overlay || !menuBtn) {
+            return;
+        }
+
+        sidebar.classList.remove("open");
+
+        overlay.classList.remove("active");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            "Open navigation"
+        );
+
+        menuBtn.innerHTML = "☰";
+
+        document.body.style.overflow = "";
+    }
+
+
+    if (menuBtn) {
+
+        menuBtn.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    sidebar.classList.contains("open")
+                ) {
+
+                    closeSidebar();
+
+                } else {
+
+                    openSidebar();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                sidebar &&
+                sidebar.classList.contains("open")
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    if (sidebar) {
+
+        sidebar
+            .querySelectorAll(".quiz-nav-item")
+            .forEach(function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth <= 900
+                        ) {
+
+                            closeSidebar();
+
+                        }
+
+                    }
+                );
+
+            });
+
+    }
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (
+                window.innerWidth > 900 &&
+                sidebar &&
+                sidebar.classList.contains("open")
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       BOTTOM CREATE BUTTON
+       ===================================================== */
+
+    const bottomButton =
+        document.getElementById(
+            "bottomCreateQuiz"
+        );
+
+    const quizForm =
+        document.getElementById(
+            "createQuizForm"
+        );
+
+
+    if (bottomButton && quizForm) {
+
+        bottomButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    typeof quizForm.requestSubmit ===
+                    "function"
+                ) {
+
+                    quizForm.requestSubmit();
+
+                } else {
+
+                    quizForm.submit();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LIVE SETTINGS PREVIEW
+       ===================================================== */
+
+    const passMark =
+        document.getElementById("pass_mark");
+
+    const timeLimit =
+        document.getElementById("time_limit");
+
+    const maxAttempts =
+        document.getElementById("max_attempts");
+
+    const passPreview =
+        document.getElementById("passMarkPreview");
+
+    const timePreview =
+        document.getElementById("timePreview");
+
+    const attemptPreview =
+        document.getElementById("attemptPreview");
+
+
+    if (passMark && passPreview) {
+
+        function updatePassMark() {
+
+            passPreview.textContent =
+                passMark.value || "0";
+
+        }
+
+        passMark.addEventListener(
+            "input",
+            updatePassMark
+        );
+
+        updatePassMark();
+
+    }
+
+
+    if (timeLimit && timePreview) {
+
+        function updateTime() {
+
+            const value =
+                parseInt(timeLimit.value, 10);
+
+            if (!value || value <= 0) {
+
+                timePreview.textContent =
+                    "Unlimited";
+
+            } else {
+
+                timePreview.textContent =
+                    value + " min";
+
+            }
+
+        }
+
+        timeLimit.addEventListener(
+            "input",
+            updateTime
+        );
+
+        updateTime();
+
+    }
+
+
+    if (maxAttempts && attemptPreview) {
+
+        function updateAttempts() {
+
+            const value =
+                parseInt(maxAttempts.value, 10);
+
+            if (!value || value <= 0) {
+
+                attemptPreview.textContent =
+                    "Unlimited";
+
+            } else {
+
+                attemptPreview.textContent =
+                    value;
+
+            }
+
+        }
+
+        maxAttempts.addEventListener(
+            "input",
+            updateAttempts
+        );
+
+        updateAttempts();
+
+    }
+
+})();
+
+</script>
+
+{% endblock %}

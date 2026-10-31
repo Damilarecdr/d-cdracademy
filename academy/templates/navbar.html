@@ -1,0 +1,622 @@
+
+{% load static %}
+
+<style>
+/* =========================================================
+   D-CDR ACADEMY NAVBAR - DEEP BLUE & GOLD
+   ========================================================= */
+
+:root {
+    --nav-deep-blue: #020817;
+    --nav-blue: #0B2250;
+    --nav-primary: #174EA6;
+    --nav-light-blue: #3B82F6;
+    --nav-pale-blue: #EFF6FF;
+    --nav-gold: #FACC15;
+    --nav-gold-light: #FFE580;
+    --nav-white: #FFFFFF;
+    --nav-text: #172B4D;
+    --nav-border: rgba(255,255,255,0.15);
+}
+
+/* =========================================================
+   NAVBAR BASE
+   ========================================================= */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 105px;
+    padding: 0.8rem 2.2rem;
+
+    background: linear-gradient(
+        135deg,
+        #0f1b3a,
+        #0B2250,
+        #103B7A
+    );
+
+    color: #FFFFFF;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    border-bottom: 1px solid var(--nav-border);
+
+    box-shadow:
+        0 4px 20px rgba(2,8,23,0.22),
+        0 1px 3px rgba(2,8,23,0.10);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+nav * {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   LOGO AND BRANDING
+   ========================================================= */
+
+nav .logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: max-content;
+}
+
+nav .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+}
+
+nav .logo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+nav .logo-wrapper:hover .logo-img {
+    transform: scale(1.05);
+}
+
+nav .logo-text,
+nav .brand-name,
+nav .brand-link span {
+    margin: 0;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    color: #FFFFFF !important;
+    background: none;
+    -webkit-text-fill-color: #FFFFFF;
+}
+
+/* =========================================================
+   DESKTOP NAVIGATION
+   ========================================================= */
+
+nav ul.nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.3rem;
+}
+
+nav ul.nav-links li {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul.nav-links li a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 0.85rem;
+
+    color: #FFFFFF !important;
+    font-size: 0.93rem;
+    font-weight: 650;
+    text-decoration: none;
+    border-radius: 9px;
+
+    transition: all 0.25s ease;
+}
+
+nav ul.nav-links li a:hover {
+    color: var(--nav-gold) !important;
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+}
+
+nav ul.nav-links li a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 4px;
+    width: 0;
+    height: 2px;
+    border-radius: 999px;
+
+    background: linear-gradient(
+        90deg,
+        #FACC15,
+        #FFE580
+    );
+
+    transform: translateX(-50%);
+    transition: width 0.25s ease;
+}
+
+nav ul.nav-links li a:hover::after {
+    width: 45%;
+}
+
+/* =========================================================
+   DESKTOP BUTTONS
+   ========================================================= */
+
+nav .btns {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+nav .create-account-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.7rem 1.35rem;
+
+    border: none;
+    border-radius: 999px;
+
+    color: #020817 !important;
+
+    background: linear-gradient(
+        135deg,
+        #FACC15,
+        #FFE580
+    );
+
+    font-size: 0.9rem;
+    font-weight: 850;
+    text-decoration: none;
+
+    box-shadow: 0 5px 15px rgba(250,204,21,0.16);
+    transition: all 0.25s ease;
+}
+
+nav .create-account-btn:hover {
+    color: #020817 !important;
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 9px 22px rgba(250,204,21,0.25);
+}
+
+/* LOGIN BUTTON */
+
+nav .login-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1.25rem;
+
+    border: 1.5px solid rgba(255,255,255,0.7);
+    border-radius: 999px;
+
+    color: #FFFFFF !important;
+    background: transparent;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+nav .login-btn:hover {
+    color: #020817 !important;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* DOWNLOAD APP */
+
+nav .download-app-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.7rem 1.3rem;
+
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+
+    color: #FFFFFF !important;
+    background: rgba(255,255,255,0.10);
+
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+
+    transition: all 0.25s ease;
+}
+
+nav .download-app-btn:hover {
+    color: #020817 !important;
+    background: var(--nav-gold);
+    border-color: var(--nav-gold);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   TABLET NAVBAR
+   ========================================================= */
+
+@media (max-width: 1100px) and (min-width: 901px) {
+
+    nav {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    nav ul.nav-links {
+        gap: 0.05rem;
+    }
+
+    nav ul.nav-links li a {
+        padding-left: 0.55rem;
+        padding-right: 0.55rem;
+        font-size: 0.85rem;
+    }
+
+    nav .btns {
+        gap: 0.4rem;
+    }
+
+    nav .logo-img {
+        width: 65px;
+        height: 65px;
+    }
+
+    nav .brand-link span {
+        font-size: 1.4rem;
+    }
+}
+
+
+
+
+/* =========================================================
+   MOBILE NAVBAR - FOUR CENTERED ROWS
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        min-height: auto;
+        padding: 12px 0 0;
+        gap: 0;
+    }
+
+    /* ROW 1: LOGO */
+
+    nav .logo-wrapper {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        min-width: 0;
+    }
+
+    nav .brand-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        text-align: center;
+    }
+
+    nav .logo-img {
+        display: block;
+        width: 65px;
+        height: 65px;
+        object-fit: contain;
+    }
+
+    /* ROW 2: ACADEMY NAME */
+
+    nav .brand-link span {
+        display: block;
+        width: 100%;
+        margin: 5px 0 0;
+
+        font-size: 1.1rem;
+        font-weight: 750;
+        line-height: 1.3;
+        text-align: center;
+        white-space: normal;
+
+        transform: none;
+    }
+
+    /* ROW 3: ALL NAVIGATION LINKS */
+
+    nav ul.nav-links {
+        display: flex !important;
+
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        gap: 5px;
+        margin: 12px 0 0;
+        padding: 10px 8px;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+
+        border-top: 1px solid rgba(255,255,255,0.12);
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+
+        background: rgba(2,8,23,0.18);
+    }
+
+    nav ul.nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    nav ul.nav-links li {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul.nav-links li a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 9px 11px;
+
+        font-size: 0.83rem;
+        font-weight: 650;
+        white-space: nowrap;
+    }
+
+    nav ul.nav-links li a::after {
+        display: none;
+    }
+
+    /* ROW 4: BOTH ACCOUNT BUTTONS */
+
+    nav .btns {
+        display: flex !important;
+
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        gap: 10px;
+        margin: 0;
+        padding: 12px 10px;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    nav .btns form {
+        display: inline-flex;
+        justify-content: center;
+        margin: 0 !important;
+    }
+
+    nav .login-btn,
+    nav .create-account-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        min-height: 40px;
+        padding: 9px 16px;
+
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+
+    /* HIDE HAMBURGER */
+
+    nav .menu {
+        display: none !important;
+    }
+}
+
+/* =========================================================
+   EXTRA SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    nav .logo-img {
+        width: 55px;
+        height: 55px;
+    }
+
+    nav .brand-link span {
+        font-size: 1rem;
+    }
+
+    nav ul.nav-links {
+        justify-content: flex-start;
+        gap: 3px;
+        padding: 9px 6px;
+    }
+
+    nav ul.nav-links li a {
+        padding: 8px 9px;
+        font-size: 0.78rem;
+    }
+
+    nav .btns {
+        gap: 7px;
+        padding: 10px 5px;
+    }
+
+    nav .login-btn,
+    nav .create-account-btn {
+        padding: 8px 12px;
+        font-size: 0.76rem;
+    }
+}
+
+</style>
+
+
+<!-- =========================================================
+     MAIN NAVBAR
+     ========================================================= -->
+
+<nav>
+
+    <!-- LOGO AND BRAND NAME -->
+
+    <div class="logo-wrapper">
+
+        <a href="{% url 'home' %}" class="brand-link">
+
+            {% if navbar.logo %}
+
+                <img
+                    src="{{ navbar.logo.url }}"
+                    class="logo-img"
+                    alt="{{ navbar.name|default:'D-Cdr Academy' }}"
+                >
+
+            {% else %}
+
+                <img
+                    src="{% static 'img/logo.png' %}"
+                    class="logo-img"
+                    alt="D-Cdr Academy"
+                >
+
+            {% endif %}
+
+            <span class="brand-name">
+                {{ navbar.name|default:"D-Cdr Academy" }}
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- NAVIGATION LINKS -->
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="#home">Home</a>
+        </li>
+
+        <li>
+            <a href="#about">About Us</a>
+        </li>
+
+        <li>
+            <a href="#tutors">Our Tutors</a>
+        </li>
+
+        <li>
+            <a href="#testimonials">Testimonials</a>
+        </li>
+
+        <li>
+            <a href="#contact">Contact</a>
+        </li>
+
+    </ul>
+
+
+    <!-- DESKTOP ACCOUNT BUTTONS -->
+
+    <div class="btns">
+
+        {% if request.user.is_authenticated %}
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="login-btn"
+            >
+                Continue Learning
+            </a>
+
+            <form
+                method="post"
+                action="{% url 'logout' %}"
+                style="display:inline; margin:0;"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+                    Logout
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <a
+                href="{% url 'register' %}"
+                class="login-btn"
+            >
+                Create Account
+            </a>
+
+            <a
+                href="{% url 'login' %}"
+                class="login-btn"
+            >
+                Login
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>

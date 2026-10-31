@@ -1,0 +1,1347 @@
+{% extends "academy/base.html" %}
+
+{% block title %}{{ lesson.title }} | LearnHub{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   EDUSPHERE — LESSON DETAIL PAGE (WITH SIDEBAR)
+   Modern, mobile-first, fully responsive
+   ========================================================= */
+
+:root {
+    --edu-deep: #033d30;
+    --edu-green: #0a6c56;
+    --edu-primary: #0cb481;
+    --edu-light: #34d399;
+
+    --edu-pale: #ecfdf5;
+    --edu-pale-2: #f3fffa;
+
+    --edu-text: #17352d;
+    --edu-muted: #6b7f78;
+
+    --edu-border: rgba(3, 61, 48, 0.08);
+    --edu-radius: 14px;
+    --edu-radius-sm: 10px;
+    --edu-shadow: 0 1px 3px rgba(3, 61, 48, 0.05), 0 1px 2px rgba(3, 61, 48, 0.03);
+    --edu-shadow-md: 0 4px 14px rgba(3, 61, 48, 0.07);
+    --edu-shadow-lg: 0 10px 30px rgba(3, 61, 48, 0.10);
+
+    --sidebar-width: 260px;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.lms-app *,
+.lms-app *::before,
+.lms-app *::after {
+    box-sizing: border-box;
+}
+
+.lms-app {
+    display: flex;
+    min-height: calc(100vh - 76px);
+    background: #f4faf7;
+    color: var(--edu-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+/* =========================================================
+   MOBILE TOP BAR
+   ========================================================= */
+
+.lms-mobile-bar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    padding: 0 1rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--edu-border);
+    box-shadow: 0 1px 3px rgba(3, 61, 48, 0.04);
+}
+
+.lms-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+}
+
+.lms-mobile-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 900;
+}
+
+.lms-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--edu-border);
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--edu-deep);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-menu-btn:hover,
+.lms-menu-btn:focus-visible {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.20);
+    outline: none;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.lms-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: #ffffff;
+    border-right: 1px solid var(--edu-border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(3, 61, 48, 0.15) transparent;
+}
+
+.lms-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lms-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(3, 61, 48, 0.12);
+    border-radius: 3px;
+}
+
+.lms-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1.35rem 1.5rem 1.1rem;
+    border-bottom: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.18);
+}
+
+.lms-sidebar-brand .brand-text h3 {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.lms-sidebar-brand .brand-text p {
+    margin: 0.15rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--edu-muted);
+}
+
+.lms-sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 1rem 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.06), rgba(52, 211, 153, 0.10));
+    border: 1px solid rgba(12, 180, 129, 0.10);
+}
+
+.lms-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.lms-avatar-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.lms-avatar-info strong {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 750;
+    color: var(--edu-deep);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-avatar-info small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--edu-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 0.75rem 0;
+}
+
+.lms-nav-label {
+    padding: 0.85rem 0.75rem 0.4rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--edu-muted);
+}
+
+.lms-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--edu-radius-sm);
+    color: var(--edu-text);
+    font-size: 0.87rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-nav-item:hover {
+    background: var(--edu-pale);
+    color: var(--edu-green);
+}
+
+.lms-nav-item.active {
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.10), rgba(52, 211, 153, 0.14));
+    color: var(--edu-green);
+    font-weight: 750;
+}
+
+.lms-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    border-radius: 0 3px 3px 0;
+    background: var(--edu-primary);
+}
+
+.lms-nav-item .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.lms-nav-item .nav-badge {
+    margin-left: auto;
+    background: var(--edu-primary);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.lms-sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 1rem 1.25rem;
+    border-top: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-footer .btn-upgrade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 750;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lms-sidebar-footer .btn-upgrade:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(3, 61, 48, 0.24);
+    color: #fff;
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.lms-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 61, 48, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 95;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.lms-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.lms-main {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem 2.5rem 3rem;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.lesson-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--edu-muted);
+    flex-wrap: wrap;
+}
+
+.lesson-breadcrumb a {
+    color: var(--edu-green);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.lesson-breadcrumb a:hover {
+    color: var(--edu-primary);
+}
+
+.lesson-breadcrumb .sep {
+    opacity: 0.5;
+}
+
+.lesson-breadcrumb .current {
+    color: var(--edu-text);
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 240px;
+}
+
+/* =========================================================
+   LESSON HEADER
+   ========================================================= */
+
+.lesson-header {
+    margin-bottom: 1.5rem;
+}
+
+.lesson-header .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    color: var(--edu-green);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.08), rgba(52, 211, 153, 0.14));
+    border: 1px solid rgba(12, 180, 129, 0.12);
+    font-size: 0.66rem;
+    font-weight: 850;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.lesson-header h1 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    font-weight: 900;
+    color: var(--edu-deep);
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+}
+
+.lesson-header p {
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+    color: var(--edu-muted);
+    line-height: 1.65;
+    max-width: 800px;
+}
+
+/* =========================================================
+   LESSON LAYOUT (main + sidebar)
+   ========================================================= */
+
+.lesson-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* =========================================================
+   VIDEO CONTAINER
+   ========================================================= */
+
+.lesson-main {
+    min-width: 0;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #033d30;
+    border-radius: var(--edu-radius);
+    overflow: hidden;
+    box-shadow: var(--edu-shadow-lg);
+    margin-bottom: 1.25rem;
+}
+
+.video-container video,
+.video-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    object-fit: cover;
+}
+
+/* =========================================================
+   MATERIAL CARD
+   ========================================================= */
+
+.material-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    background: #ffffff;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius);
+    box-shadow: var(--edu-shadow);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.material-card:hover {
+    box-shadow: var(--edu-shadow-md);
+    border-color: rgba(12, 180, 129, 0.16);
+}
+
+.material-info {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.material-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: var(--edu-pale);
+    color: var(--edu-green);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.material-text {
+    min-width: 0;
+}
+
+.material-text strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--edu-deep);
+    margin-bottom: 0.15rem;
+}
+
+.material-text p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--edu-muted);
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0.65rem 1.1rem;
+    border: 0;
+    border-radius: var(--edu-radius-sm);
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, #033d30, #0a6c56 55%, #0cb481);
+    box-shadow: 0 6px 16px rgba(3, 61, 48, 0.18);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(3, 61, 48, 0.24);
+    color: #fff;
+}
+
+.btn-outline {
+    color: var(--edu-text);
+    background: #ffffff;
+    border: 1px solid var(--edu-border);
+}
+
+.btn-outline:hover {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.20);
+    color: var(--edu-green);
+}
+
+.btn-small {
+    min-height: 38px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+}
+
+/* =========================================================
+   LESSON CONTROLS
+   ========================================================= */
+
+.lesson-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    padding: 1.1rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius);
+    box-shadow: var(--edu-shadow);
+    flex-wrap: wrap;
+}
+
+.lesson-controls form {
+    margin: 0;
+}
+
+/* Completed pill */
+.completed-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--edu-radius-sm);
+    font-size: 0.82rem;
+    font-weight: 850;
+    color: #047857;
+    background: var(--edu-pale);
+    border: 1px solid rgba(16, 185, 129, 0.16);
+}
+
+/* =========================================================
+   LESSON SIDEBAR
+   ========================================================= */
+
+.lesson-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+
+.progress-card {
+    padding: 1.35rem;
+    background: #ffffff;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius);
+    box-shadow: var(--edu-shadow);
+}
+
+.progress-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.progress-top strong {
+    color: var(--edu-deep);
+    font-size: 0.9rem;
+    font-weight: 850;
+}
+
+.progress-top span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    padding: 0.35rem 0.6rem;
+    color: #047857;
+    background: var(--edu-pale);
+    border: 1px solid rgba(16, 185, 129, 0.13);
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 900;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 9px;
+    overflow: hidden;
+    background: #e8f3ef;
+    border-radius: 999px;
+}
+
+.progress-bar span {
+    display: block;
+    height: 100%;
+    min-width: 0;
+    background: linear-gradient(90deg, #033d30, #0a6c56, #0cb481);
+    border-radius: inherit;
+    box-shadow: 0 0 12px rgba(12, 180, 129, 0.22);
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-card small {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--edu-muted);
+    font-size: 0.76rem;
+}
+
+/* Lesson info card */
+.lesson-info-card {
+    padding: 1.35rem;
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.05), rgba(52, 211, 153, 0.10));
+    border: 1px solid rgba(12, 180, 129, 0.12);
+    border-radius: var(--edu-radius);
+}
+
+.lesson-info-card h4 {
+    margin: 0 0 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.01em;
+}
+
+.lesson-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.lesson-info-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lesson-info-list .label {
+    color: var(--edu-muted);
+    font-weight: 600;
+}
+
+.lesson-info-list .value {
+    color: var(--edu-deep);
+    font-weight: 800;
+    text-align: right;
+}
+
+.lesson-info-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+/* =========================================================
+   RESPONSIVE — LARGE TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+    .lms-main {
+        padding: 1.75rem 2rem 3rem;
+    }
+
+    .lesson-layout {
+        grid-template-columns: minmax(0, 1fr) 280px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .lms-main {
+        padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .lesson-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-sidebar {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .lesson-sidebar > * {
+        flex: 1;
+        min-width: 240px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .lms-app {
+        flex-direction: column;
+    }
+
+    .lms-mobile-bar {
+        display: flex;
+    }
+
+    .lms-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 280px;
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(3, 61, 48, 0.12);
+        border-right: none;
+        padding-top: 0.5rem;
+    }
+
+    .lms-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .lms-overlay {
+        display: block;
+    }
+
+    .lms-main {
+        padding: 1.25rem 1rem 3rem;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .lms-main {
+        padding: 1rem 0.85rem 2.5rem;
+    }
+
+    .lesson-breadcrumb {
+        font-size: 0.74rem;
+        margin-bottom: 1rem;
+    }
+
+    .lesson-breadcrumb .current {
+        max-width: 140px;
+    }
+
+    .lesson-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .lesson-header p {
+        font-size: 0.85rem;
+    }
+
+    .material-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        padding: 1rem;
+    }
+
+    .material-card .btn {
+        width: 100%;
+    }
+
+    .lesson-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+        padding: 1rem;
+    }
+
+    .lesson-controls .btn,
+    .lesson-controls form,
+    .lesson-controls .completed-pill {
+        width: 100%;
+    }
+
+    .lesson-controls form .btn {
+        width: 100%;
+    }
+
+    .lesson-controls > span:empty {
+        display: none;
+    }
+
+    .lesson-sidebar {
+        flex-direction: column;
+    }
+
+    .lesson-sidebar > * {
+        min-width: 0;
+    }
+
+    .progress-card,
+    .lesson-info-card {
+        padding: 1.1rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .lesson-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .lesson-header .eyebrow {
+        font-size: 0.62rem;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.lms-app a:focus-visible,
+.lms-app button:focus-visible,
+.lms-app input:focus-visible {
+    outline: 3px solid rgba(12, 180, 129, 0.30);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.lms-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    z-index: 999;
+    padding: 0.6rem 1rem;
+    background: var(--edu-deep);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.lms-skip-link:focus {
+    top: 1rem;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .lms-app *,
+    .lms-app *::before,
+    .lms-app *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+<!-- Skip link for accessibility -->
+<a class="lms-skip-link" href="#lms-main">Skip to main content</a>
+
+<div class="lms-app">
+
+    <!-- =====================================================
+         MOBILE TOP BAR
+         ===================================================== -->
+    <div class="lms-mobile-bar">
+        <div class="lms-mobile-brand">
+            <span class="brand-mark">E</span>
+            <span>EduSphere</span>
+        </div>
+        <button class="lms-menu-btn" id="lmsMenuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="lmsSidebar">
+            ☰
+        </button>
+    </div>
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+         ===================================================== -->
+    <div class="lms-overlay" id="lmsOverlay" aria-hidden="true"></div>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+    <aside class="lms-sidebar" id="lmsSidebar" aria-label="Main navigation">
+
+        <div class="lms-sidebar-brand">
+            <div class="brand-mark">E</div>
+            <div class="brand-text">
+                <h3>EduSphere</h3>
+                <p>Student Portal</p>
+            </div>
+        </div>
+
+        <div class="lms-sidebar-user">
+            <div class="lms-avatar">
+                {{ user.first_name|first|default:"S" }}{{ user.last_name|first|default:"" }}
+            </div>
+            <div class="lms-avatar-info">
+                <strong>{{ user.first_name|default:user.email|truncatechars:20 }}</strong>
+                <small>Student Account</small>
+            </div>
+        </div>
+
+        <nav class="lms-nav">
+            <span class="lms-nav-label">Main Menu</span>
+
+            <a class="lms-nav-item" href="{% url 'dashboard' %}">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="lms-nav-item active" href="{% url 'my-courses' %}" aria-current="page">
+                <span class="nav-icon">📚</span>
+                <span>My Courses</span>
+            </a>
+
+            <a class="lms-nav-item" href="{% url 'course-list' %}">
+                <span class="nav-icon">🔍</span>
+                <span>Browse Courses</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📝</span>
+                <span>Assignments</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📈</span>
+                <span>Grades</span>
+            </a>
+
+            <span class="lms-nav-label">Account</span>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                {% if user.notifications.count %}
+                    <span class="nav-badge">{{ user.notifications.count }}</span>
+                {% endif %}
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="lms-sidebar-footer">
+            <a class="btn-upgrade" href="{% url 'course-list' %}">
+                <span>✦</span>
+                <span>Enroll in a Course</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+    <main class="lms-main" id="lms-main">
+
+        <!-- Breadcrumb -->
+        <nav class="lesson-breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <span class="sep">/</span>
+            <a href="{% url 'my-courses' %}">My Courses</a>
+            <span class="sep">/</span>
+            <a href="{% url 'course-detail' lesson.course.id %}">{{ lesson.course.title|truncatechars:30 }}</a>
+            <span class="sep">/</span>
+            <span class="current">{{ lesson.title }}</span>
+        </nav>
+
+        <!-- Lesson Header -->
+        <header class="lesson-header">
+            <span class="eyebrow">Lesson {{ lesson.lesson_order }}</span>
+            <h1>{{ lesson.title }}</h1>
+            {% if lesson.description %}
+                <p>{{ lesson.description }}</p>
+            {% endif %}
+        </header>
+
+        <!-- Lesson Layout -->
+        <div class="lesson-layout">
+
+            <!-- =============================================
+                 MAIN: Video + Material + Controls
+                 ============================================= -->
+            <article class="lesson-main">
+
+                <!-- Video -->
+                <div class="video-container">
+                    {% if lesson.video %}
+                        <video controls preload="metadata">
+                            <source src="{{ lesson.video.url }}">
+                            Your browser does not support video playback.
+                        </video>
+                    {% elif lesson.video_url %}
+                        <iframe
+                            src="{{ lesson.video_url }}"
+                            title="{{ lesson.title }}"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    {% endif %}
+                </div>
+
+                <!-- Material -->
+                {% if lesson.material %}
+                <div class="material-card">
+                    <div class="material-info">
+                        <div class="material-icon">📄</div>
+                        <div class="material-text">
+                            <strong>Learning Material</strong>
+                            <p>Download the PDF for this lesson.</p>
+                        </div>
+                    </div>
+                    <a class="btn btn-outline btn-small" href="{{ lesson.material.url }}" target="_blank" rel="noopener">
+                        Open PDF
+                    </a>
+                </div>
+                {% endif %}
+
+                <!-- Controls -->
+                <div class="lesson-controls">
+                    {% if previous_lesson %}
+                        <a class="btn btn-outline" href="{% url 'lesson-detail' previous_lesson.id %}">
+                            ← Previous
+                        </a>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
+
+                    {% if progress.completed %}
+                        <span class="completed-pill">✓ Completed</span>
+                    {% else %}
+                        <form method="post" action="{% url 'lesson-complete' lesson.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary" type="submit">Mark as Completed</button>
+                        </form>
+                    {% endif %}
+
+                    {% if next_lesson %}
+                        <a class="btn btn-outline" href="{% url 'lesson-detail' next_lesson.id %}">
+                            Next →
+                        </a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{% url 'course-detail' lesson.course.id %}">
+                            Finish Course
+                        </a>
+                    {% endif %}
+                </div>
+
+            </article>
+
+            <!-- =============================================
+                 SIDEBAR: Progress + Lesson Info
+                 ============================================= -->
+            <aside class="lesson-sidebar">
+
+
+                <!-- Progress -->
+                <div class="progress-card">
+                    <div class="progress-top">
+                        <strong>Course Progress</strong>
+                        <span>{{ percentage }}%</span>
+                    </div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                        <span style="width: {{ percentage }}%"></span>
+                    </div>
+                    <small>{{ completed }} of {{ total }} lessons completed</small>
+                </div>
+
+
+                {% if lesson.quiz %}
+<div class="quiz-card">
+    <div class="quiz-card-main">
+
+        <div class="quiz-icon">
+            📝
+        </div>
+
+        <div class="quiz-card-content">
+            <div class="quiz-badge">
+                QUIZ
+            </div>
+
+            <h3>{{ lesson.quiz.title }}</h3>
+
+            {% if lesson.quiz.description %}
+                <p>{{ lesson.quiz.description|striptags|truncatechars:140 }}</p>
+            {% else %}
+                <p>Test your understanding of this lesson.</p>
+            {% endif %}
+
+            <div class="quiz-meta">
+                <span>
+                    ❓ {{ lesson.quiz.questions.count }} question{{ lesson.quiz.questions.count|pluralize }}
+                </span>
+
+                <span>
+                    🎯 Pass mark: {{ lesson.quiz.pass_mark }}%
+                </span>
+
+                {% if lesson.quiz.time_limit %}
+                    <span>
+                        ⏱ {{ lesson.quiz.time_limit }} min
+                    </span>
+                {% endif %}
+
+                {% if lesson.quiz.max_attempts %}
+                    <span>
+                        🔄 {{ lesson.quiz.max_attempts }} attempt{{ lesson.quiz.max_attempts|pluralize }}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="quiz-card-action">
+        <a
+            href="{% url 'student-quiz-attempt' lesson.quiz.id %}"
+            class="btn btn-primary"
+        >
+            <span>Start Quiz</span>
+            <span>→</span>
+        </a>
+    </div>
+</div>
+{% endif %}
+                <!-- Lesson Info -->
+                <div class="lesson-info-card">
+                    <h4>Lesson Details</h4>
+                    <ul class="lesson-info-list">
+                        <li>
+                            <span class="label">Course</span>
+                            <span class="value">{{ lesson.course.title|truncatechars:22 }}</span>
+                        </li>
+                        <li>
+                            <span class="label">Lesson</span>
+                            <span class="value">{{ lesson.lesson_order }} of {{ total }}</span>
+                        </li>
+                        {% if lesson.duration %}
+                        <li>
+                            <span class="label">Duration</span>
+                            <span class="value">{{ lesson.duration }} min</span>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <span class="label">Status</span>
+                            <span class="value">
+                                {% if progress.completed %}Completed{% else %}In Progress{% endif %}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    var menuBtn = document.getElementById("lmsMenuBtn");
+    var sidebar = document.getElementById("lmsSidebar");
+    var overlay = document.getElementById("lmsOverlay");
+
+    if (!menuBtn || !sidebar || !overlay) return;
+
+    function openSidebar() {
+        sidebar.classList.add("open");
+        overlay.classList.add("active");
+        menuBtn.setAttribute("aria-expanded", "true");
+        menuBtn.innerHTML = "✕";
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.innerHTML = "☰";
+        document.body.style.overflow = "";
+    }
+
+    function toggleSidebar() {
+        if (sidebar.classList.contains("open")) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
+
+    menuBtn.addEventListener("click", toggleSidebar);
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && sidebar.classList.contains("open")) {
+            closeSidebar();
+        }
+    });
+
+    var navLinks = sidebar.querySelectorAll(".lms-nav-item");
+    navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+            if (window.innerWidth <= 900) {
+                closeSidebar();
+            }
+        });
+    });
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            if (window.innerWidth > 900 && sidebar.classList.contains("open")) {
+                closeSidebar();
+            }
+        }, 150);
+    });
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,2731 @@
+{% extends "academy/base.html" %}
+
+{% block title %}Edit Lesson | LearnHub{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   EDUSPHERE — TUTOR LESSON EDITOR
+   ========================================================= */
+
+:root {
+    --edu-deep: #033d30;
+    --edu-dark: #062f27;
+    --edu-green: #087a60;
+    --edu-primary: #10b981;
+    --edu-light: #34d399;
+    --edu-pale: #ecfdf5;
+
+    --edu-bg: #f5f8f7;
+    --edu-card: #ffffff;
+
+    --edu-text: #17352d;
+    --edu-muted: #71827d;
+
+    --edu-border: #e4ebe8;
+
+    --edu-danger: #dc2626;
+    --edu-warning: #d97706;
+
+    --edu-sidebar: 270px;
+
+    --edu-radius: 18px;
+    --edu-radius-sm: 11px;
+
+    --edu-shadow:
+        0 1px 2px rgba(3, 61, 48, 0.03),
+        0 8px 30px rgba(3, 61, 48, 0.055);
+
+    --edu-shadow-lg:
+        0 18px 45px rgba(3, 61, 48, 0.10);
+
+    --edu-transition:
+        cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.lesson-editor,
+.lesson-editor *,
+.lesson-editor *::before,
+.lesson-editor *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.lesson-editor {
+    width: 100%;
+    min-height: calc(100vh - 76px);
+
+    background:
+        radial-gradient(
+            circle at 85% 0%,
+            rgba(16, 185, 129, 0.045),
+            transparent 30%
+        ),
+        var(--edu-bg);
+
+    color: var(--edu-text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   DESKTOP APP LAYOUT
+   ========================================================= */
+
+.editor-layout {
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+
+    min-height: calc(100vh - 76px);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.editor-sidebar {
+    width: var(--edu-sidebar);
+    min-width: var(--edu-sidebar);
+    max-width: var(--edu-sidebar);
+
+    flex: 0 0 var(--edu-sidebar);
+
+    height: calc(100vh - 76px);
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border-right: 1px solid var(--edu-border);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    z-index: 50;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(3, 61, 48, 0.14) transparent;
+}
+
+.editor-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.editor-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(3, 61, 48, 0.12);
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   SIDEBAR BRAND
+   ========================================================= */
+
+.editor-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 22px 20px 20px;
+
+    border-bottom: 1px solid var(--edu-border);
+}
+
+.editor-brand-icon {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #087a60,
+            #10b981
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    box-shadow:
+        0 7px 18px rgba(3, 61, 48, 0.16);
+}
+
+.editor-brand-title {
+    margin: 0;
+
+    color: var(--edu-deep);
+
+    font-size: 16px;
+    font-weight: 850;
+
+    letter-spacing: -0.02em;
+}
+
+.editor-brand-subtitle {
+    margin: 3px 0 0;
+
+    color: var(--edu-muted);
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   USER CARD
+   ========================================================= */
+
+.editor-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 16px 14px 9px;
+
+    padding: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f2fbf7,
+            #f7fcfa
+        );
+
+    border: 1px solid #e1f0e9;
+
+    border-radius: 13px;
+}
+
+.editor-avatar {
+    width: 39px;
+    height: 39px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #10b981
+        );
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 850;
+
+    text-transform: uppercase;
+}
+
+.editor-user-info {
+    min-width: 0;
+}
+
+.editor-user-info strong {
+    display: block;
+
+    color: var(--edu-deep);
+
+    font-size: 12px;
+    font-weight: 750;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.editor-user-info span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--edu-muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.editor-nav {
+    display: flex;
+    flex-direction: column;
+
+    padding: 7px 10px 15px;
+}
+
+.editor-nav-label {
+    display: block;
+
+    padding: 13px 9px 7px;
+
+    color: #8a9994;
+
+    font-size: 9px;
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.13em;
+}
+
+.editor-nav-item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    width: 100%;
+
+    padding: 10px 11px;
+
+    margin-bottom: 3px;
+
+    border-radius: 11px;
+
+    color: #435650;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s var(--edu-transition),
+        color 0.2s var(--edu-transition),
+        transform 0.2s var(--edu-transition);
+}
+
+.editor-nav-item:hover {
+    color: var(--edu-green);
+
+    background: #f0faf6;
+
+    transform: translateX(1px);
+}
+
+.editor-nav-item.active {
+    color: var(--edu-green);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(16, 185, 129, 0.12),
+            rgba(16, 185, 129, 0.04)
+        );
+
+    font-weight: 750;
+}
+
+.editor-nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 50%;
+
+    width: 3px;
+    height: 21px;
+
+    transform: translateY(-50%);
+
+    border-radius: 0 4px 4px 0;
+
+    background: var(--edu-primary);
+}
+
+.editor-nav-icon {
+    width: 22px;
+    height: 22px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    font-size: 15px;
+}
+
+.nav-badge {
+    margin-left: auto;
+
+    min-width: 19px;
+
+    padding: 3px 6px;
+
+    border-radius: 999px;
+
+    background: var(--edu-primary);
+
+    color: white;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.editor-sidebar-footer {
+    margin-top: auto;
+
+    padding: 15px;
+
+    border-top: 1px solid var(--edu-border);
+}
+
+.manage-course-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 9px 12px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #087a60
+        );
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 5px 15px rgba(3, 61, 48, 0.14);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+.manage-course-btn:hover {
+    color: white;
+
+    background: #087a60;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(3, 61, 48, 0.20);
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.editor-main {
+    flex: 1 1 auto;
+
+    width: calc(100% - var(--edu-sidebar));
+
+    min-width: 0;
+
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 0%,
+            rgba(16, 185, 129, 0.045),
+            transparent 30%
+        ),
+        var(--edu-bg);
+}
+
+
+/* =========================================================
+   CONTENT CONTAINER
+   ========================================================= */
+
+.editor-container {
+    width: 100%;
+
+    max-width: 1320px;
+
+    margin: 0 auto;
+
+    padding: 35px 46px 90px;
+}
+
+
+/* =========================================================
+   MOBILE BAR
+   ========================================================= */
+
+.editor-mobile-bar {
+    display: none;
+
+    height: 62px;
+
+    padding: 0 18px;
+
+    align-items: center;
+    justify-content: space-between;
+
+    background: white;
+
+    border-bottom: 1px solid var(--edu-border);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+}
+
+.editor-mobile-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--edu-deep);
+
+    font-size: 15px;
+    font-weight: 850;
+}
+
+.editor-mobile-brand span {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #033d30,
+            #10b981
+        );
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.editor-menu-btn {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid var(--edu-border);
+
+    border-radius: 11px;
+
+    background: white;
+
+    color: var(--edu-deep);
+
+    font-size: 19px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.editor-overlay {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(3, 61, 48, 0.48);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 105;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity 0.25s var(--edu-transition);
+}
+
+.editor-overlay.active {
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.editor-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    color: var(--edu-muted);
+
+    font-size: 11px;
+}
+
+.editor-breadcrumb a {
+    color: var(--edu-green);
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.editor-breadcrumb a:hover {
+    color: var(--edu-primary);
+}
+
+.editor-breadcrumb .separator {
+    color: #aab6b2;
+}
+
+
+/* =========================================================
+   LESSON HEADER
+   ========================================================= */
+
+.lesson-header {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 28px 30px;
+
+    margin-bottom: 23px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 88% 12%,
+            rgba(52, 211, 153, 0.24),
+            transparent 31%
+        ),
+        linear-gradient(
+            135deg,
+            #033d30,
+            #075b48 55%,
+            #08745a
+        );
+
+    box-shadow: var(--edu-shadow-lg);
+}
+
+.lesson-header::before {
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+    height: 330px;
+
+    right: -130px;
+    top: -180px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.09);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 35px rgba(255,255,255,0.025),
+        0 0 0 70px rgba(255,255,255,0.015);
+}
+
+.lesson-header::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.035;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.9) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.9) 1px,
+            transparent 1px
+        );
+
+    background-size: 27px 27px;
+
+    pointer-events: none;
+}
+
+.lesson-header-content {
+    position: relative;
+
+    z-index: 2;
+}
+
+.lesson-header-top {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+}
+
+.lesson-label {
+    color: #a7f3d0;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.15em;
+}
+
+.lesson-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    font-size: 8px;
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+.lesson-status::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+.lesson-status.published {
+    color: #bbf7d0;
+
+    background:
+        rgba(16, 185, 129, 0.18);
+
+    border:
+        1px solid
+        rgba(52, 211, 153, 0.22);
+}
+
+.lesson-status.draft {
+    color: #fde68a;
+
+    background:
+        rgba(245, 158, 11, 0.18);
+
+    border:
+        1px solid
+        rgba(245, 158, 11, 0.22);
+}
+
+.lesson-header h1 {
+    margin: 0;
+
+    max-width: 900px;
+
+    color: white;
+
+    font-size:
+        clamp(1.55rem, 3vw, 2.25rem);
+
+    font-weight: 900;
+
+    line-height: 1.13;
+
+    letter-spacing: -0.04em;
+}
+
+.lesson-course {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 10px;
+
+    color: rgba(255,255,255,0.64);
+
+    font-size: 11px;
+}
+
+.lesson-course strong {
+    color: rgba(255,255,255,0.90);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CONTENT GRID
+   ========================================================= */
+
+.editor-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        305px;
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.editor-form-card {
+    background: white;
+
+    border:
+        1px solid
+        var(--edu-border);
+
+    border-radius: var(--edu-radius);
+
+    box-shadow: var(--edu-shadow);
+
+    overflow: hidden;
+}
+
+.form-card-header {
+    padding: 21px 24px;
+
+    border-bottom:
+        1px solid
+        var(--edu-border);
+}
+
+.form-card-header h2 {
+    margin: 0;
+
+    color: var(--edu-deep);
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.025em;
+}
+
+.form-card-header p {
+    margin: 5px 0 0;
+
+    color: var(--edu-muted);
+
+    font-size: 11px;
+
+    line-height: 1.55;
+}
+
+.form-card-body {
+    padding: 24px;
+}
+
+
+/* =========================================================
+   DJANGO FORM
+   ========================================================= */
+
+.editor-form-card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-form-card form p,
+.editor-form-card .form-row,
+.editor-form-card .form-group {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0 0 17px;
+}
+
+.editor-form-card label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--edu-deep);
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.editor-form-card input[type="text"],
+.editor-form-card input[type="email"],
+.editor-form-card input[type="password"],
+.editor-form-card input[type="number"],
+.editor-form-card input[type="url"],
+.editor-form-card input[type="tel"],
+.editor-form-card input[type="date"],
+.editor-form-card input[type="datetime-local"],
+.editor-form-card input[type="file"],
+.editor-form-card select,
+.editor-form-card textarea {
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 10px 12px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--edu-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+.editor-form-card textarea {
+    min-height: 150px;
+
+    line-height: 1.65;
+
+    resize: vertical;
+}
+
+.editor-form-card input::placeholder,
+.editor-form-card textarea::placeholder {
+    color: #a1ada9;
+}
+
+.editor-form-card input:hover,
+.editor-form-card select:hover,
+.editor-form-card textarea:hover {
+    border-color: #b9ccc4;
+}
+
+.editor-form-card input:focus,
+.editor-form-card select:focus,
+.editor-form-card textarea:focus {
+    border-color: var(--edu-primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(16, 185, 129, 0.10);
+}
+
+.editor-form-card input[type="file"] {
+    background: #f8fcfa;
+
+    cursor: pointer;
+}
+
+.editor-form-card input[type="checkbox"],
+.editor-form-card input[type="radio"] {
+    width: 17px;
+    height: 17px;
+
+    margin-right: 7px;
+
+    accent-color: var(--edu-primary);
+
+    cursor: pointer;
+}
+
+.editor-form-card small,
+.editor-form-card .helptext,
+.editor-form-card .help-text {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--edu-muted);
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   FORM ERRORS
+   ========================================================= */
+
+.editor-form-card .errorlist {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    list-style: none;
+
+    margin: 6px 0 0;
+
+    padding: 0;
+
+    color: var(--edu-danger);
+
+    font-size: 11px;
+
+    font-weight: 650;
+}
+
+.editor-form-card .errorlist li {
+    padding: 7px 9px;
+
+    background: #fef2f2;
+
+    border:
+        1px solid
+        #fee2e2;
+
+    border-radius: 7px;
+}
+
+.form-errors {
+    padding: 11px 13px;
+
+    margin-bottom: 18px;
+
+    border-left:
+        3px solid
+        var(--edu-danger);
+
+    border-radius: 9px;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CURRENT FILE
+   ========================================================= */
+
+.current-file {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 6px;
+
+    padding: 8px 10px;
+
+    background: var(--edu-pale);
+
+    border:
+        1px solid
+        #d1fae5;
+
+    border-radius: 8px;
+
+    color: var(--edu-green);
+
+    font-size: 11px;
+}
+
+.current-file a {
+    color: var(--edu-deep);
+
+    font-weight: 750;
+
+    text-decoration: none;
+}
+
+.current-file a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    padding-top: 20px;
+
+    margin-top: 4px;
+
+    border-top:
+        1px solid
+        var(--edu-border);
+}
+
+.editor-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 43px;
+
+    padding: 10px 17px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        background 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.editor-btn-primary {
+    border: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b9f75,
+            #10b981
+        );
+
+    color: white;
+
+    box-shadow:
+        0 7px 17px
+        rgba(16, 185, 129, 0.20);
+}
+
+.editor-btn-primary:hover {
+    color: white;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 22px
+        rgba(16, 185, 129, 0.27);
+}
+
+.editor-btn-secondary {
+    border:
+        1px solid
+        #d6e4df;
+
+    background: white;
+
+    color: var(--edu-green);
+}
+
+.editor-btn-secondary:hover {
+    color: var(--edu-deep);
+
+    background: #f5fbf8;
+
+    border-color: #bdd6cc;
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR TOOLS
+   ========================================================= */
+
+.editor-tools {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+
+    position: sticky;
+    top: 24px;
+}
+
+.tool-card {
+    padding: 18px;
+
+    background: white;
+
+    border:
+        1px solid
+        var(--edu-border);
+
+    border-radius: var(--edu-radius);
+
+    box-shadow: var(--edu-shadow);
+}
+
+.tool-card-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.tool-icon {
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: var(--edu-pale);
+
+    color: var(--edu-green);
+
+    font-size: 16px;
+}
+
+.tool-card h3 {
+    margin: 0;
+
+    color: var(--edu-deep);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.tool-card-description {
+    margin: 2px 0 0;
+
+    color: var(--edu-muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+
+.quiz-card {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fdfb
+        );
+}
+
+.quiz-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-bottom: 10px;
+
+    padding: 5px 8px;
+
+    border-radius: 999px;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.quiz-status.exists {
+    color: #047857;
+
+    background: #d1fae5;
+}
+
+.quiz-status.empty {
+    color: #6b7280;
+
+    background: #f3f4f6;
+}
+
+.quiz-info {
+    margin: 0 0 14px;
+
+    color: var(--edu-muted);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+.quiz-btn {
+    width: 100%;
+
+    min-height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 9px;
+
+    background: var(--edu-deep);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+.quiz-btn:hover {
+    background: var(--edu-green);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   INFORMATION LIST
+   ========================================================= */
+
+.tool-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+.tool-list-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding-bottom: 10px;
+
+    border-bottom:
+        1px solid
+        #edf1ef;
+}
+
+.tool-list-item:last-child {
+    padding-bottom: 0;
+
+    border-bottom: none;
+}
+
+.tool-list-label {
+    color: var(--edu-muted);
+
+    font-size: 10px;
+}
+
+.tool-list-value {
+    color: var(--edu-deep);
+
+    font-size: 10px;
+
+    font-weight: 750;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   SAVE BAR
+   ========================================================= */
+
+.save-bar {
+    position: sticky;
+
+    bottom: 14px;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 22px;
+
+    padding: 11px 14px;
+
+    background:
+        rgba(255, 255, 255, 0.94);
+
+    backdrop-filter: blur(14px);
+
+    border:
+        1px solid
+        rgba(3, 61, 48, 0.10);
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(3, 61, 48, 0.12);
+}
+
+.save-message {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--edu-muted);
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.save-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--edu-primary);
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1150px) {
+
+    .editor-container {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .editor-grid {
+        grid-template-columns:
+            minmax(0, 1fr)
+            270px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .lesson-editor {
+        min-height: 100vh;
+    }
+
+    .editor-layout {
+        display: block;
+
+        min-height: calc(100vh - 62px);
+    }
+
+    .editor-mobile-bar {
+        display: flex;
+    }
+
+    .editor-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 285px;
+        min-width: 285px;
+        max-width: 285px;
+
+        height: 100vh;
+        height: 100dvh;
+
+        z-index: 110;
+
+        transform: translateX(-100%);
+
+        transition:
+            transform 0.3s var(--edu-transition);
+
+        box-shadow:
+            8px 0 30px
+            rgba(0, 0, 0, 0.14);
+
+        border-right: none;
+    }
+
+    .editor-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .editor-overlay {
+        display: block;
+    }
+
+    .editor-main {
+        width: 100%;
+
+        min-height:
+            calc(100vh - 62px);
+    }
+
+    .editor-container {
+        padding:
+            24px
+            20px
+            60px;
+    }
+
+    .editor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-tools {
+        position: static;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .editor-container {
+        padding:
+            20px
+            15px
+            55px;
+    }
+
+    .lesson-header {
+        padding: 22px;
+
+        border-radius: 17px;
+    }
+
+    .lesson-header h1 {
+        font-size: 1.45rem;
+    }
+
+    .form-card-header {
+        padding: 18px;
+    }
+
+    .form-card-body {
+        padding: 18px;
+    }
+
+    .editor-tools {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+    .form-actions .editor-btn {
+        width: 100%;
+    }
+
+    .save-bar {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        bottom: 8px;
+    }
+
+    .save-bar .editor-btn {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .editor-container {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .lesson-header {
+        padding: 19px;
+    }
+
+    .lesson-header h1 {
+        font-size: 1.3rem;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.lesson-editor a:focus-visible,
+.lesson-editor button:focus-visible,
+.lesson-editor input:focus-visible,
+.lesson-editor select:focus-visible,
+.lesson-editor textarea:focus-visible {
+    outline:
+        3px solid
+        rgba(16, 185, 129, 0.25);
+
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .lesson-editor *,
+    .lesson-editor *::before,
+    .lesson-editor *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+
+}
+
+</style>
+
+<!-- =========================================================
+     PAGE
+     ========================================================= -->
+
+<div class="lesson-editor">
+
+```
+<!-- =====================================================
+     MOBILE HEADER
+     ===================================================== -->
+
+<div class="editor-mobile-bar">
+
+    <div class="editor-mobile-brand">
+
+        <span>E</span>
+
+        <strong>
+            EduSphere
+        </strong>
+
+    </div>
+
+
+    <button
+        class="editor-menu-btn"
+        id="editorMenuBtn"
+        type="button"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="editorSidebar"
+    >
+        ☰
+    </button>
+
+</div>
+
+
+<!-- MOBILE OVERLAY -->
+
+<div
+    class="editor-overlay"
+    id="editorOverlay"
+    aria-hidden="true"
+></div>
+
+
+<!-- =====================================================
+     DESKTOP LAYOUT
+     ===================================================== -->
+
+<div class="editor-layout">
+
+
+    <!-- =================================================
+         SIDEBAR
+         ================================================= -->
+
+    <aside
+        class="editor-sidebar"
+        id="editorSidebar"
+        aria-label="Tutor navigation"
+    >
+
+
+        <!-- BRAND -->
+
+        <div class="editor-sidebar-brand">
+
+            <div class="editor-brand-icon">
+                E
+            </div>
+
+            <div>
+
+                <h2 class="editor-brand-title">
+                    EduSphere
+                </h2>
+
+                <p class="editor-brand-subtitle">
+                    Tutor Portal
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- USER -->
+
+        <div class="editor-user">
+
+            <div class="editor-avatar">
+
+                {{ user.first_name|first|default:"T" }}{{ user.last_name|first|default:"" }}
+
+            </div>
+
+
+            <div class="editor-user-info">
+
+                <strong>
+                    {{ user.first_name|default:user.email|truncatechars:20 }}
+                </strong>
+
+                <span>
+                    Tutor Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="editor-nav">
+
+
+            <span class="editor-nav-label">
+                Workspace
+            </span>
+
+
+            <a
+                href="{% url 'tutor-dashboard' %}"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    📊
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'tutor-courses' %}"
+                class="editor-nav-item active"
+                aria-current="page"
+            >
+
+                <span class="editor-nav-icon">
+                    📚
+                </span>
+
+                <span>
+                    My Courses
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    👥
+                </span>
+
+                <span>
+                    Students
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    📝
+                </span>
+
+                <span>
+                    Lessons
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    📈
+                </span>
+
+                <span>
+                    Analytics
+                </span>
+
+            </a>
+
+
+            <span class="editor-nav-label">
+                Account
+            </span>
+
+
+            <a
+                href="{% url 'profile' %}"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    👤
+                </span>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    🔔
+                </span>
+
+                <span>
+                    Notifications
+                </span>
+
+
+                {% if user.notifications.count %}
+
+                    <span class="nav-badge">
+                        {{ user.notifications.count }}
+                    </span>
+
+                {% endif %}
+
+            </a>
+
+
+            <a
+                href="#"
+                class="editor-nav-item"
+            >
+
+                <span class="editor-nav-icon">
+                    ⚙️
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- SIDEBAR FOOTER -->
+
+        <div class="editor-sidebar-footer">
+
+            <a
+                href="{% url 'tutor-courses' %}"
+                class="manage-course-btn"
+            >
+
+                <span>
+                    ←
+                </span>
+
+                <span>
+                    Manage Courses
+                </span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+         ================================================= -->
+
+    <main
+        class="editor-main"
+        id="lesson-editor-main"
+    >
+
+
+        <div class="editor-container">
+
+
+            <!-- =================================================
+                 BREADCRUMB
+                 ================================================= -->
+
+            <nav
+                class="editor-breadcrumb"
+                aria-label="Breadcrumb"
+            >
+
+                <a href="{% url 'tutor-dashboard' %}">
+                    Dashboard
+                </a>
+
+                <span class="separator">
+                    /
+                </span>
+
+                <a href="{% url 'tutor-courses' %}">
+                    My Courses
+                </a>
+
+                <span class="separator">
+                    /
+                </span>
+
+                <a href="{% url 'tutor-course-detail' course.id %}">
+                    {{ course.title|truncatechars:32 }}
+                </a>
+
+                <span class="separator">
+                    /
+                </span>
+
+                <span>
+                    Edit Lesson
+                </span>
+
+            </nav>
+
+
+            <!-- =================================================
+                 LESSON HEADER
+                 ================================================= -->
+
+            <section class="lesson-header">
+
+                <div class="lesson-header-content">
+
+
+                    <div class="lesson-header-top">
+
+                        <span class="lesson-label">
+                            Lesson Editor
+                        </span>
+
+
+                        {% if lesson.is_published %}
+
+                            <span class="lesson-status published">
+                                Published
+                            </span>
+
+                        {% else %}
+
+                            <span class="lesson-status draft">
+                                Draft
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <h1>
+                        {{ lesson.title }}
+                    </h1>
+
+
+                    <div class="lesson-course">
+
+                        <span>
+                            Course:
+                        </span>
+
+                        <strong>
+                            {{ course.title }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EDITOR GRID
+                 ================================================= -->
+
+            <div class="editor-grid">
+
+
+                <!-- =============================================
+                     LESSON FORM
+                     ============================================= -->
+
+                <section class="editor-form-card">
+
+
+                    <div class="form-card-header">
+
+                        <h2>
+                            Lesson Details
+                        </h2>
+
+                        <p>
+                            Update your lesson title, content,
+                            resources, visibility and other details.
+                        </p>
+
+                    </div>
+
+
+                    <div class="form-card-body">
+
+
+                        <form
+                            method="post"
+                            enctype="multipart/form-data"
+                            novalidate
+                        >
+
+                            {% csrf_token %}
+
+
+                            {% if form.non_field_errors %}
+
+                                <div class="form-errors">
+
+                                    {{ form.non_field_errors }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% include "academy/partials/form_fields.html" with form=form %}
+
+
+                            <div class="form-actions">
+
+                                <a
+                                    href="{% url 'tutor-course-detail' course.id %}"
+                                    class="editor-btn editor-btn-secondary"
+                                >
+
+                                    ← Cancel
+
+                                </a>
+
+
+                                <button
+                                    class="editor-btn editor-btn-primary"
+                                    type="submit"
+                                >
+
+                                    ✓
+
+                                    <span>
+                                        Save Changes
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- =============================================
+                     TOOLS
+                     ============================================= -->
+
+                <aside class="editor-tools">
+
+
+                    <!-- QUIZ -->
+
+                    <section class="tool-card quiz-card">
+
+
+                        <div class="tool-card-header">
+
+                            <div class="tool-icon">
+                                📝
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Lesson Quiz
+                                </h3>
+
+                                <p class="tool-card-description">
+                                    Test student understanding
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if quiz %}
+
+
+                            <span class="quiz-status exists">
+                                ✓ Quiz available
+                            </span>
+
+
+                            <p class="quiz-info">
+
+                                This lesson has
+
+                                <strong>
+                                    {{ quiz.question_count }}
+                                </strong>
+
+                                question{{ quiz.question_count|pluralize }}.
+
+                            </p>
+
+
+                            <a
+                                href="{% url 'tutor-quiz-edit' lesson.id %}"
+                                class="quiz-btn"
+                            >
+
+                                ✎
+
+                                <span>
+                                    Manage Quiz
+                                </span>
+
+                            </a>
+
+
+                        {% else %}
+
+
+                            <span class="quiz-status empty">
+                                No quiz yet
+                            </span>
+
+
+                            <p class="quiz-info">
+
+                                Add a short assessment to help
+                                students check their understanding.
+
+                            </p>
+
+
+                            <a
+                                href="{% url 'tutor-quiz-create' lesson.id %}"
+                                class="quiz-btn"
+                            >
+
+                                +
+
+                                <span>
+                                    Create Quiz
+                                </span>
+
+                            </a>
+
+
+                        {% endif %}
+
+
+                    </section>
+
+
+                    <!-- LESSON INFORMATION -->
+
+                    <section class="tool-card">
+
+
+                        <div class="tool-card-header">
+
+                            <div class="tool-icon">
+                                ℹ️
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Lesson Information
+                                </h3>
+
+                                <p class="tool-card-description">
+                                    Current lesson details
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="tool-list">
+
+
+                            <div class="tool-list-item">
+
+                                <span class="tool-list-label">
+                                    Status
+                                </span>
+
+                                <span class="tool-list-value">
+
+                                    {% if lesson.is_published %}
+                                        Published
+                                    {% else %}
+                                        Draft
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="tool-list-item">
+
+                                <span class="tool-list-label">
+                                    Course
+                                </span>
+
+                                <span class="tool-list-value">
+                                    {{ course.title|truncatechars:20 }}
+                                </span>
+
+                            </div>
+
+
+                            {% if lesson.created_at %}
+
+                                <div class="tool-list-item">
+
+                                    <span class="tool-list-label">
+                                        Created
+                                    </span>
+
+                                    <span class="tool-list-value">
+                                        {{ lesson.created_at|date:"M d, Y" }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- TIP -->
+
+                    <section class="tool-card">
+
+
+                        <div class="tool-card-header">
+
+                            <div class="tool-icon">
+                                💡
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Publishing Tip
+                                </h3>
+
+                                <p class="tool-card-description">
+                                    Before publishing
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <p style="
+                            margin:0;
+                            color:#71827d;
+                            font-size:10px;
+                            line-height:1.7;
+                        ">
+
+                            Make sure your lesson content is
+                            complete, resources are accessible,
+                            and the quiz accurately reflects
+                            the material.
+
+                        </p>
+
+
+                    </section>
+
+
+                </aside>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 SAVE BAR
+                 ================================================= -->
+
+            <div class="save-bar">
+
+
+                <div class="save-message">
+
+                    <span class="save-dot"></span>
+
+                    <span>
+                        Review your changes before saving.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="editor-btn editor-btn-primary"
+                    id="bottomSaveBtn"
+                >
+
+                    ✓
+
+                    <span>
+                        Save Lesson
+                    </span>
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+```
+
+</div>
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /* =====================================================
+       MOBILE SIDEBAR
+       ===================================================== */
+
+    const menuBtn =
+        document.getElementById("editorMenuBtn");
+
+    const sidebar =
+        document.getElementById("editorSidebar");
+
+    const overlay =
+        document.getElementById("editorOverlay");
+
+
+    if (menuBtn && sidebar && overlay) {
+
+
+        function openSidebar() {
+
+            sidebar.classList.add("open");
+
+            overlay.classList.add("active");
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+            menuBtn.setAttribute(
+                "aria-label",
+                "Close navigation"
+            );
+
+            menuBtn.innerHTML = "✕";
+
+            document.body.style.overflow = "hidden";
+
+        }
+
+
+        function closeSidebar() {
+
+            sidebar.classList.remove("open");
+
+            overlay.classList.remove("active");
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            menuBtn.setAttribute(
+                "aria-label",
+                "Open navigation"
+            );
+
+            menuBtn.innerHTML = "☰";
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        menuBtn.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    sidebar.classList.contains("open")
+                ) {
+
+                    closeSidebar();
+
+                } else {
+
+                    openSidebar();
+
+                }
+
+            }
+        );
+
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape" &&
+                    sidebar.classList.contains("open")
+                ) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+
+        sidebar
+            .querySelectorAll(".editor-nav-item")
+            .forEach(function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth <= 900
+                        ) {
+
+                            closeSidebar();
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+        window.addEventListener(
+            "resize",
+            function () {
+
+                if (
+                    window.innerWidth > 900 &&
+                    sidebar.classList.contains("open")
+                ) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       BOTTOM SAVE BUTTON
+       ===================================================== */
+
+    const bottomSaveBtn =
+        document.getElementById("bottomSaveBtn");
+
+
+    if (bottomSaveBtn) {
+
+        bottomSaveBtn.addEventListener(
+            "click",
+            function () {
+
+                const form =
+                    document.querySelector(
+                        ".editor-form-card form"
+                    );
+
+                if (form) {
+
+                    if (
+                        typeof form.requestSubmit === "function"
+                    ) {
+
+                        form.requestSubmit();
+
+                    } else {
+
+                        form.submit();
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+})();
+
+</script>
+
+{% endblock %}

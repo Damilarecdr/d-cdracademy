@@ -1,0 +1,465 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         BASIC META
+    ====================================================== -->
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Brilliant Mind Academy — Learn better, prepare smarter and achieve more.">
+
+    <meta name="theme-color"
+          content="#022c23">
+
+    <title>
+        {% block title %}
+            D-CDR AcCADEMY
+        {% endblock %}
+    </title>
+
+
+    <!-- =====================================================
+         FAVICON
+    ====================================================== -->
+    <link rel="shortcut icon"
+          href="{% static 'img/logo.png' %}"
+          type="image/x-icon">
+
+
+    <!-- =====================================================
+         GOOGLE FONT — INTER
+    ====================================================== -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =====================================================
+         TAILWIND CONFIG
+    ====================================================== -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        academy: {
+                            green: "#022c23",
+                            primary: "#0a6c56",
+                            light: "#b2f5ea",
+                            yellow: "#facc15"
+                        }
+                    },
+
+                    fontFamily: {
+                        inter: ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <!-- =====================================================
+         AOS ANIMATION CSS
+    ====================================================== -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+
+    <!-- =====================================================
+         NAVBAR CSS
+         
+         IMPORTANT:
+         If your actual file is:
+         static/css/navbar.css
+         
+         use:
+         {% static 'css/navbar.css' %}
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="{% static 'css/navbar.css' %}">
+
+
+    <!-- =====================================================
+         GLOBAL CUSTOM CSS
+    ====================================================== -->
+    <style>
+
+        /* -------------------------------------------------
+           RESET
+        -------------------------------------------------- */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* -------------------------------------------------
+           ACADEMY COLORS
+        -------------------------------------------------- */
+
+        :root {
+            --green: #0a6c56;
+            --dark-green: #022c23;
+            --light-green: #b2f5ea;
+            --hover-green: #9ae6b4;
+            --yellow: #facc15;
+        }
+
+
+        /* -------------------------------------------------
+           SELECTION
+        -------------------------------------------------- */
+
+        ::selection {
+            background: #facc15;
+            color: #022c23;
+        }
+
+
+        /* -------------------------------------------------
+           SCROLLBAR
+        -------------------------------------------------- */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0fdf4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0a6c56;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #022c23;
+        }
+
+
+        /* -------------------------------------------------
+           FOCUS
+        -------------------------------------------------- */
+
+        :focus-visible {
+            outline: 3px solid rgba(250, 204, 21, 0.6);
+            outline-offset: 3px;
+        }
+
+
+        /* -------------------------------------------------
+           PREVENT HORIZONTAL OVERFLOW
+        -------------------------------------------------- */
+
+        section,
+        footer,
+        header,
+        main {
+            max-width: 100%;
+        }
+
+
+        /* -------------------------------------------------
+           DO NOT HIDE SECTIONS
+           
+           IMPORTANT:
+           Do NOT use:
+           
+           section {
+               opacity: 0;
+           }
+           
+           because it can make the entire homepage invisible.
+        -------------------------------------------------- */
+
+        section {
+            position: relative;
+        }
+
+
+        /* -------------------------------------------------
+           MOBILE
+        -------------------------------------------------- */
+
+        @media (max-width: 640px) {
+
+            body {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
+
+    <!-- =====================================================
+         PAGE-SPECIFIC CSS
+    ====================================================== -->
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body class="bg-white text-slate-900 antialiased">
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    {% include 'navbar.html' %}
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    {% include 'footer.html' %}
+
+
+    <!-- =====================================================
+         AOS JAVASCRIPT
+    ====================================================== -->
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+    <!-- =====================================================
+         AOS INITIALIZATION
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            AOS.init({
+                duration: 800,
+                easing: "ease-out-cubic",
+                once: true,
+                offset: 80,
+                delay: 0
+            });
+
+        });
+
+    </script>
+
+
+    <!-- =====================================================
+         MOBILE MENU
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const menu = document.getElementById("menu");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (menu && mobileMenu) {
+
+                menu.addEventListener("click", function () {
+
+                    mobileMenu.classList.toggle("show");
+
+                });
+
+            }
+
+
+            /* Close mobile menu after clicking a link */
+
+            document.querySelectorAll(".mobile-menu a").forEach(function (link) {
+
+                link.addEventListener("click", function () {
+
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove("show");
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+
+    <!-- =====================================================
+         TUTOR / TESTIMONIAL AUTO SLIDER
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            function autoSlide(containerId, interval = 5000) {
+
+                const container =
+                    document.getElementById(containerId);
+
+                if (!container) {
+                    return;
+                }
+
+                const cards = container.children;
+
+                if (!cards.length) {
+                    return;
+                }
+
+                let index = 0;
+
+                setInterval(function () {
+
+                    index = (index + 1) % cards.length;
+
+                    container.scrollTo({
+                        left: cards[index].offsetLeft,
+                        behavior: "smooth"
+                    });
+
+                }, interval);
+
+            }
+
+
+            autoSlide("tutorSlider", 5000);
+
+            autoSlide("testimonialSlider", 5000);
+
+        });
+
+    </script>
+
+
+    <!-- =====================================================
+         SMOOTH SCROLL
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll(
+                'a[href^="#"]'
+            ).forEach(function (link) {
+
+                link.addEventListener("click", function (event) {
+
+                    const href =
+                        link.getAttribute("href");
+
+                    if (!href || href === "#") {
+                        return;
+                    }
+
+                    const target =
+                        document.querySelector(href);
+
+                    if (target) {
+
+                        event.preventDefault();
+
+                        target.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+
+    <!-- =====================================================
+         PAGE-SPECIFIC JAVASCRIPT
+    ====================================================== -->
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>

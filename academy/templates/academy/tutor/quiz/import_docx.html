@@ -1,0 +1,387 @@
+{% extends "academy/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Import Questions | {{ quiz.title }}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    :root {
+        --edu-green: #087f5b;
+        --edu-dark: #064e3b;
+        --edu-light: #ecfdf5;
+        --edu-border: #dfe7e3;
+        --edu-text: #17211d;
+        --edu-muted: #6b7771;
+        --edu-white: #ffffff;
+        --edu-danger: #dc2626;
+    }
+
+    .docx-page {
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 40px 24px 70px;
+    }
+
+    .docx-header {
+        margin-bottom: 28px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        color: var(--edu-muted);
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .breadcrumb a {
+        color: var(--edu-green);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .docx-header h1 {
+        margin: 0;
+        color: var(--edu-dark);
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    .docx-header p {
+        margin: 8px 0 0;
+        color: var(--edu-muted);
+        font-size: 15px;
+    }
+
+    .docx-card {
+        background: var(--edu-white);
+        border: 1px solid var(--edu-border);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .upload-zone {
+        border: 2px dashed #b8d8cb;
+        border-radius: 18px;
+        background: #f8fffc;
+        padding: 45px 30px;
+        text-align: center;
+        transition: 0.2s ease;
+    }
+
+    .upload-zone:hover {
+        border-color: var(--edu-green);
+        background: var(--edu-light);
+    }
+
+    .upload-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 18px;
+        border-radius: 18px;
+        background: var(--edu-light);
+        color: var(--edu-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+    .upload-zone h2 {
+        margin: 0 0 8px;
+        color: var(--edu-text);
+        font-size: 21px;
+    }
+
+    .upload-zone p {
+        color: var(--edu-muted);
+        margin: 0 0 20px;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .choose-file {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        border-radius: 10px;
+        background: var(--edu-green);
+        color: white;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+    .selected-file {
+        margin-top: 15px;
+        font-size: 14px;
+        color: var(--edu-dark);
+        font-weight: 600;
+    }
+
+    .instructions {
+        margin-top: 30px;
+        padding: 22px;
+        background: #f8faf9;
+        border: 1px solid var(--edu-border);
+        border-radius: 15px;
+    }
+
+    .instructions h3 {
+        margin: 0 0 14px;
+        color: var(--edu-dark);
+        font-size: 17px;
+    }
+
+    .instructions pre {
+        margin: 0;
+        padding: 18px;
+        overflow-x: auto;
+        background: #ffffff;
+        border: 1px solid var(--edu-border);
+        border-radius: 12px;
+        font-family: Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.65;
+        color: #34413b;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        border: 0;
+        text-decoration: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-secondary {
+        background: #f1f4f2;
+        color: #34413b;
+    }
+
+    .btn-primary {
+        background: var(--edu-green);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--edu-dark);
+    }
+
+    .messages {
+        margin-bottom: 20px;
+    }
+
+    .message {
+        padding: 14px 16px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #fff4f4;
+        color: var(--edu-danger);
+        border: 1px solid #fecaca;
+    }
+
+    @media (max-width: 700px) {
+        .docx-page {
+            padding: 25px 15px 50px;
+        }
+
+        .docx-card {
+            padding: 20px;
+        }
+
+        .docx-header h1 {
+            font-size: 26px;
+        }
+
+        .upload-zone {
+            padding: 32px 18px;
+        }
+
+        .actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="docx-page">
+
+    <div class="docx-header">
+
+        <div class="breadcrumb">
+            <a href="{% url 'tutor-quiz-edit' lesson.id %}">
+                Quiz
+            </a>
+
+            <span>›</span>
+
+            <span>Import Questions</span>
+        </div>
+
+        <h1>Import Questions from Word</h1>
+
+        <p>
+            Upload a DOCX file to quickly add multiple questions
+            to <strong>{{ quiz.title }}</strong>.
+        </p>
+
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="docx-card">
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+            <div class="upload-zone">
+
+                <div class="upload-icon">
+                    📄
+                </div>
+
+                <h2>
+                    Upload your Word document
+                </h2>
+
+                <p>
+                    Supported format: .DOCX · Maximum size: 10 MB
+                </p>
+
+                <label
+                    for="docx_file"
+                    class="choose-file"
+                >
+                    Choose Word Document
+                </label>
+
+                <input
+                    type="file"
+                    id="docx_file"
+                    name="docx_file"
+                    class="file-input"
+                    accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                >
+
+                <div
+                    id="selectedFile"
+                    class="selected-file"
+                ></div>
+
+            </div>
+
+            <div class="instructions">
+
+                <h3>
+                    Word document format
+                </h3>
+
+                <pre>1. What is the capital of Nigeria?
+
+A. Lagos
+B. Abuja
+C. Kano
+D. Ibadan
+
+Answer: B
+Points: 2
+
+
+2. Which is a programming language?
+
+A. HTML
+B. CSS
+C. Python
+D. Photoshop
+
+Answer: C
+Points: 1
+
+
+3. The Earth is round.
+
+A. True
+B. False
+
+Answer: A
+Points: 1</pre>
+
+            </div>
+
+            <div class="actions">
+
+                <a
+                    href="{% url 'tutor-quiz-edit' lesson.id %}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Import Questions
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    const fileInput = document.getElementById("docx_file");
+    const selectedFile = document.getElementById("selectedFile");
+
+    fileInput.addEventListener("change", function () {
+
+        if (!this.files.length) {
+            selectedFile.textContent = "";
+            return;
+        }
+
+        const file = this.files[0];
+
+        selectedFile.textContent =
+            "Selected: " + file.name;
+    });
+</script>
+
+{% endblock %}

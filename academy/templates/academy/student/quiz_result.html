@@ -1,0 +1,803 @@
+{% extends "academy/base.html" %}
+
+{% block title %}
+    {{ quiz.title }} — Quiz Review
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   QUIZ REVIEW PAGE
+   ========================================================= */
+
+.quiz-review-page {
+    min-height: calc(100vh - 76px);
+    padding: 2rem 1rem 4rem;
+    background: #f4faf7;
+    color: #17352d;
+}
+
+.quiz-review-container {
+    width: min(100%, 900px);
+    margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.review-header {
+    margin-bottom: 1.25rem;
+}
+
+.review-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    color: #6b7f78;
+}
+
+.review-breadcrumb a {
+    color: #0a6c56;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.review-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.review-header-card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(3, 61, 48, 0.08);
+    border-radius: 16px;
+    box-shadow:
+        0 1px 3px rgba(3, 61, 48, 0.04),
+        0 10px 30px rgba(3, 61, 48, 0.06);
+}
+
+.review-label {
+    display: inline-flex;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #0a6c56;
+    font-size: 0.63rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+.review-header-card h1 {
+    margin: 0.55rem 0 0;
+    color: #033d30;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+}
+
+.review-subtitle {
+    margin: 0.5rem 0 0;
+    color: #6b7f78;
+    font-size: 0.84rem;
+}
+
+/* =========================================================
+   SCORE
+   ========================================================= */
+
+.score-card {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: #ffffff;
+    border: 1px solid rgba(3, 61, 48, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(3, 61, 48, 0.04);
+}
+
+.score-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 140px;
+    height: 140px;
+
+    margin: 0 auto;
+
+    border-radius: 50%;
+
+    background: #ecfdf5;
+    border: 8px solid #b7f3df;
+}
+
+.score-circle strong {
+    color: #033d30;
+    font-size: 2rem;
+    font-weight: 950;
+}
+
+.score-circle span {
+    color: #6b7f78;
+    font-size: 0.68rem;
+    font-weight: 750;
+}
+
+.score-details h2 {
+    margin: 0;
+    color: #033d30;
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.score-details p {
+    margin: 0.45rem 0 0;
+    color: #6b7f78;
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+.score-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+}
+
+.score-stat {
+    padding: 0.4rem 0.65rem;
+    border-radius: 8px;
+    background: #f3f8f6;
+    color: #48645b;
+    font-size: 0.7rem;
+    font-weight: 750;
+}
+
+/* =========================================================
+   QUESTION
+   ========================================================= */
+
+.review-list {
+    margin-top: 1.25rem;
+}
+
+.review-question {
+    margin-bottom: 1rem;
+    padding: 1.3rem;
+    background: #ffffff;
+    border: 1px solid rgba(3, 61, 48, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(3, 61, 48, 0.04);
+}
+
+.question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.question-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #033d30;
+    color: #ffffff;
+
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.question-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.question-body h3 {
+    margin: 0;
+    color: #17352d;
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.question-body h3 p {
+    margin: 0;
+}
+
+.question-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.question-points {
+    flex-shrink: 0;
+    color: #6b7f78;
+    font-size: 0.68rem;
+    font-weight: 750;
+}
+
+/* =========================================================
+   OPTIONS
+   ========================================================= */
+
+.answer-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.answer-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+
+    padding: 0.85rem 0.95rem;
+
+    border: 1px solid rgba(3, 61, 48, 0.08);
+    border-radius: 11px;
+
+    background: #ffffff;
+}
+
+.option-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: #f0f5f3;
+    color: #48645b;
+
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+.option-text {
+    flex: 1;
+    min-width: 0;
+
+    color: #35574e;
+    font-size: 0.83rem;
+    line-height: 1.6;
+}
+
+.option-text p {
+    margin: 0;
+}
+
+.option-text img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 7px;
+}
+
+/* =========================================================
+   CORRECT ANSWER
+   ========================================================= */
+
+.answer-option.correct {
+    background: #ecfdf5;
+    border-color: rgba(16, 185, 129, 0.35);
+}
+
+.answer-option.correct .option-marker {
+    background: #10b981;
+    color: #ffffff;
+}
+
+/* =========================================================
+   WRONG STUDENT ANSWER
+   ========================================================= */
+
+.answer-option.wrong {
+    background: #fff5f5;
+    border-color: rgba(239, 68, 68, 0.28);
+}
+
+.answer-option.wrong .option-marker {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.option-status {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+
+    padding: 0.25rem 0.5rem;
+
+    border-radius: 999px;
+
+    font-size: 0.6rem;
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+.correct-status {
+    color: #047857;
+    background: #d1fae5;
+}
+
+.wrong-status {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+/* =========================================================
+   QUESTION RESULT
+   ========================================================= */
+
+.question-result {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    margin-top: 0.85rem;
+    padding: 0.65rem 0.75rem;
+
+    border-radius: 9px;
+
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.question-result.correct-result {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.question-result.wrong-result {
+    background: #fff5f5;
+    color: #b91c1c;
+}
+
+.question-result.unanswered-result {
+    background: #f8faf9;
+    color: #64756f;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.review-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+
+    flex-wrap: wrap;
+
+    gap: 0.7rem;
+
+    margin-top: 1.5rem;
+}
+
+.review-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+
+    padding: 0.7rem 1.15rem;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 0.8rem;
+    font-weight: 800;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.review-btn:hover {
+    transform: translateY(-1px);
+}
+
+.review-btn-primary {
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #033d30,
+        #0a6c56,
+        #0cb481
+    );
+
+    box-shadow: 0 8px 20px rgba(3, 61, 48, 0.14);
+}
+
+.review-btn-primary:hover {
+    box-shadow: 0 10px 24px rgba(3, 61, 48, 0.2);
+}
+
+.review-btn-secondary {
+    color: #17352d;
+    background: #ffffff;
+
+    border: 1px solid rgba(3, 61, 48, 0.1);
+}
+
+.review-btn-secondary:hover {
+    background: #f4faf7;
+}
+
+/* =========================================================
+   TRY AGAIN
+   ========================================================= */
+
+.try-again-btn {
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #087f5b,
+        #0cb481
+    );
+
+    box-shadow: 0 8px 20px rgba(12, 180, 129, 0.16);
+}
+
+.try-again-btn:hover {
+    box-shadow: 0 10px 24px rgba(12, 180, 129, 0.24);
+}
+
+.try-again-icon {
+    margin-right: 0.4rem;
+    font-size: 1rem;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .quiz-review-page {
+        padding: 1rem 0.75rem 3rem;
+    }
+
+    .review-header-card,
+    .review-question {
+        padding: 1rem;
+    }
+
+    .score-card {
+        grid-template-columns: 1fr;
+    }
+
+    .question-header {
+        gap: 0.55rem;
+    }
+
+    .question-points {
+        display: none;
+    }
+
+    .answer-option {
+        padding: 0.75rem;
+    }
+
+    .option-status {
+        font-size: 0.55rem;
+    }
+
+    .review-actions {
+        flex-direction: column;
+    }
+
+    .review-btn {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<div class="quiz-review-page">
+
+    <div class="quiz-review-container">
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <header class="review-header">
+
+            <nav class="review-breadcrumb">
+
+                <a href="{% url 'my-courses' %}">
+                    My Courses
+                </a>
+
+                <span>/</span>
+
+                <a href="{% url 'course-detail' lesson.course.id %}">
+                    {{ lesson.course.title|truncatechars:30 }}
+                </a>
+
+                <span>/</span>
+
+                <a href="{% url 'lesson-detail' lesson.id %}">
+                    {{ lesson.title|truncatechars:30 }}
+                </a>
+
+                <span>/</span>
+
+                <span>
+                    Quiz Review
+                </span>
+
+            </nav>
+
+            <div class="review-header-card">
+
+                <span class="review-label">
+                    QUIZ COMPLETED
+                </span>
+
+                <h1>
+                    {{ quiz.title }}
+                </h1>
+
+                <p class="review-subtitle">
+                    Attempt {{ attempt.attempt_number }}
+                    · Submitted {{ attempt.submitted_at|date:"M d, Y · H:i" }}
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             SCORE
+             ================================================= -->
+
+        <section class="score-card">
+
+            <div class="score-circle">
+
+                <strong>
+                    {{ attempt.percentage|floatformat:0 }}%
+                </strong>
+
+                <span>
+                    Score
+                </span>
+
+            </div>
+
+            <div class="score-details">
+
+                {% if attempt.passed %}
+
+                    <h2>
+                        ✓ Quiz Passed
+                    </h2>
+
+                    <p>
+                        You reached the required
+                        {{ quiz.pass_mark }}% pass mark.
+                    </p>
+
+                {% else %}
+
+                    <h2>
+                        Quiz Not Passed
+                    </h2>
+
+                    <p>
+                        You scored {{ attempt.percentage }}%.
+                        The pass mark is {{ quiz.pass_mark }}%.
+                    </p>
+
+                {% endif %}
+
+                <div class="score-stats">
+
+                    <span class="score-stat">
+                        {{ attempt.score }}/{{ attempt.total_points }}
+                        points
+                    </span>
+
+                    <span class="score-stat">
+                        {{ answers|length }}
+                        questions
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             QUESTIONS
+             ================================================= -->
+
+        <div class="review-list">
+
+            {% for answer in answers %}
+
+                <article class="review-question">
+
+                    <div class="question-header">
+
+                        <span class="question-number">
+                            {{ forloop.counter }}
+                        </span>
+
+                        <div class="question-body">
+
+                            <h3>
+                                {{ answer.question.question|safe }}
+                            </h3>
+
+                        </div>
+
+                        <span class="question-points">
+                            {{ answer.points_earned }}/{{ answer.question.points }}
+                            pts
+                        </span>
+
+                    </div>
+
+
+                    <div class="answer-options">
+
+                        {% for option in answer.question.options.all %}
+
+                            {% if option.id == answer.correct_option_id %}
+
+                                <div class="answer-option correct">
+
+                                    <span class="option-marker">
+                                        ✓
+                                    </span>
+
+                                    <div class="option-text">
+                                        {{ option.text|safe }}
+                                    </div>
+
+                                    <span class="option-status correct-status">
+                                        Correct Answer
+                                    </span>
+
+                                </div>
+
+                            {% elif option.id == answer.selected_option_id %}
+
+                                <div class="answer-option wrong">
+
+                                    <span class="option-marker">
+                                        ✕
+                                    </span>
+
+                                    <div class="option-text">
+                                        {{ option.text|safe }}
+                                    </div>
+
+                                    <span class="option-status wrong-status">
+                                        Your Answer
+                                    </span>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="answer-option">
+
+                                    <span class="option-marker">
+                                        •
+                                    </span>
+
+                                    <div class="option-text">
+                                        {{ option.text|safe }}
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if answer.is_correct %}
+
+                        <div class="question-result correct-result">
+                            ✓ Your answer is correct.
+                        </div>
+
+                    {% elif answer.selected_option %}
+
+                        <div class="question-result wrong-result">
+                            ✕ Your answer was incorrect.
+                            The correct answer is highlighted above.
+                        </div>
+
+                    {% else %}
+
+                        <div class="question-result unanswered-result">
+                            — You did not answer this question.
+                        </div>
+
+                    {% endif %}
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="review-actions">
+
+            <a
+                href="{% url 'lesson-detail' lesson.id %}"
+                class="review-btn review-btn-primary"
+            >
+                ← Back to Lesson
+            </a>
+
+
+            {% if quiz.max_attempts == 0 or attempt.attempt_number < quiz.max_attempts %}
+
+                <a
+                    href="{% url 'student-quiz-attempt' quiz.id %}"
+                    class="review-btn try-again-btn"
+                >
+                    <span class="try-again-icon">↻</span>
+                    Try Again
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

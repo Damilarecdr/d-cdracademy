@@ -1,0 +1,3376 @@
+
+{% extends 'academy/base.html' %}
+{% load static %}
+
+{% block title %}Home - Brilliant Mind Academy{% endblock %}
+
+{% block content %}
+
+<!-- External Libraries -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --blue: #123b78;
+    --dark-blue: #071d40;
+    --light-blue: #e8f1ff;
+    --yellow: #facc15;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    animation: academyPageEnter .9s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes academyPageEnter {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes academyFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.academy-float {
+    animation: academyFloat 5s ease-in-out infinite;
+}
+
+section {
+    position: relative;
+}
+
+section h2 {
+    line-height: 1.2;
+}
+
+.btn {
+    display: inline-block;
+    padding: 13px 25px;
+    border: 2px solid var(--blue);
+    border-radius: 10px;
+    color: var(--blue);
+    font-weight: 700;
+    transition: .3s;
+}
+
+.btn:hover {
+    background: var(--blue);
+    color: white;
+}
+
+@media(prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==================================
+   PROMOTIONAL POPUP
+================================== */
+
+.promo-popup {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: min(780px, calc(100vw - 30px));
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    z-index: 99999;
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(35px) scale(.96);
+
+    transition:
+        opacity .4s ease,
+        transform .4s ease,
+        visibility .4s ease;
+}
+
+.promo-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.promo-container {
+    display: flex;
+    align-items: stretch;
+    padding: 30px 20px 22px;
+    gap: 15px;
+}
+
+.promo-item {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    padding: 8px 5px;
+}
+
+.promo-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 13px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.whatsapp-item .promo-icon {
+    color: #25D366;
+    background: #e7fbed;
+}
+
+.telegram-item .promo-icon {
+    color: #229ED9;
+    background: #e5f5fc;
+}
+
+.app-item .promo-icon {
+    color: #174A8B;
+    background: #e8f1ff;
+}
+
+.promo-item h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #102b50;
+    margin-bottom: 8px;
+}
+
+.promo-item p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.promo-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 5px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    text-align: center;
+    transition: .3s;
+}
+
+.promo-btn:hover {
+    transform: translateY(-3px);
+    opacity: .9;
+}
+
+.whatsapp-btn {
+    background: #25D366;
+    color: white;
+}
+
+.telegram-btn {
+    background: #229ED9;
+    color: white;
+}
+
+.app-btn {
+    background: #174A8B;
+    color: white;
+}
+
+.promo-divider {
+    width: 1px;
+    background: #e2e8f0;
+}
+
+.promo-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    width: 29px;
+    height: 29px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.promo-close:hover {
+    background: #e2e8f0;
+}
+
+@media(max-width: 600px) {
+    .promo-popup {
+        right: 10px;
+        bottom: 12px;
+        width: calc(100vw - 20px);
+    }
+
+    .promo-container {
+        padding: 32px 9px 15px;
+        gap: 7px;
+    }
+
+    .promo-item {
+        padding: 5px 2px;
+    }
+
+    .promo-item h3 {
+        font-size: 11px;
+    }
+
+    .promo-item p {
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .promo-btn {
+        font-size: 9px;
+        padding: 10px 3px;
+    }
+
+    .promo-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+}
+
+/* ==================================
+   COURSES
+================================== */
+
+.course-card {
+    position: relative;
+    padding: 28px;
+    border: 1px solid #dce8f8;
+    border-radius: 20px;
+    background: linear-gradient(145deg,#fff,#f8fbff);
+    box-shadow: 0 8px 25px rgba(6,63,47,.045);
+    transition: .3s;
+}
+
+.course-card:hover {
+    transform: translateY(-7px);
+    border-color: #a9c9f2;
+    box-shadow: 0 18px 38px rgba(6,63,47,.11);
+}
+
+.course-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+    font-size: 25px;
+}
+
+.course-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #174a8b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.course-card h3 {
+    margin-bottom: 12px;
+    color: #102b50;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.course-card p {
+    min-height: 75px;
+    margin-bottom: 22px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.course-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #174a8b;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.course-link i {
+    transition: .25s;
+}
+
+.course-card:hover .course-link i {
+    transform: translateX(5px);
+}
+
+/* ==================================
+   TUTORS
+================================== */
+
+.tutor-slider {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.tutor-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.tutor-card {
+    position: relative;
+    flex: 0 0 calc(33.333% - 11px);
+    border-radius: 15px;
+    overflow: hidden;
+    height: 400px;
+    min-width: 0;
+    box-shadow: 0 8px 25px rgba(0,0,0,.1);
+}
+
+.tutor-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tutor-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent,rgba(5,20,45,.95));
+    color: white;
+    padding: 25px 16px 18px;
+    box-sizing: border-box;
+}
+
+.tutor-info h3 {
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.tutor-info p {
+    color: #dbeafe;
+    font-size: 13px;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #123b78;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 43px;
+    height: 43px;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);
+}
+
+.slider-arrow:hover {
+    background: #facc15;
+    color: #123b78;
+}
+
+/* ==================================
+   TESTIMONIALS
+================================== */
+
+.testimonial-slider {
+    display: flex;
+    transition: transform .7s ease;
+}
+
+.testimonial-card {
+    flex-shrink: 0;
+    width: 33.333%;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.testimonial-inner {
+    background: white;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    text-align: center;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.testimonial-inner img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    border: 4px solid #2563eb;
+}
+
+.testimonial-stars {
+    color: #f5c518;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+@media(max-width:768px) {
+    .tutor-card {
+        flex: 0 0 100%;
+        height: 330px;
+    }
+
+    .testimonial-card {
+        width: 100%;
+    }
+
+    .course-card p {
+        min-height: auto;
+    }
+}
+</style>
+
+<style>
+
+    /* Community Popup - Hero Section */
+.hero-section {
+    position: relative;
+}
+
+.community-popup {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-40%) scale(0.9);
+    width: 350px;
+    max-width: calc(100% - 30px);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease;
+}
+
+.community-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) scale(1);
+}
+
+.popup-content {
+    position: relative;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: #eef2ff;
+    color: #1e40af;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.popup-label {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 7px 13px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+}
+
+.popup-content h3 {
+    color: #0f172a;
+    font-size: 23px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.popup-content p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.popup-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.popup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 18px;
+    border-radius: 10px;
+    color: white !important;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: 0.3s ease;
+}
+
+.popup-btn:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.08);
+}
+
+.whatsapp-btn {
+    background: #16a34a;
+}
+
+.telegram-btn {
+    background: #229ED9;
+}
+
+.popup-btn i {
+    font-size: 19px;
+}
+
+/* Mobile positioning */
+@media (max-width: 768px) {
+    .community-popup {
+        position: absolute;
+        top: auto;
+        bottom: 25px;
+        left: 50%;
+        right: auto;
+        width: 330px;
+        transform: translate(-50%, 20px) scale(0.95);
+    }
+
+    .community-popup.show {
+        transform: translate(-50%, 0) scale(1);
+    }
+
+    .popup-content {
+        padding: 25px 20px;
+    }
+
+    .popup-content h3 {
+        font-size: 20px;
+    }
+}
+
+</style>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const popup = document.getElementById("communityPopup");
+    const closeBtn = document.getElementById("closePopup");
+
+    if (!popup || !closeBtn) return;
+
+    // Automatically display popup after page loads
+    setTimeout(function () {
+        popup.classList.add("show");
+    }, 1500);
+
+    // Close popup
+    closeBtn.addEventListener("click", function () {
+        popup.classList.remove("show");
+    });
+
+});
+</script>
+<!-- ==================================
+     ACADEMY PROMOTIONAL POPUP
+================================== -->
+
+<div id="promoPopup" class="promo-popup">
+
+    <button class="promo-close"
+            onclick="closePromo()"
+            aria-label="Close popup">
+        &times;
+    </button>
+
+    <div class="promo-container">
+
+        <!-- WHATSAPP -->
+        <div class="promo-item whatsapp-item">
+
+            <div class="promo-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+
+            <h3>Join WhatsApp</h3>
+
+            <p>
+                Connect with fellow learners and receive
+                important academic updates.
+            </p>
+
+            <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_LINK"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="promo-btn whatsapp-btn">
+                <i class="fab fa-whatsapp"></i>
+                Join Community
+            </a>
+
+        </div>
+
+        <div class="promo-divider"></div>
+
+        <!-- TELEGRAM -->
+        <div class="promo-item telegram-item">
+
+            <div class="promo-icon">
+                <i class="fab fa-telegram-plane"></i>
+            </div>
+
+            <h3>Join Telegram</h3>
+
+            <p>
+                Get academic updates, announcements,
+                and learning resources.
+            </p>
+
+            <a href="https://t.me/YOUR_TELEGRAM_USERNAME"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="promo-btn telegram-btn">
+                <i class="fab fa-telegram-plane"></i>
+                Join Telegram
+            </a>
+
+        </div>
+
+        <div class="promo-divider"></div>
+
+        <!-- APP DOWNLOAD -->
+        <div class="promo-item app-item">
+
+            <div class="promo-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+
+            <h3>Download App</h3>
+
+            <p>
+                Access learning materials and enjoy
+                a better learning experience.
+            </p>
+
+            <a href="{{ download_app.button_url|default:'#' }}"
+               class="promo-btn app-btn">
+                <i class="fas fa-download"></i>
+                {{ download_app.button_text|default:"Download App" }}
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- ==================================
+     HERO SECTION
+================================== -->
+
+<section id="home"
+         class="relative isolate w-full min-h-screen overflow-hidden bg-[#020817]">
+         <!-- CENTRE HERO ADVERTISEMENT POPUP -->
+{% if advertisement %}
+
+<div id="academyAdPopup" class="academy-ad-overlay">
+
+    <div class="academy-ad-box">
+
+        <button class="academy-ad-close"
+                onclick="closeAcademyAd()"
+                aria-label="Close advertisement">
+            &times;
+        </button>
+
+   {% if advertisement.image %}
+<div class="academy-ad-image">
+
+    <a href="{{ advertisement.button_url }}"
+       class="academy-ad-image-link"
+       aria-label="{{ advertisement.title }}">
+
+        <img src="{{ advertisement.image.url }}"
+             alt="{{ advertisement.title }}">
+
+    </a>
+
+    <span class="academy-ad-tag">
+        D-CDR ACADEMY
+    </span>
+
+</div>
+{% endif %}
+
+        <!--div class="academy-ad-content">
+
+            <span class="academy-ad-label">
+                {{ advertisement.label }}
+            </span>
+
+            <h2>{{ advertisement.title }}</h2>
+
+            <p>
+                {{ advertisement.description }}
+            </p>
+
+            <a href="{{ advertisement.button_url }}"
+               class="academy-ad-button">
+                {{ advertisement.button_text }}
+                <i class="fas fa-arrow-right"></i>
+            </a>
+
+            <span class="academy-ad-footer">
+                {{ advertisement.footer_text }}
+            </span>
+
+        </div-->
+
+    </div>
+</div>
+
+{% endif %}
+
+    <!-- BACKGROUND IMAGE -->
+    <img src="{{ hero.background_video.url }}"
+         alt="{{ navbar.name|default:'D-Cdr Academy' }}"
+         fetchpriority="high"
+         class="absolute inset-0 z-0 w-full h-full object-cover hero-bg">
+
+
+    <!-- DEEP BLUE OVERLAY -->
+ <div class="absolute inset-0 z-[1] pointer-events-none
+            bg-gradient-to-br
+            from-[#020817]/80
+            via-[#071B49]/90
+            to-[#0B2D65]/85">
+</div>
+    <!-- BLUE LIGHT EFFECTS -->
+    <div class="absolute inset-0 z-[2] pointer-events-none
+                bg-[radial-gradient(ellipse_at_20%_20%,rgba(37,99,235,0.20),transparent_45%),radial-gradient(ellipse_at_85%_75%,rgba(30,64,175,0.22),transparent_45%)]">
+    </div>
+
+
+    <!-- =====================================
+         WHATSAPP & TELEGRAM POPUP
+    ====================================== -->
+
+    <div id="communityPopup" class="community-popup relative z-50">
+        <div class="popup-content">
+
+            <button class="popup-close"
+                    id="closePopup"
+                    aria-label="Close popup">
+                &times;
+            </button>
+
+            <span class="popup-label">JOIN OUR COMMUNITY</span>
+
+            <h3>Stay Connected with Us!</h3>
+
+            <p>
+                Join our online community for learning resources,
+                academic updates, announcements and educational support.
+            </p>
+
+            <div class="popup-buttons">
+
+                <a href="https://wa.me/234XXXXXXXXXX"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="popup-btn whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    Join WhatsApp
+                </a>
+
+                <a href="https://t.me/YOUR_TELEGRAM_USERNAME"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="popup-btn telegram-btn">
+                    <i class="fab fa-telegram"></i>
+                    Join Telegram
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =====================================
+         FLOATING SCIENCE & ENGINEERING LINE ART
+    ====================================== -->
+
+    <div class="absolute inset-0 z-[3] overflow-hidden
+                pointer-events-none select-none">
+
+        <!-- ATOM STRUCTURE -->
+        <svg class="science-item float-one absolute
+                    top-[12%] left-[4%] w-24 sm:w-36
+                    text-white/45"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.2">
+
+            <circle cx="50" cy="50" r="5"/>
+            <ellipse cx="50" cy="50" rx="42" ry="16"
+                     transform="rotate(45 50 50)"/>
+            <ellipse cx="50" cy="50" rx="42" ry="16"
+                     transform="rotate(-45 50 50)"/>
+            <circle cx="50" cy="8" r="3" fill="#FACC15"/>
+        </svg>
+
+
+        <!-- SECOND ATOM -->
+        <svg class="science-item float-two absolute
+                    bottom-[12%] right-[4%] w-28 sm:w-40
+                    text-white/40"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1">
+
+            <circle cx="50" cy="50" r="4"/>
+            <ellipse cx="50" cy="50" rx="45" ry="17"/>
+            <ellipse cx="50" cy="50" rx="45" ry="17"
+                     transform="rotate(60 50 50)"/>
+            <ellipse cx="50" cy="50" rx="45" ry="17"
+                     transform="rotate(120 50 50)"/>
+        </svg>
+
+
+        <!-- ENGINEERING GEAR -->
+        <svg class="science-item gear-spin absolute
+                    top-[12%] right-[10%] w-20 sm:w-32
+                    text-yellow-300/60"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <circle cx="50" cy="50" r="22"/>
+            <circle cx="50" cy="50" r="9"/>
+
+            <path d="M50 5V20 M50 80V95
+                     M5 50H20 M80 50H95
+                     M18 18L29 29 M71 71L82 82
+                     M18 82L29 71 M71 29L82 18"/>
+        </svg>
+
+
+        <!-- ENGINEERING MACHINE -->
+        <svg class="science-item float-three absolute
+                    bottom-[10%] left-[8%] w-28 sm:w-36
+                    text-white/40"
+             viewBox="0 0 120 120"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.4">
+
+            <rect x="25" y="25" width="70" height="70" rx="5"/>
+            <circle cx="60" cy="60" r="19"/>
+            <circle cx="60" cy="60" r="7"/>
+
+            <path d="M60 25V10 M60 95V110
+                     M25 60H10 M95 60H110
+                     M25 25L15 15 M95 25L105 15
+                     M25 95L15 105 M95 95L105 105"/>
+        </svg>
+
+
+        <!-- OPEN EDUCATIONAL BOOK -->
+        <svg class="science-item float-two absolute
+                    top-[60%] left-[32%] w-20 sm:w-28
+                    text-yellow-200/55"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.5"
+             stroke-linecap="round">
+
+            <path d="M50 30C38 20 20 20 8 25V75
+                     C23 70 39 72 50 82
+                     C61 72 77 70 92 75V25
+                     C80 20 62 20 50 30Z"/>
+
+            <path d="M50 30V82"/>
+
+            <path d="M16 36C26 33 36 35 43 40
+                     M16 47C26 44 36 46 43 51
+                     M57 40C64 35 74 33 84 36
+                     M57 51C64 46 74 44 84 47"/>
+        </svg>
+
+
+        <!-- LABORATORY FLASK -->
+        <svg class="science-item float-one absolute
+                    top-[42%] right-[24%] w-16 sm:w-24
+                    text-white/45"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.5">
+
+            <path d="M38 12H62 M43 12V43L20 80
+                     Q17 88 27 88H73
+                     Q83 88 80 80L57 43V12"/>
+
+            <path d="M29 68H71"/>
+            <circle cx="42" cy="76" r="2" fill="#FACC15"/>
+            <circle cx="59" cy="73" r="2" fill="#FACC15"/>
+        </svg>
+
+
+        <!-- ELECTRONIC CIRCUIT BOARD -->
+        <svg class="science-item float-three absolute
+                    top-[32%] left-[20%] w-24 sm:w-32
+                    text-white/40"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.4">
+
+            <path d="M10 25H35V45H60V20H90
+                     M10 75H30V60H55V85H90
+                     M60 45V60H80V75"/>
+
+            <circle cx="10" cy="25" r="4"/>
+            <circle cx="90" cy="20" r="4"/>
+            <circle cx="10" cy="75" r="4"/>
+            <circle cx="90" cy="85" r="4"/>
+
+            <rect x="35" y="42" width="25" height="20" rx="3"/>
+        </svg>
+
+
+        <!-- MATHEMATICAL GEOMETRY -->
+        <svg class="science-item float-two absolute
+                    bottom-[7%] right-[30%] w-20 sm:w-28
+                    text-white/45"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.3">
+
+            <path d="M15 80L50 15L85 80Z"/>
+            <circle cx="50" cy="50" r="20"/>
+            <path d="M50 15V80"/>
+            <circle cx="50" cy="15" r="3" fill="#FACC15"/>
+        </svg>
+
+
+        <!-- MATHEMATICAL PI SYMBOL -->
+        <svg class="science-item float-one absolute
+                    top-[22%] left-[48%] w-14 sm:w-20
+                    text-yellow-300/50"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linecap="round">
+
+            <path d="M15 30H85 M35 30V75
+                     M65 30L58 75"/>
+        </svg>
+
+
+        <!-- MOLECULAR STRUCTURE -->
+        <svg class="science-item float-three absolute
+                    top-[72%] right-[10%] w-20 sm:w-28
+                    text-white/40"
+             viewBox="0 0 100 100"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.5">
+
+            <path d="M25 30L50 50L75 30L75 70L50 85L25 70Z"/>
+
+            <circle cx="25" cy="30" r="6" fill="#FACC15"/>
+            <circle cx="50" cy="50" r="6"/>
+            <circle cx="75" cy="30" r="6"/>
+            <circle cx="75" cy="70" r="6"/>
+            <circle cx="50" cy="85" r="6"/>
+            <circle cx="25" cy="70" r="6"/>
+        </svg>
+
+
+        <!-- FLOATING LIGHT PARTICLES -->
+        <span class="absolute top-[25%] left-[40%]
+                     h-2 w-2 rounded-full bg-yellow-300/70 animate-pulse">
+        </span>
+
+        <span class="absolute bottom-[25%] right-[15%]
+                     h-2 w-2 rounded-full bg-white/60 animate-pulse">
+        </span>
+
+        <span class="absolute top-[70%] left-[15%]
+                     h-1.5 w-1.5 rounded-full bg-yellow-300/70 animate-pulse">
+        </span>
+
+        <span class="absolute top-[45%] right-[7%]
+                     h-2 w-2 rounded-full bg-blue-200/70 animate-pulse">
+        </span>
+
+    </div>
+
+
+    <!-- =====================================
+         HERO CONTENT
+    ====================================== -->
+
+    <div class="relative z-10 max-w-7xl mx-auto min-h-screen
+                px-5 sm:px-8 lg:px-12 pt-32 pb-16
+                flex items-center">
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_270px]
+                    gap-10 xl:gap-16 items-center w-full">
+
+
+            <!-- HERO CONTENT -->
+            <div class="text-center lg:text-left max-w-3xl
+                        mx-auto lg:mx-0"
+                 data-aos="fade-right">
+
+                <div class="inline-flex items-center gap-2 rounded-full
+                            bg-white/10 border border-white/25
+                            backdrop-blur-md px-4 py-2 mb-6">
+
+                    <i class="fas fa-star text-yellow-400"></i>
+
+                    <span class="text-xs sm:text-sm font-semibold
+                                 tracking-wide text-blue-50">
+                        Your Pathway to Academic Excellence
+                    </span>
+
+                </div>
+
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
+                           font-black text-white mb-6 leading-tight">
+
+                    {{ hero.title_main }}
+
+                    <span class="block bg-gradient-to-r
+                                 from-yellow-300 via-yellow-400
+                                 to-amber-500 bg-clip-text text-transparent">
+
+                        {{ hero.title_gradient }}
+
+                    </span>
+
+                    <span class="block text-2xl sm:text-3xl lg:text-4xl
+                                 font-bold text-blue-100 mt-4">
+
+                        {{ hero.title_sub }}
+
+                    </span>
+
+                </h1>
+
+
+                <p class="text-base sm:text-lg lg:text-xl
+                          text-blue-50/95 mb-8 max-w-2xl
+                          mx-auto lg:mx-0 leading-relaxed">
+
+                    {{ hero.description }}
+
+                </p>
+
+
+                <!-- HERO BUTTONS -->
+                <div class="flex flex-wrap justify-center
+                            lg:justify-start gap-3 mt-6">
+
+                    <a href="{{ hero.download_button_link }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 rounded-xl
+                              font-bold bg-gradient-to-r
+                              from-yellow-400 to-amber-500
+                              text-blue-950 shadow-xl
+                              hover:-translate-y-1 transition
+                              px-7 py-4">
+
+                        <i class="fas fa-download"></i>
+
+                        {{ hero.download_button_text }}
+
+                    </a>
+
+
+                    <a href="{{ hero.learn_more_button_link }}"
+                       class="inline-flex items-center gap-2
+                              rounded-xl font-bold text-white
+                              border border-white/40 bg-white/10
+                              backdrop-blur-sm
+                              hover:bg-white hover:text-blue-950
+                              transition px-7 py-4">
+
+                        <i class="fas fa-play"></i>
+
+                        {{ hero.learn_more_button_text }}
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 ACADEMIC PROGRAMMES
+            ================================== -->
+
+            <aside class="w-full max-w-sm mx-auto lg:max-w-none"
+                   data-aos="fade-left">
+
+                <div class="rounded-3xl p-[1px]
+                            bg-gradient-to-br from-yellow-300
+                            via-white/30 to-blue-400/60
+                            shadow-2xl">
+
+                    <div class="rounded-3xl bg-[#071B49]/90
+                                backdrop-blur-xl
+                                border border-white/15 p-6">
+
+
+                        <!-- CARD HEADER -->
+                        <div class="text-center mb-6">
+
+                            <div class="mx-auto mb-3 flex
+                                        items-center justify-center
+                                        w-12 h-12 rounded-2xl
+                                        bg-yellow-400/20
+                                        border border-yellow-300/40">
+
+                                <i class="fas fa-graduation-cap
+                                          text-yellow-400 text-xl"></i>
+
+                            </div>
+
+                            <h2 class="text-xl font-black text-white">
+                                Academic Programmes
+                            </h2>
+
+                            <p class="text-xs text-blue-100 mt-1">
+                                Your journey starts here
+                            </p>
+
+                        </div>
+
+
+                        <!-- PROGRAMME LIST -->
+                        <div class="flex flex-col gap-3">
+
+                            {% for programme in programmes %}
+
+                            <div class="flex items-center gap-3
+                                        rounded-2xl p-3.5
+                                        bg-white/[0.08]
+                                        border border-white/15
+                                        hover:bg-white/[0.13]
+                                        transition">
+
+                                <div class="w-11 h-11 rounded-xl
+                                            bg-yellow-400/20
+                                            flex items-center
+                                            justify-center
+                                            text-yellow-300 shrink-0">
+
+                                    <i class="fas fa-book-open"></i>
+
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <h3 class="font-extrabold text-white">
+                                        {{ programme.title }}
+                                    </h3>
+
+                                    <p class="text-xs text-blue-100">
+                                        {{ programme.description }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            {% empty %}
+
+                            <div class="flex items-center gap-3
+                                        rounded-2xl p-3.5
+                                        bg-white/[0.08]
+                                        border border-white/15">
+
+                                <i class="fas fa-file-alt
+                                          text-yellow-400 text-2xl"></i>
+
+                                <div>
+                                    <h3 class="font-bold text-white">WAEC</h3>
+                                    <p class="text-xs text-blue-100">
+                                        Secondary School Exams
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex items-center gap-3
+                                        rounded-2xl p-3.5
+                                        bg-white/[0.08]
+                                        border border-white/15">
+
+                                <i class="fas fa-calendar-check
+                                          text-yellow-400 text-2xl"></i>
+
+                                <div>
+                                    <h3 class="font-bold text-white">JAMB</h3>
+                                    <p class="text-xs text-blue-100">
+                                        University Entrance
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex items-center gap-3
+                                        rounded-2xl p-3.5
+                                        bg-white/[0.08]
+                                        border border-white/15">
+
+                                <i class="fas fa-graduation-cap
+                                          text-yellow-400 text-2xl"></i>
+
+                                <div>
+                                    <h3 class="font-bold text-white">A-LEVEL</h3>
+                                    <p class="text-xs text-blue-100">
+                                        IJMB & JUPEB
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex items-center gap-3
+                                        rounded-2xl p-3.5
+                                        bg-white/[0.08]
+                                        border border-white/15">
+
+                                <i class="fas fa-university
+                                          text-yellow-400 text-2xl"></i>
+
+                                <div>
+                                    <h3 class="font-bold text-white">
+                                        UNIVERSITY
+                                    </h3>
+                                    <p class="text-xs text-blue-100">
+                                        Undergraduate Tutorials
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- CARD FOOTER -->
+                        <div class="mt-5 pt-4 border-t
+                                    border-white/15 text-center">
+
+                            <p class="text-xs font-bold text-yellow-300">
+                                LEARN TODAY. EXCEL TOMORROW.
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     HERO ANIMATIONS AND STYLING
+====================================== -->
+
+<style>
+
+/* Background image appearance */
+
+#home .hero-bg {
+    opacity: 1;
+    filter: brightness(0.95) contrast(1.08) saturate(1.12);
+}
+
+
+/* Floating line-art animation */
+
+@keyframes scienceFloat {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    50% {
+        transform: translate3d(0, -22px, 0) rotate(7deg);
+    }
+}
+
+@keyframes scienceFloatReverse {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    50% {
+        transform: translate3d(0, 18px, 0) rotate(-7deg);
+    }
+}
+
+
+/* Rotating engineering gear */
+
+@keyframes gearRotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Animation assignments */
+
+.float-one {
+    animation: scienceFloat 10s ease-in-out infinite;
+}
+
+.float-two {
+    animation: scienceFloatReverse 12s ease-in-out infinite;
+}
+
+.float-three {
+    animation: scienceFloat 14s ease-in-out infinite;
+}
+
+.gear-spin {
+    animation: gearRotation 35s linear infinite;
+}
+
+
+/* Slightly reduce decoration on mobile */
+
+@media (max-width: 640px) {
+
+    #home .hero-bg {
+        object-position: center;
+    }
+
+    .science-item {
+        opacity: 0.28;
+    }
+
+}
+
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .science-item {
+        animation: none !important;
+    }
+
+}
+
+</style>
+
+
+<!-- ==================================
+     ABOUT US
+================================== -->
+
+<section id="about"
+         class="py-20 bg-gradient-to-br
+                from-white via-blue-50/30 to-yellow-50/20">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16" data-aos="fade-up">
+
+            <div class="flex items-center justify-center mb-4">
+
+                <span class="h-px w-16 bg-blue-600 mr-3"></span>
+
+                <span class="text-2xl font-black uppercase
+             tracking-wider text-[#164A9C]">
+    About Us
+</span>
+                <span class="h-px w-16 bg-blue-600 ml-3"></span>
+
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-black
+                       text-blue-900 mb-6">
+                {{ about.title_main }}
+
+                <span class="block text-blue-700">
+                    {{ about.title_sub }}
+                </span>
+            </h2>
+
+            <p class="text-lg text-blue-700
+                      max-w-3xl mx-auto leading-relaxed">
+                {{ about.description }}
+            </p>
+
+        </div>
+
+ <!-- FEATURES -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+
+    {% for feature in features %}
+
+    <div class="bg-white rounded-2xl p-8 shadow-lg
+                border border-blue-100
+                transition hover:-translate-y-2"
+         data-aos="fade-up">
+
+        <!-- FEATURE ICON -->
+        <div class="w-16 h-16 rounded-xl flex
+                    items-center justify-center mb-6"
+             style="background-image: linear-gradient(
+                 135deg,
+                 {{ feature.color_from|default:'#0D0950' }},
+                 {{ feature.color_to|default:'#2563EB' }}
+             ) !important;">
+
+            {{ feature.svg_icon|safe }}
+            
+
+        </div>
+
+        <h3 class="text-xl font-bold text-blue-900 mb-4">
+            {{ feature.title }}
+        </h3>
+
+        <p class="text-blue-600 leading-relaxed">
+            {{ feature.description }}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+    <!-- STATISTICS -->
+<div class="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950
+            rounded-3xl p-8 md:p-12 text-white
+            grid grid-cols-2 md:grid-cols-4 gap-8
+            text-center mb-20">
+
+            {% for stat in stats %}
+
+            <div data-aos="fade-up">
+
+                <div class="text-3xl md:text-4xl
+                            font-bold text-yellow-400 mb-2">
+                    {{ stat.number }}
+                </div>
+
+                <div class="text-blue-100">
+                    {{ stat.description }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- VISION AND MISSION -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg
+                        border border-blue-100"
+                 data-aos="fade-up">
+
+                <h3 class="text-2xl font-bold
+                           text-blue-900 mb-4">
+                    {{ vision_mission.vision_title }}
+                </h3>
+
+                <p class="text-blue-700 leading-relaxed">
+                    {{ vision_mission.vision_text }}
+                </p>
+
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg
+                        border border-blue-100"
+                 data-aos="fade-up" data-aos-delay="150">
+
+                <h3 class="text-2xl font-bold
+                           text-blue-900 mb-4">
+                    {{ vision_mission.mission_title }}
+                </h3>
+
+                <p class="text-blue-700 leading-relaxed">
+                    {{ vision_mission.mission_text }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ==================================
+     AVAILABLE COURSES
+================================== -->
+
+<section id="courses"
+         class="bg-white py-20 px-5 sm:px-8 lg:px-12">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div class="text-center max-w-2xl mx-auto mb-12"
+             data-aos="fade-up">
+
+            <span class="inline-flex items-center gap-2
+                         rounded-full bg-blue-50
+                         border border-blue-100
+                         px-4 py-2 text-sm font-bold
+                         text-blue-800">
+
+                <i class="fas fa-graduation-cap"></i>
+                LEARN WITH CONFIDENCE
+
+            </span>
+
+            <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl
+                       font-black text-blue-950">
+
+                Explore Our
+                <span class="text-blue-700">Courses</span>
+
+            </h2>
+
+            <p class="mt-4 text-gray-600 text-base
+                      sm:text-lg leading-relaxed">
+
+                Discover courses designed to strengthen
+                your foundation, improve your understanding,
+                and help you excel academically.
+
+            </p>
+
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2
+                    lg:grid-cols-3 gap-6">
+
+            <!-- MATHEMATICS -->
+            <article class="course-card" data-aos="fade-up">
+
+                <div class="course-icon bg-blue-50 text-blue-700">
+                    <i class="fas fa-calculator"></i>
+                </div>
+
+                <span class="course-label">MATHEMATICS</span>
+
+                <h3>General Mathematics</h3>
+
+                <p>
+                    Build strong mathematical foundations
+                    through clear explanations, worked examples,
+                    and practice.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+            <!-- PHYSICS -->
+            <article class="course-card" data-aos="fade-up"
+                     data-aos-delay="100">
+
+                <div class="course-icon bg-blue-50 text-blue-700">
+                    <i class="fas fa-atom"></i>
+                </div>
+
+                <span class="course-label">PHYSICAL SCIENCES</span>
+
+                <h3>Physics</h3>
+
+                <p>
+                    Understand physical principles, solve numerical
+                    problems, and connect theories with real-life
+                    applications.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+            <!-- CHEMISTRY -->
+            <article class="course-card" data-aos="fade-up"
+                     data-aos-delay="200">
+
+                <div class="course-icon bg-amber-50 text-amber-700">
+                    <i class="fas fa-flask"></i>
+                </div>
+
+                <span class="course-label">CHEMICAL SCIENCES</span>
+
+                <h3>Chemistry</h3>
+
+                <p>
+                    Learn chemical concepts, equations,
+                    calculations, and essential principles
+                    step by step.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+            <!-- BIOLOGY -->
+            <article class="course-card" data-aos="fade-up">
+
+                <div class="course-icon bg-emerald-50 text-emerald-700">
+                    <i class="fas fa-dna"></i>
+                </div>
+
+                <span class="course-label">LIFE SCIENCES</span>
+
+                <h3>Biology</h3>
+
+                <p>
+                    Explore living organisms, biological systems,
+                    and important concepts through engaging lessons.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+            <!-- COMPUTER STUDIES -->
+            <article class="course-card" data-aos="fade-up"
+                     data-aos-delay="100">
+
+                <div class="course-icon bg-purple-50 text-purple-700">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+
+                <span class="course-label">COMPUTING</span>
+
+                <h3>Computer Studies</h3>
+
+                <p>
+                    Develop your understanding of computer
+                    fundamentals, digital technology,
+                    and computing concepts.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+            <!-- GST -->
+            <article class="course-card" data-aos="fade-up"
+                     data-aos-delay="200">
+
+                <div class="course-icon bg-rose-50 text-rose-700">
+                    <i class="fas fa-book-open"></i>
+                </div>
+
+                <span class="course-label">GENERAL STUDIES</span>
+
+                <h3>General Studies (GST)</h3>
+
+                <p>
+                    Strengthen your academic skills and prepare
+                    for university general studies courses.
+                </p>
+
+                <a href="/courses/" class="course-link">
+                    Explore Course
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </article>
+
+        </div>
+
+        <div class="mt-12 text-center">
+
+            <a href="/courses/"
+               class="inline-flex items-center gap-3
+                      rounded-xl bg-blue-800
+                      hover:bg-blue-900 text-white
+                      font-bold px-8 py-4 shadow-lg
+                      transition hover:-translate-y-1">
+
+                Explore All Courses
+                <i class="fas fa-arrow-right"></i>
+
+            </a>
+
+            <p class="mt-4 text-sm text-gray-500">
+                Find the right course for your academic journey.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ==================================
+     MEET THE FOUNDER
+================================== -->
+
+<section id="founder"
+         class="relative overflow-hidden bg-white py-20 sm:py-24">
+
+    <div class="absolute -top-24 -right-20 h-72 w-72
+                rounded-full bg-blue-100 blur-3xl opacity-70">
+    </div>
+
+    <div class="relative mx-auto grid max-w-7xl
+                grid-cols-1 items-center gap-12
+                px-5 sm:px-8 lg:grid-cols-2 lg:px-12">
+
+        <!-- FOUNDER IMAGE -->
+        <div class="relative mx-auto w-full max-w-md"
+             data-aos="fade-right">
+
+            <div class="absolute -inset-4 rounded-[2rem]
+                        bg-gradient-to-br from-blue-700
+                        to-blue-300 opacity-20 blur-xl">
+            </div>
+
+            <div class="relative overflow-hidden
+                        rounded-[2rem] border border-blue-100
+                        bg-blue-50 shadow-2xl academy-float">
+
+                {% if founder and founder.photo %}
+
+                    <img src="{{ founder.photo.url }}"
+                         alt="{{ founder.name }}"
+                         class="h-[420px] w-full object-cover">
+
+                {% else %}
+
+                    <div class="flex h-[420px] items-center
+                                justify-center bg-gradient-to-br
+                                from-blue-950 via-blue-800
+                                to-blue-600 text-white">
+
+                        <div class="text-center">
+
+                            <div class="mx-auto mb-4 flex h-24
+                                        w-24 items-center justify-center
+                                        rounded-full border
+                                        border-white/30 bg-white/10
+                                        text-4xl">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+
+                            <p class="text-sm font-bold
+                                      tracking-[.25em]">
+                              No IMAGE
+                            </p>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            <div class="absolute -bottom-6 -right-4
+            rounded-2xl bg-blue-950
+            px-6 py-4 shadow-xl">
+
+        <p class="text-xs font-black uppercase
+          tracking-widest text-white">
+    {{ founder.name }}
+</p>
+
+<p class="text-lg font-extrabold text-white">
+    {{ founder.title|default:"Founder, dcracademy" }}
+</p>
+            </div>
+
+        </div>
+
+        <!-- FOUNDER INFORMATION -->
+        <div class="pt-6 lg:pt-0" data-aos="fade-left">
+
+            <span class="inline-flex rounded-full border
+                         border-blue-100 bg-blue-50
+                         px-4 py-2 text-xs font-extrabold
+                         uppercase tracking-[.2em] text-blue-800">
+
+                The Person Behind the Vision
+
+            </span>
+
+         <!--h2 class="mt-5 text-left text-2xl font-black
+           leading-tight text-blue-950 sm:text-3xl">
+
+    A Passion for Education and Academic Excellence
+
+</h2-->
+
+            <!--p class="mt-5 text-lg leading-relaxed text-slate-600">
+
+                {% if founder.message %}
+                    “{{ founder.message }}”
+                {% else %}
+               No text
+                {% endif %}
+
+            </p-->
+
+            {% if founder %}
+
+                <h3 class="mt-7 text-2xl font-extrabold
+                           text-blue-950">
+                   A Passion for Education and Academic Excellence
+                </h3>
+
+                <!--p class="mt-1 font-semibold text-blue-700">
+                    {{ founder.title|default:"Founder, dcracademy" }}
+                </p-->
+
+               
+                 {% if founder and founder.bio %}
+
+                    <blockquote class="mt-6 border-l-4
+                                       border-yellow-400 pl-5
+                                       italic leading-relaxed
+                                       text-slate-600">
+                             {{ founder.bio }}
+
+                        
+
+                    </blockquote>
+
+                {% endif %}
+                   
+            {% else %}
+
+                <h3 class="mt-7 text-2xl font-extrabold
+                           text-blue-950">
+                    Founder, D-CDR ACADEMY
+                </h3>
+
+                <p class="mt-1 font-semibold text-blue-700">
+                    Education • Excellence • Impact
+                </p>
+
+            {% endif %}
+
+            <a href="#tutors"
+               class="mt-8 inline-flex items-center gap-3
+                      rounded-xl bg-blue-800 px-6 py-3
+                      font-bold text-white shadow-lg
+                      transition hover:-translate-y-1
+                      hover:bg-blue-950">
+
+                Meet the Team
+                <i class="fas fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+</section> 
+
+
+
+<!-- ==================================
+     OPTIMIZED STUDENT RESULTS
+================================== -->
+
+<section id="student-results"
+         class="bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 py-20 text-white">
+
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+
+        <!-- SECTION HEADER -->
+        <div class="mx-auto mb-12 max-w-3xl text-center"
+             data-aos="fade-up"
+             data-aos-duration="500">
+
+            <span class="inline-flex rounded-full
+                         border border-white/20 bg-white/10
+                         px-4 py-2 text-xs font-bold
+                         uppercase tracking-[.2em] text-blue-100">
+
+                Our Impact in Action
+
+            </span>
+
+            <h2 class="mt-5 text-4xl font-black text-white sm:text-5xl">
+
+                Our Student
+                <span class="text-yellow-400">Results</span>
+
+            </h2>
+
+            <p class="mt-4 text-lg leading-relaxed text-blue-100">
+
+                Celebrating the hard work, progress,
+                and academic milestones of our learners.
+
+            </p>
+
+        </div>
+
+
+        {% if student_results %}
+
+        <!-- RESULTS GRID -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+            {% for result in student_results %}
+
+            <article class="group overflow-hidden rounded-2xl
+                            border border-white/10 bg-white
+                            text-blue-950 shadow-xl
+                            transition-transform duration-300
+                            hover:-translate-y-2"
+                     data-aos="fade-up"
+                     data-aos-duration="400"
+                     data-aos-once="true">
+
+                <!-- STUDENT PHOTO -->
+                {% if result.photo %}
+
+                    <img src="{{ result.photo.url }}"
+                         alt="{{ result.student_name }}"
+                         loading="lazy"
+                         decoding="async"
+                         fetchpriority="low"
+                         width="600"
+                         height="400"
+                         class="h-52 w-full object-cover">
+
+                {% else %}
+
+                    <div class="flex h-52 items-center
+                                justify-center bg-blue-100
+                                text-5xl text-blue-700">
+
+                        <i class="fas fa-trophy"></i>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- RESULT DETAILS -->
+                <div class="p-6">
+
+                    <p class="text-xs font-black uppercase
+                              tracking-[.18em] text-blue-600">
+
+                        {{ result.exam|default:"Academic Achievement" }}
+
+                    </p>
+
+                    <h3 class="mt-2 text-xl font-extrabold">
+
+                        {{ result.student_name }}
+
+                    </h3>
+
+                    {% if result.achievement %}
+
+                    <p class="mt-2 leading-relaxed text-slate-600">
+
+                        {{ result.achievement }}
+
+                    </p>
+
+                    {% endif %}
+
+                    {% if result.score %}
+
+                    <div class="mt-5 inline-flex rounded-full
+                                bg-yellow-100 px-4 py-2
+                                text-sm font-extrabold text-blue-950">
+
+                        {{ result.score }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- EMPTY STATE -->
+        <div class="mx-auto max-w-2xl rounded-3xl
+                    border border-white/15 bg-white/10
+                    p-10 text-center backdrop-blur"
+             data-aos="fade-up"
+             data-aos-duration="400">
+
+            <div class="text-5xl">
+
+                <i class="fas fa-trophy text-yellow-400"></i>
+
+            </div>
+
+            <h3 class="mt-4 text-2xl font-extrabold">
+
+                Every Achievement Begins With a Commitment to Learn.
+
+            </h3>
+
+            <p class="mt-3 leading-relaxed text-blue-100">
+
+                This space celebrates our students'
+                examination successes and academic milestones.
+                Student result records will appear here
+                when added to the homepage.
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- ==================================
+     MEET OUR TUTORS
+================================== -->
+
+<section id="tutors"
+         class="py-20 bg-gradient-to-br
+                from-white via-blue-50/30 to-yellow-50/20">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16" data-aos="fade-up">
+
+            <div class="flex items-center justify-center mb-4">
+
+                <span class="h-px w-16 bg-blue-600 mr-3"></span>
+
+                <span class="text-2xl font-black uppercase
+                             tracking-wider text-blue-700">
+
+                    Meet Our Tutors
+
+                </span>
+
+                <span class="h-px w-16 bg-blue-600 ml-3"></span>
+
+            </div>
+
+            <h2 class="text-4xl font-black text-blue-950">
+                Learn From
+                <span class="text-blue-700">Experienced Tutors</span>
+            </h2>
+
+            <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+
+                Meet the dedicated educators committed
+                to helping students achieve academic excellence.
+
+            </p>
+
+        </div>
+
+        <div class="relative">
+
+            <div class="tutor-slider" id="tutorSlider">
+
+                {% for tutor in tutors %}
+
+                <div class="tutor-card" data-aos="fade-up">
+
+                    {% if tutor.photo %}
+
+                    <img src="{{ tutor.photo.url }}"
+                         alt="{{ tutor.name }}">
+
+                    {% else %}
+
+                    <div class="h-full flex items-center
+                                justify-center bg-blue-900
+                                text-white text-5xl">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+
+                    {% endif %}
+
+                    <div class="tutor-info">
+
+                        <h3>
+                            {{ tutor.name }}
+                            {% if tutor.qualification %}
+                                , {{ tutor.qualification }}
+                            {% endif %}
+                        </h3>
+
+                        <p>{{ tutor.role }}</p>
+
+                        <p>
+                            Course: {{ tutor.course }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% empty %}
+
+                <div class="w-full text-center py-12
+                            text-blue-800">
+                    <i class="fas fa-users text-4xl mb-4"></i>
+                    <p>Our tutor profiles will appear here.</p>
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            <button id="prevBtn"
+                    class="slider-arrow"
+                    style="left:-15px;"
+                    aria-label="Previous tutor">
+
+                <i class="fas fa-chevron-left"></i>
+
+            </button>
+
+            <button id="nextBtn"
+                    class="slider-arrow"
+                    style="right:-15px;"
+                    aria-label="Next tutor">
+
+                <i class="fas fa-chevron-right"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ==================================
+     STUDENT TESTIMONIALS
+================================== -->
+
+<section id="testimonials"
+         class="py-20 bg-gradient-to-br
+                from-blue-50 via-white to-blue-100">
+
+    <div class="text-center mb-16" data-aos="fade-up">
+
+        <div class="flex items-center justify-center mb-4">
+
+            <span class="h-px w-16 bg-blue-600 mr-3"></span>
+
+            <span class="text-xl sm:text-2xl font-black
+                         uppercase tracking-wider text-blue-700">
+
+                What Our Students Are Saying
+
+            </span>
+
+            <span class="h-px w-16 bg-blue-600 ml-3"></span>
+
+        </div>
+
+        <h2 class="text-4xl font-black text-blue-950">
+            Real Experiences.
+            <span class="text-blue-700">Real Results.</span>
+        </h2>
+
+        <p class="mt-4 text-slate-600">
+            Hear directly from students who have experienced
+            our learning environment.
+        </p>
+
+    </div>
+
+    <div class="relative max-w-6xl mx-auto overflow-hidden">
+
+        <div id="testimonialSlider" class="testimonial-slider">
+
+            {% for testimonial in testimonials %}
+
+            <div class="testimonial-card">
+
+                <div class="testimonial-inner">
+
+                    {% if testimonial.photo %}
+
+                    <img src="{{ testimonial.photo.url }}"
+                         alt="{{ testimonial.name }}">
+
+                    {% else %}
+
+                    <div class="mx-auto w-20 h-20 rounded-full
+                                bg-blue-100 flex items-center
+                                justify-center text-blue-700
+                                text-3xl mb-4">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    {% endif %}
+
+                    <div>
+
+                        <div class="testimonial-stars">
+
+                            {% for i in "12345" %}
+
+                                {% if forloop.counter <= testimonial.rating %}
+                                    ★
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                        <p class="text-blue-700 mb-4
+                                  text-base leading-relaxed">
+
+                            "{{ testimonial.content }}"
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <h4 class="font-bold text-xl text-blue-800">
+                            {{ testimonial.name }}
+                        </h4>
+
+                        <p class="text-blue-600 text-sm">
+                            {{ testimonial.university }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="w-full text-center py-12 text-blue-800">
+                Student testimonials will appear here.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button id="testimonialPrev"
+                class="slider-arrow"
+                style="left:5px;"
+                aria-label="Previous testimonial">
+
+            <i class="fas fa-chevron-left"></i>
+
+        </button>
+
+        <button id="testimonialNext"
+                class="slider-arrow"
+                style="right:5px;"
+                aria-label="Next testimonial">
+
+            <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================
+     PREMIUM CALL TO ACTION
+================================== -->
+
+<section id="contact"
+         class="relative overflow-hidden py-24
+                bg-gradient-to-br from-[#020817]
+                via-[#071B49] to-[#0B2D65]">
+
+<!-- SCIENCE-INSPIRED BACKGROUND DESIGN -->
+
+<!-- Deep Blue Glow Effects -->
+<div class="absolute -top-32 -left-32
+            w-96 h-96 rounded-full
+            bg-blue-400/10 blur-3xl
+            pointer-events-none">
+</div>
+
+<div class="absolute -bottom-32 -right-32
+            w-96 h-96 rounded-full
+            bg-yellow-400/10 blur-3xl
+            pointer-events-none">
+</div>
+
+<!-- Subtle Background Grid -->
+<div class="absolute inset-0 opacity-[0.035]
+            pointer-events-none"
+     style="background-image:
+     linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+     linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+     background-size: 55px 55px;">
+</div>
+
+<!-- SCIENCE LINE ART: ATOM -->
+<div class="absolute top-10 left-[5%]
+            w-32 h-32 md:w-44 md:h-44
+            text-white opacity-[0.13]
+            pointer-events-none">
+
+    <svg viewBox="0 0 100 100"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="0.8">
+
+        <ellipse cx="50" cy="50" rx="42" ry="15"
+                 transform="rotate(0 50 50)"/>
+
+        <ellipse cx="50" cy="50" rx="42" ry="15"
+                 transform="rotate(60 50 50)"/>
+
+        <ellipse cx="50" cy="50" rx="42" ry="15"
+                 transform="rotate(120 50 50)"/>
+
+        <circle cx="50" cy="50" r="3"
+                fill="currentColor" stroke="none"/>
+
+        <circle cx="92" cy="50" r="2"
+                fill="currentColor" stroke="none"/>
+
+    </svg>
+</div>
+
+<!-- SCIENCE LINE ART: MOLECULE -->
+<div class="absolute top-24 right-[8%]
+            w-28 h-28 md:w-36 md:h-36
+            text-white opacity-[0.12]
+            pointer-events-none">
+
+    <svg viewBox="0 0 100 100"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.2">
+
+        <path d="M25 25 L50 15 L75 30 L70 65 L40 80 L20 55 Z"/>
+
+        <path d="M25 25 L40 80 M50 15 L70 65 M75 30 L20 55"/>
+
+        <circle cx="25" cy="25" r="5"/>
+        <circle cx="50" cy="15" r="5"/>
+        <circle cx="75" cy="30" r="5"/>
+        <circle cx="70" cy="65" r="5"/>
+        <circle cx="40" cy="80" r="5"/>
+        <circle cx="20" cy="55" r="5"/>
+
+    </svg>
+</div>
+
+<!-- SCIENCE LINE ART: LABORATORY FLASK -->
+<div class="absolute bottom-12 left-[12%]
+            w-24 h-24 md:w-36 md:h-36
+            text-white opacity-[0.12]
+            pointer-events-none">
+
+    <svg viewBox="0 0 100 100"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+
+        <path d="M38 12 H62"/>
+        <path d="M42 12 V42 L20 78 Q17 86 28 88 H72 Q83 86 80 78 L58 42 V12"/>
+
+        <path d="M28 68 Q50 58 72 68"/>
+        <path d="M32 78 H68"/>
+
+        <circle cx="42" cy="72" r="2"/>
+        <circle cx="58" cy="78" r="2"/>
+        <circle cx="50" cy="65" r="2"/>
+
+    </svg>
+</div>
+
+<!-- SCIENCE LINE ART: MICROSCOPE -->
+<div class="absolute bottom-16 right-[12%]
+            w-28 h-28 md:w-40 md:h-40
+            text-white opacity-[0.11]
+            pointer-events-none">
+
+    <svg viewBox="0 0 100 100"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+
+        <path d="M35 15 L50 8 L65 38 L50 45 Z"/>
+        <path d="M47 42 L35 57"/>
+        <path d="M35 57 Q25 70 42 77"/>
+        <path d="M42 77 H78"/>
+        <path d="M27 87 H82"/>
+        <path d="M60 42 Q80 55 72 75"/>
+        <path d="M35 57 L25 57"/>
+
+        <circle cx="42" cy="77" r="3"/>
+
+    </svg>
+</div>
+
+<!-- Small Scientific Decorative Details -->
+<div class="absolute top-1/2 left-[3%]
+            w-3 h-3 border border-white/20
+            rounded-full pointer-events-none">
+</div>
+
+<div class="absolute top-[35%] right-[4%]
+            w-2 h-2 bg-white/20
+            rounded-full pointer-events-none">
+</div>
+
+<div class="absolute bottom-[30%] right-[35%]
+            w-2 h-2 border border-white/20
+            rounded-full pointer-events-none">
+</div>
+
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8
+                relative z-10 text-center">
+
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2
+                    bg-yellow-400/10
+                    border border-yellow-400/30
+                    rounded-full px-5 py-2 mb-8
+                    shadow-lg shadow-yellow-500/5">
+
+            <span class="w-2 h-2 rounded-full
+                         bg-yellow-400 animate-pulse">
+            </span>
+
+            <span class="text-yellow-300 text-sm
+                         font-semibold tracking-wide">
+                {{ cta_section.badge_text }}
+            </span>
+
+        </div>
+
+
+        <!-- Heading -->
+        <h2 class="text-4xl md:text-5xl lg:text-6xl
+                   font-black text-white mb-7
+                   leading-tight tracking-tight">
+
+            {{ cta_section.heading_main }}
+
+            <span class="block mt-2
+                         bg-gradient-to-r
+                         from-yellow-300 via-yellow-400
+                         to-amber-500
+                         bg-clip-text text-transparent">
+
+                {{ cta_section.heading_gradient }}
+
+            </span>
+
+        </h2>
+
+
+        <!-- Description -->
+        <p class="text-lg md:text-xl
+                  text-blue-100/80
+                  max-w-3xl mx-auto mb-10
+                  leading-relaxed">
+
+            {{ cta_section.subtext }}
+
+        </p>
+
+
+        <!-- CTA Button -->
+        <a href="{{ cta_section.button_url }}"
+           class="group inline-flex items-center
+                  justify-center gap-3
+                  rounded-full
+                  bg-gradient-to-r
+                  from-yellow-400 to-amber-500
+                  hover:from-yellow-300
+                  hover:to-yellow-400
+                  text-[#06152E]
+                  px-10 py-4
+                  font-bold text-lg
+                  shadow-xl shadow-yellow-500/20
+                  transition-all duration-300
+                  hover:-translate-y-1
+                  hover:shadow-2xl
+                  hover:shadow-yellow-400/30">
+
+            <i class="fas fa-arrow-right
+                      transition-transform duration-300
+                      group-hover:translate-x-1">
+            </i>
+
+            {{ cta_section.button_text }}
+
+        </a>
+
+
+        <!-- Feature Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3
+                    gap-6 lg:gap-8 mt-20">
+
+
+            {% for feature in cta_features %}
+
+            <!-- Feature Card -->
+            <div class="group relative
+                        rounded-3xl
+                        border border-white/10
+                        bg-white/[0.045]
+                        backdrop-blur-xl
+                        p-8
+                        transition-all duration-500
+                        hover:-translate-y-3
+                        hover:bg-white/[0.08]
+                        hover:border-yellow-400/40
+                        hover:shadow-2xl
+                        hover:shadow-blue-950/40">
+
+
+                <!-- Top Accent -->
+                <div class="absolute top-0 left-1/2
+                            -translate-x-1/2
+                            w-16 h-1 rounded-full
+                            bg-gradient-to-r
+                            from-yellow-300 to-amber-500
+                            opacity-0
+                            group-hover:opacity-100
+                            transition duration-300">
+                </div>
+
+
+                <!-- Icon Container -->
+                <div class="w-16 h-16
+                            bg-yellow-400/10
+                            border border-yellow-400/20
+                            rounded-2xl
+                            flex items-center justify-center
+                            mx-auto mb-6
+                            text-yellow-400
+                            transition-all duration-300
+                            group-hover:bg-yellow-400/20
+                            group-hover:scale-110
+                            group-hover:rotate-3">
+
+                    <div class="w-9 h-9 flex items-center
+                                justify-center">
+
+                        {{ feature.icon_svg|safe }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Feature Title -->
+                <h3 class="text-xl md:text-2xl
+                           font-bold text-white mb-3
+                           transition-colors duration-300
+                           group-hover:text-yellow-300">
+
+                    {{ feature.title }}
+
+                </h3>
+
+
+                <!-- Feature Description -->
+                <p class="text-blue-100/70
+                          leading-relaxed text-base">
+
+                    {{ feature.description }}
+
+                </p>
+
+
+                <!-- Bottom Decorative Line -->
+                <div class="w-10 h-1 rounded-full
+                            bg-yellow-400/30
+                            mx-auto mt-7
+                            transition-all duration-300
+                            group-hover:w-20
+                            group-hover:bg-yellow-400">
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+
+
+    </div>
+
+</section>
+
+
+<!-- ==================================
+     DOWNLOAD OUR APP
+================================== -->
+
+<section class="py-20
+                bg-gradient-to-br
+                from-[#020817] via-[#071B49] to-[#0B2D65]">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="bg-gradient-to-br
+                    from-[#0B1F49] via-[#102F68] to-[#071B49]
+                    rounded-3xl p-8 md:p-16
+                    text-center relative overflow-hidden
+                    shadow-2xl border border-white/10">
+
+<!-- SCIENCE LINE-ART BACKGROUND -->
+
+<div class="absolute inset-0 pointer-events-none overflow-hidden">
+
+    <!-- Atom Illustration: Top Left -->
+    <div class="absolute top-5 left-[3%]
+                w-32 h-32 md:w-44 md:h-44
+                text-white opacity-[0.12]">
+
+        <svg viewBox="0 0 100 100"
+             fill="none" stroke="currentColor"
+             stroke-width="0.8">
+
+            <ellipse cx="50" cy="50" rx="42" ry="15"/>
+            <ellipse cx="50" cy="50" rx="42" ry="15"
+                     transform="rotate(60 50 50)"/>
+            <ellipse cx="50" cy="50" rx="42" ry="15"
+                     transform="rotate(120 50 50)"/>
+
+            <circle cx="50" cy="50" r="3"
+                    fill="currentColor" stroke="none"/>
+            <circle cx="92" cy="50" r="2"
+                    fill="currentColor" stroke="none"/>
+
+        </svg>
+    </div>
+
+    <!-- Molecular Structure: Top Right -->
+    <div class="absolute top-8 right-[5%]
+                w-28 h-28 md:w-36 md:h-36
+                text-white opacity-[0.12]">
+
+        <svg viewBox="0 0 100 100"
+             fill="none" stroke="currentColor"
+             stroke-width="1">
+
+            <path d="M25 25 L50 15 L75 30 L70 65 L40 80 L20 55 Z"/>
+            <path d="M25 25 L40 80 M50 15 L70 65 M75 30 L20 55"/>
+
+            <circle cx="25" cy="25" r="5"/>
+            <circle cx="50" cy="15" r="5"/>
+            <circle cx="75" cy="30" r="5"/>
+            <circle cx="70" cy="65" r="5"/>
+            <circle cx="40" cy="80" r="5"/>
+            <circle cx="20" cy="55" r="5"/>
+
+        </svg>
+    </div>
+
+    <!-- Laboratory Flask: Bottom Left -->
+    <div class="absolute bottom-5 left-[15%]
+                w-24 h-24 md:w-36 md:h-36
+                text-white opacity-[0.11]">
+
+        <svg viewBox="0 0 100 100"
+             fill="none" stroke="currentColor"
+             stroke-width="1.2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M38 12 H62"/>
+            <path d="M42 12 V42 L20 78 Q17 86 28 88 H72 Q83 86 80 78 L58 42 V12"/>
+            <path d="M28 68 Q50 58 72 68"/>
+            <path d="M32 78 H68"/>
+
+            <circle cx="42" cy="72" r="2"/>
+            <circle cx="58" cy="78" r="2"/>
+            <circle cx="50" cy="65" r="2"/>
+
+        </svg>
+    </div>
+
+    <!-- Microscope: Bottom Right -->
+    <div class="absolute bottom-5 right-[10%]
+                w-28 h-28 md:w-40 md:h-40
+                text-white opacity-[0.12]">
+
+        <svg viewBox="0 0 100 100"
+             fill="none" stroke="currentColor"
+             stroke-width="1.2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M35 15 L50 8 L65 38 L50 45 Z"/>
+            <path d="M47 42 L35 57"/>
+            <path d="M35 57 Q25 70 42 77"/>
+            <path d="M42 77 H78"/>
+            <path d="M27 87 H82"/>
+            <path d="M60 42 Q80 55 72 75"/>
+
+        </svg>
+    </div>
+
+    <!-- Mathematical / Scientific Orbit -->
+    <div class="absolute top-1/2 left-[45%]
+                w-20 h-20 md:w-28 md:h-28
+                text-white opacity-[0.07]">
+
+        <svg viewBox="0 0 100 100"
+             fill="none" stroke="currentColor"
+             stroke-width="0.8">
+
+            <circle cx="50" cy="50" r="35"/>
+            <circle cx="50" cy="50" r="20"/>
+            <path d="M10 50 H90 M50 10 V90"/>
+            <circle cx="50" cy="50" r="3"/>
+
+        </svg>
+    </div>
+
+    <!-- Small Science Details -->
+    <div class="absolute top-[35%] left-[25%]
+                w-3 h-3 border border-white/20 rounded-full">
+    </div>
+
+    <div class="absolute bottom-[35%] right-[30%]
+                w-2 h-2 bg-white/20 rounded-full">
+    </div>
+
+</div>
+
+            <!-- Subtle Pattern -->
+            <div class="absolute inset-0 opacity-[0.035]
+                        pointer-events-none"
+                 style="background-image:
+                 radial-gradient(#ffffff 1px, transparent 1px);
+                 background-size: 28px 28px;">
+            </div>
+
+            <div class="relative z-10">
+
+                <!-- Download Icon -->
+                <div class="w-20 h-20
+                            bg-yellow-400/10
+                            border border-yellow-400/20
+                            rounded-2xl flex items-center
+                            justify-center mx-auto mb-8">
+
+                    <i class="fas fa-download
+                              text-4xl text-yellow-400"></i>
+
+                </div>
+
+                <!-- Heading -->
+                <h2 class="font-black text-4xl md:text-5xl
+                           text-white mb-6">
+
+                    {{ download_app.heading_main }}
+
+                    <span class="block
+                                 bg-gradient-to-r
+                                 from-yellow-300 via-yellow-400
+                                 to-amber-500
+                                 bg-clip-text text-transparent">
+
+                        {{ download_app.heading_highlight }}
+
+                    </span>
+
+                </h2>
+
+                <!-- Description -->
+                <p class="text-lg md:text-xl
+                          text-blue-100/80
+                          max-w-2xl mx-auto mb-8
+                          leading-relaxed">
+
+                    {{ download_app.description }}
+
+                </p>
+
+                <!-- Download Button -->
+                <a href="{{ download_app.button_url }}"
+                   class="group inline-flex items-center gap-3
+                          bg-gradient-to-r
+                          from-yellow-400 to-amber-500
+                          hover:from-yellow-300
+                          hover:to-yellow-400
+                          text-[#06152E]
+                          px-10 py-4 rounded-full
+                          font-bold text-lg
+                          transition-all duration-300
+                          hover:-translate-y-1
+                          shadow-xl shadow-yellow-500/20
+                          hover:shadow-2xl
+                          hover:shadow-yellow-400/30">
+
+                    <i class="fas fa-download
+                              transition-transform duration-300
+                              group-hover:translate-y-1"></i>
+
+                    {{ download_app.button_text }}
+
+                </a>
+
+                <!-- Features -->
+                <div class="grid grid-cols-1 md:grid-cols-2
+                            gap-8 mt-12 max-w-2xl mx-auto">
+
+                    {% for feature in download_features %}
+
+                    <div class="flex items-center gap-4
+                                text-left p-4 rounded-2xl
+                                bg-white/[0.04]
+                                border border-white/10
+                                backdrop-blur-md
+                                transition-all duration-300
+                                hover:bg-white/[0.08]
+                                hover:border-yellow-400/30">
+
+                        <div class="w-12 h-12 shrink-0
+                                    rounded-xl
+                                    bg-yellow-400/10
+                                    border border-yellow-400/20
+                                    flex items-center justify-center
+                                    text-yellow-400">
+
+                            {{ feature.icon_svg|safe }}
+
+                        </div>
+
+                        <div>
+
+                            <h4 class="font-bold text-white">
+                                {{ feature.title }}
+                            </h4>
+
+                            <p class="text-blue-100/60 text-sm">
+                                {{ feature.description }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CENTRE ADVERTISEMENT POPUP -->
+<style>
+
+/* =====================================
+   IMAGE-ONLY ADVERTISEMENT POPUP
+===================================== */
+
+#home {
+    position: relative;
+    isolation: isolate;
+}
+
+.academy-ad-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background: rgba(2, 8, 23, .78);
+    backdrop-filter: blur(7px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: .4s ease;
+}
+
+.academy-ad-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* IMAGE CONTAINER */
+
+.academy-ad-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 750px;
+    max-height: 90vh;
+
+    background: transparent;
+    border-radius: 15px;
+
+    transform: translateY(25px) scale(.95);
+    transition: .5s cubic-bezier(.22,1,.36,1);
+}
+
+.academy-ad-overlay.show .academy-ad-box {
+    transform: translateY(0) scale(1);
+}
+
+/* CLICKABLE IMAGE */
+
+.academy-ad-image-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-height: 85vh;
+
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.academy-ad-image-link img {
+    display: block;
+
+    width: 100%;
+    max-height: 85vh;
+
+    object-fit: contain;
+    object-position: center;
+
+    border-radius: 15px;
+    transition: transform .3s ease;
+}
+
+.academy-ad-image-link:hover img {
+    transform: scale(1.02);
+}
+
+/* CLOSE BUTTON */
+
+.academy-ad-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    z-index: 5;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: white;
+    color: #123b78;
+
+    font-size: 26px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,.25);
+}
+
+.academy-ad-close:hover {
+    background: #facc15;
+    transform: rotate(90deg);
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .academy-ad-overlay {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 5vh;
+    }
+
+    .academy-ad-box {
+        width: 100%;
+        max-width: 100%;
+        transform: translateY(-15px);
+    }
+
+    .academy-ad-image-link,
+    .academy-ad-image-link img {
+        max-height: 75vh;
+    }
+
+    .academy-ad-close {
+        top: -12px;
+        right: -8px;
+
+        width: 34px;
+        height: 34px;
+
+        font-size: 23px;
+    }
+}
+
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const adPopup = document.getElementById("academyAdPopup");
+
+    if (!adPopup) return;
+
+    // Display advertisement after 2 seconds on every page refresh
+    setTimeout(function () {
+        adPopup.classList.add("show");
+    }, 20);
+
+});
+
+function closeAcademyAd() {
+
+    const adPopup = document.getElementById("academyAdPopup");
+
+    if (adPopup) {
+        adPopup.classList.remove("show");
+    }
+
+}
+
+</script>
+
+<!-- ==================================
+     JAVASCRIPT
+================================== -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ==================================
+       PROMOTIONAL POPUP
+    ================================== */
+
+    const promoPopup = document.getElementById("promoPopup");
+
+    if (promoPopup) {
+        setTimeout(function () {
+            promoPopup.classList.add("show");
+        }, 2000);
+    }
+
+
+    /* ==================================
+       AOS ANIMATIONS
+    ================================== */
+
+    if (window.AOS) {
+        AOS.init({
+            duration: 900,
+            easing: 'ease-out-cubic',
+            once: true,
+            mirror: false,
+            offset: 70,
+            disable: window.matchMedia(
+                '(prefers-reduced-motion: reduce)'
+            ).matches
+        });
+
+        AOS.refreshHard();
+    }
+
+
+    /* ==================================
+       TUTOR SLIDER
+    ================================== */
+
+    const tutorSlider = document.getElementById("tutorSlider");
+    const nextTutor = document.getElementById("nextBtn");
+    const prevTutor = document.getElementById("prevBtn");
+
+    if (tutorSlider && nextTutor && prevTutor) {
+
+        nextTutor.addEventListener("click", function () {
+
+            const card = tutorSlider.querySelector(".tutor-card");
+
+            if (!card) return;
+
+            tutorSlider.scrollBy({
+                left: card.offsetWidth + 16,
+                behavior: "smooth"
+            });
+
+        });
+
+        prevTutor.addEventListener("click", function () {
+
+            const card = tutorSlider.querySelector(".tutor-card");
+
+            if (!card) return;
+
+            tutorSlider.scrollBy({
+                left: -(card.offsetWidth + 16),
+                behavior: "smooth"
+            });
+
+        });
+
+    }
+
+
+    /* ==================================
+       TESTIMONIAL SLIDER
+    ================================== */
+
+    const testimonialSlider =
+        document.getElementById("testimonialSlider");
+
+    const testimonialNext =
+        document.getElementById("testimonialNext");
+
+    const testimonialPrev =
+        document.getElementById("testimonialPrev");
+
+    if (testimonialSlider &&
+        testimonialNext &&
+        testimonialPrev) {
+
+        let testimonialIndex = 0;
+
+        function updateTestimonials() {
+
+            const cards =
+                testimonialSlider.querySelectorAll(
+                    ".testimonial-card"
+                );
+
+            if (!cards.length) return;
+
+            const visibleCards =
+                window.innerWidth <= 768 ? 1 : 3;
+
+            const maxIndex =
+                Math.max(0, cards.length - visibleCards);
+
+            testimonialIndex = Math.min(
+                testimonialIndex,
+                maxIndex
+            );
+
+            testimonialIndex = Math.max(
+                0,
+                testimonialIndex
+            );
+
+            const cardWidth =
+                cards[0].getBoundingClientRect().width;
+
+            testimonialSlider.style.transform =
+                `translateX(-${testimonialIndex * cardWidth}px)`;
+
+        }
+
+        testimonialNext.addEventListener("click", function () {
+
+            const cards =
+                testimonialSlider.querySelectorAll(
+                    ".testimonial-card"
+                );
+
+            const visibleCards =
+                window.innerWidth <= 768 ? 1 : 3;
+
+            const maxIndex =
+                Math.max(0, cards.length - visibleCards);
+
+            if (testimonialIndex < maxIndex) {
+                testimonialIndex++;
+            } else {
+                testimonialIndex = 0;
+            }
+
+            updateTestimonials();
+
+        });
+
+        testimonialPrev.addEventListener("click", function () {
+
+            const cards =
+                testimonialSlider.querySelectorAll(
+                    ".testimonial-card"
+                );
+
+            const visibleCards =
+                window.innerWidth <= 768 ? 1 : 3;
+
+            const maxIndex =
+                Math.max(0, cards.length - visibleCards);
+
+            if (testimonialIndex > 0) {
+                testimonialIndex--;
+            } else {
+                testimonialIndex = maxIndex;
+            }
+
+            updateTestimonials();
+
+        });
+
+        window.addEventListener("resize", updateTestimonials);
+
+        updateTestimonials();
+
+    }
+
+});
+
+
+/* ==================================
+   CLOSE PROMOTIONAL POPUP
+================================== */
+
+function closePromo() {
+
+    const popup = document.getElementById("promoPopup");
+
+    if (popup) {
+        popup.classList.remove("show");
+    }
+
+}
+</script>
+
+{% endblock %}

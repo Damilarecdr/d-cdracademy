@@ -1,0 +1,2023 @@
+{% extends "academy/base.html" %}
+
+{% load static %}
+
+{% block title %}Edit Quiz | {{ quiz.title }}{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   EDUSPHERE — TUTOR QUIZ EDITOR
+   Sidebar shell + quiz settings + question list + overview
+   ========================================================= */
+
+:root {
+    --edu-deep: #033d30;
+    --edu-green: #0a6c56;
+    --edu-primary: #0cb481;
+    --edu-light: #34d399;
+    --edu-pale: #ecfdf5;
+    --edu-text: #17352d;
+    --edu-muted: #6b7f78;
+    --edu-border: rgba(3, 61, 48, 0.08);
+    --edu-radius: 16px;
+    --edu-radius-sm: 12px;
+    --edu-shadow: 0 1px 3px rgba(3, 61, 48, 0.05), 0 1px 2px rgba(3, 61, 48, 0.03);
+    --edu-shadow-md: 0 6px 18px rgba(3, 61, 48, 0.08);
+    --edu-shadow-lg: 0 12px 34px rgba(3, 61, 48, 0.12);
+    --edu-shadow-xl: 0 24px 50px rgba(3, 61, 48, 0.18);
+    --sidebar-width: 280px;
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.lms-app *,
+.lms-app *::before,
+.lms-app *::after {
+    box-sizing: border-box;
+}
+
+.lms-app {
+    display: flex;
+    min-height: calc(100vh - 76px);
+    background: #f4faf7;
+    color: var(--edu-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+/* =========================================================
+   MOBILE TOP BAR
+   ========================================================= */
+
+.lms-mobile-bar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    align-items: center;
+    justify-content: space-between;
+    height: 62px;
+    padding: 0 1.25rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--edu-border);
+    box-shadow: 0 1px 3px rgba(3, 61, 48, 0.04);
+}
+
+.lms-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.05rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+}
+
+.lms-mobile-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+.lms-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--edu-border);
+    border-radius: 12px;
+    background: #ffffff;
+    color: var(--edu-deep);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s var(--transition-smooth), border-color 0.2s var(--transition-smooth);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-menu-btn:hover,
+.lms-menu-btn:focus-visible {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.20);
+    outline: none;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.lms-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: #ffffff;
+    border-right: 1px solid var(--edu-border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    transition: transform 0.35s var(--transition-smooth);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(3, 61, 48, 0.15) transparent;
+    z-index: 50;
+}
+
+.lms-sidebar::-webkit-scrollbar { width: 5px; }
+.lms-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(3, 61, 48, 0.12);
+    border-radius: 3px;
+}
+
+.lms-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem 1.5rem 1.2rem;
+    border-bottom: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(3, 61, 48, 0.18);
+}
+
+.lms-sidebar-brand .brand-text h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.lms-sidebar-brand .brand-text p {
+    margin: 0.15rem 0 0;
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: var(--edu-muted);
+}
+
+.lms-sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 1rem 0.5rem;
+    padding: 0.8rem;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.06), rgba(52, 211, 153, 0.10));
+    border: 1px solid rgba(12, 180, 129, 0.10);
+}
+
+.lms-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.lms-avatar-info { min-width: 0; flex: 1; }
+
+.lms-avatar-info strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 750;
+    color: var(--edu-deep);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-avatar-info small {
+    display: block;
+    font-size: 0.71rem;
+    color: var(--edu-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 0.75rem 0;
+}
+
+.lms-nav-label {
+    padding: 0.9rem 0.75rem 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--edu-muted);
+}
+
+.lms-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: var(--edu-radius-sm);
+    color: var(--edu-text);
+    font-size: 0.87rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s var(--transition-smooth), color 0.2s var(--transition-smooth);
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-nav-item:hover {
+    background: var(--edu-pale);
+    color: var(--edu-green);
+}
+
+.lms-nav-item.active {
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.10), rgba(52, 211, 153, 0.14));
+    color: var(--edu-green);
+    font-weight: 750;
+}
+
+.lms-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 22px;
+    border-radius: 0 3px 3px 0;
+    background: var(--edu-primary);
+}
+
+.lms-nav-item .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+}
+
+.lms-nav-item .nav-badge {
+    margin-left: auto;
+    background: var(--edu-primary);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.lms-sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 1rem 1.5rem;
+    border-top: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-footer .btn-upgrade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 0.84rem;
+    font-weight: 750;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(3, 61, 48, 0.18);
+    transition: transform 0.2s var(--transition-smooth), box-shadow 0.2s var(--transition-smooth);
+}
+
+.lms-sidebar-footer .btn-upgrade:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(3, 61, 48, 0.24);
+    color: #fff;
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.lms-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 61, 48, 0.48);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 95;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--transition-smooth);
+}
+
+.lms-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* =========================================================
+   MAIN AREA
+   ========================================================= */
+
+.lms-main {
+    flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.quiz-page {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 50px 90px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+    .quiz-page { padding: 32px 34px 80px; }
+}
+@media (max-width: 900px) {
+    .quiz-page { padding: 24px 20px 60px; }
+}
+@media (max-width: 600px) {
+    .quiz-page { padding: 18px 14px 45px; }
+}
+@media (max-width: 400px) {
+    .quiz-page { padding: 14px 11px 40px; }
+}
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.quiz-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.35rem;
+    font-size: 0.81rem;
+    color: var(--edu-muted);
+    flex-wrap: wrap;
+}
+
+.quiz-breadcrumb a {
+    color: var(--edu-green);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s var(--transition-smooth);
+}
+
+.quiz-breadcrumb a:hover { color: var(--edu-primary); }
+
+.quiz-breadcrumb .sep { opacity: 0.5; }
+
+.quiz-breadcrumb .current {
+    color: var(--edu-text);
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 260px;
+}
+
+/* =========================================================
+   HERO HEADER
+   ========================================================= */
+
+.quiz-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 30px;
+    margin-bottom: 25px;
+    background:
+        radial-gradient(circle at 90% 20%, rgba(52, 211, 153, 0.20), transparent 30%),
+        linear-gradient(135deg, #033d30, #075c49 55%, #0a6c56);
+    border-radius: 24px;
+    box-shadow:
+        0 18px 45px rgba(3, 61, 48, 0.13),
+        0 4px 10px rgba(3, 61, 48, 0.05);
+}
+
+.quiz-hero::before {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    right: -100px;
+    top: -145px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 35px rgba(255, 255, 255, 0.025),
+        0 0 0 70px rgba(255, 255, 255, 0.018);
+    pointer-events: none;
+}
+
+.quiz-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    flex: 1;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #a7f3d0;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.hero-eyebrow::before {
+    content: "";
+    width: 27px;
+    height: 3px;
+    border-radius: 999px;
+    background: #34d399;
+}
+
+.hero-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(1.55rem, 3vw, 2.15rem);
+    font-weight: 950;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    word-break: break-word;
+}
+
+.hero-description {
+    max-width: 720px;
+    margin: 10px 0 0;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.hero-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.hero-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 850;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    transition: background 0.2s var(--transition-smooth), transform 0.2s var(--transition-smooth);
+}
+
+.hero-action:hover {
+    background: rgba(255, 255, 255, 0.20);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.messages {
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 650;
+    line-height: 1.55;
+    border: 1px solid;
+}
+
+.message.error {
+    background: #fef2f2;
+    border-color: rgba(185, 28, 28, 0.16);
+    border-left: 4px solid #b91c1c;
+    color: #b91c1c;
+}
+
+.message.success {
+    background: #ecfdf5;
+    border-color: rgba(16, 185, 129, 0.18);
+    border-left: 4px solid #10b981;
+    color: #047857;
+}
+
+/* =========================================================
+   LAYOUT GRID
+   ========================================================= */
+
+.content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 22px;
+    align-items: start;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card {
+    background: #ffffff;
+    border: 1px solid rgba(15, 118, 110, 0.09);
+    border-radius: 20px;
+    box-shadow:
+        0 12px 34px rgba(3, 61, 48, 0.07),
+        0 2px 5px rgba(3, 61, 48, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #033d30, #0a6c56, #0cb481, #34d399);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.card + .card {
+    margin-top: 20px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 22px 24px;
+    border-bottom: 1px solid rgba(15, 118, 110, 0.08);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.03), rgba(52, 211, 153, 0.05));
+    flex-wrap: wrap;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--edu-pale);
+    color: var(--edu-green);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(16, 185, 129, 0.14);
+}
+
+.card-title h2 {
+    margin: 0;
+    color: var(--edu-deep);
+    font-size: 1.02rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.card-title p {
+    margin: 4px 0 0;
+    color: var(--edu-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* =========================================================
+   FORM FIELDS
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--edu-deep);
+    font-size: 0.82rem;
+    font-weight: 750;
+    letter-spacing: -0.005em;
+}
+
+.form-label .required {
+    color: #dc2626;
+    margin-left: 2px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    border: 1.5px solid rgba(3, 61, 48, 0.12);
+    border-radius: var(--edu-radius-sm);
+    outline: none;
+    color: var(--edu-text);
+    background: #ffffff;
+    font-family: inherit;
+    transition: border-color 0.2s var(--transition-smooth),
+                box-shadow 0.2s var(--transition-smooth);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input {
+    height: 48px;
+    padding: 0 14px;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.form-textarea {
+    min-height: 120px;
+    padding: 14px;
+    resize: vertical;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.form-input:hover,
+.form-textarea:hover {
+    border-color: rgba(12, 180, 129, 0.30);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: var(--edu-primary);
+    box-shadow: 0 0 0 4px rgba(12, 180, 129, 0.12);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: rgba(107, 127, 120, 0.65);
+}
+
+.form-help {
+    display: block;
+    margin-top: 6px;
+    color: var(--edu-muted);
+    font-size: 0.72rem;
+    line-height: 1.55;
+    font-weight: 500;
+}
+
+/* Quiz rules grid */
+.rules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.rules-grid .mini-label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--edu-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   PUBLISH ROW
+   ========================================================= */
+
+.publish-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 17px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.05), rgba(52, 211, 153, 0.08));
+    border: 1px solid rgba(12, 180, 129, 0.14);
+}
+
+.publish-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.publish-copy strong {
+    display: block;
+    color: var(--edu-deep);
+    font-size: 0.86rem;
+    font-weight: 800;
+    margin-bottom: 3px;
+}
+
+.publish-copy span {
+    display: block;
+    color: var(--edu-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+/* Toggle switch */
+.switch {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    border-radius: 30px;
+    background: #ccd6d2;
+    transition: background 0.25s var(--transition-smooth);
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: transform 0.25s var(--transition-smooth);
+    box-shadow: 0 2px 6px rgba(3, 61, 48, 0.20);
+}
+
+.switch input:checked + .slider {
+    background: linear-gradient(135deg, #0a6c56, #0cb481);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+.switch input:focus-visible + .slider {
+    box-shadow: 0 0 0 4px rgba(12, 180, 129, 0.25);
+}
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(15, 118, 110, 0.08);
+    flex-wrap: wrap;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 46px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.83rem;
+    font-weight: 850;
+    text-decoration: none;
+    cursor: pointer;
+    border: 0;
+    white-space: nowrap;
+    transition: transform 0.2s var(--transition-smooth),
+                box-shadow 0.2s var(--transition-smooth),
+                background 0.2s var(--transition-smooth),
+                border-color 0.2s var(--transition-smooth),
+                color 0.2s var(--transition-smooth);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, #0cb481, #34d399);
+    box-shadow: 0 9px 22px rgba(12, 180, 129, 0.22);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 13px 27px rgba(12, 180, 129, 0.30);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    color: var(--edu-green);
+    background: #ffffff;
+    border: 1.5px solid rgba(12, 180, 129, 0.22);
+}
+
+.btn-secondary:hover {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.40);
+    color: var(--edu-deep);
+    transform: translateY(-1px);
+}
+
+.btn-small {
+    min-height: 36px;
+    padding: 6px 14px;
+    font-size: 0.76rem;
+    border-radius: 10px;
+}
+
+.full-btn {
+    width: 100%;
+}
+
+/* =========================================================
+   QUESTION LIST
+   ========================================================= */
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.question-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 118, 110, 0.09);
+    border-radius: 16px;
+    transition: transform 0.2s var(--transition-smooth),
+                border-color 0.2s var(--transition-smooth),
+                box-shadow 0.2s var(--transition-smooth);
+}
+
+.question-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(12, 180, 129, 0.24);
+    box-shadow: 0 8px 22px rgba(3, 61, 48, 0.06);
+}
+
+.question-number {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 900;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.18);
+}
+
+.question-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.question-title {
+    margin: 0;
+    color: var(--edu-deep);
+    font-size: 0.88rem;
+    font-weight: 750;
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+
+.question-title p {
+    margin: 0;
+}
+
+.question-title img {
+    max-width: 100%;
+    max-height: 80px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.question-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.question-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: #f3f6f5;
+    color: var(--edu-muted);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(3, 61, 48, 0.06);
+}
+
+.question-badge.green {
+    background: var(--edu-pale);
+    color: var(--edu-green);
+    border-color: rgba(16, 185, 129, 0.16);
+}
+
+.question-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.question-action {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1.5px solid rgba(15, 118, 110, 0.10);
+    color: var(--edu-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.2s var(--transition-smooth);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.question-action:hover {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.32);
+    color: var(--edu-green);
+    transform: translateY(-1px);
+}
+
+.question-action.delete:hover {
+    background: #fef2f2;
+    border-color: rgba(185, 28, 28, 0.28);
+    color: #b91c1c;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding: 45px 25px;
+    text-align: center;
+    border: 1.5px dashed rgba(12, 180, 129, 0.30);
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.empty-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: var(--edu-pale);
+    color: var(--edu-green);
+    font-size: 1.8rem;
+    border: 1px solid rgba(16, 185, 129, 0.14);
+}
+
+.empty-state h3 {
+    margin: 0;
+    color: var(--edu-deep);
+    font-size: 1.02rem;
+    font-weight: 850;
+    letter-spacing: -0.015em;
+}
+
+.empty-state p {
+    max-width: 400px;
+    margin: 8px auto 20px;
+    color: var(--edu-muted);
+    font-size: 0.84rem;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   RIGHT SIDEBAR CARDS
+   ========================================================= */
+
+.settings-card {
+    position: sticky;
+    top: 22px;
+}
+
+.setting-section {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(15, 118, 110, 0.08);
+}
+
+.setting-section:last-child {
+    border-bottom: 0;
+}
+
+.setting-title {
+    margin: 0 0 14px;
+    color: var(--edu-deep);
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+}
+
+/* Stats */
+.quiz-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat-box {
+    padding: 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.05), rgba(52, 211, 153, 0.08));
+    border: 1px solid rgba(12, 180, 129, 0.14);
+    transition: transform 0.2s var(--transition-smooth);
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    display: block;
+    color: var(--edu-deep);
+    font-size: 1.5rem;
+    font-weight: 950;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.stat-label {
+    display: block;
+    margin-top: 4px;
+    color: var(--edu-muted);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Publication status */
+.status-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid;
+}
+
+.status-box.published {
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.08), rgba(52, 211, 153, 0.12));
+    border-color: rgba(16, 185, 129, 0.18);
+}
+
+.status-box.draft {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(251, 191, 36, 0.12));
+    border-color: rgba(217, 119, 6, 0.20);
+}
+
+.status-copy strong {
+    display: block;
+    font-size: 0.86rem;
+    font-weight: 850;
+    margin-bottom: 3px;
+}
+
+.status-box.published .status-copy strong { color: #047857; }
+.status-box.draft .status-copy strong { color: #92400e; }
+
+.status-copy span {
+    display: block;
+    color: var(--edu-muted);
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-box.published .status-dot {
+    background: #10b981;
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.16);
+}
+
+.status-box.draft .status-dot {
+    background: #f59e0b;
+    box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.16);
+}
+
+/* Quick actions */
+.quick-actions-stack {
+    display: grid;
+    gap: 9px;
+}
+
+/* Tips */
+.tips-list {
+    display: grid;
+    gap: 11px;
+}
+
+.tip-item {
+    display: flex;
+    gap: 9px;
+    color: var(--edu-muted);
+    font-size: 0.76rem;
+    line-height: 1.55;
+    font-weight: 550;
+}
+
+.tip-item::before {
+    content: "✓";
+    color: var(--edu-primary);
+    font-weight: 900;
+    flex-shrink: 0;
+    font-size: 0.82rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+    .content-grid {
+        grid-template-columns: minmax(0, 1fr) 290px;
+    }
+}
+
+@media (max-width: 900px) {
+    .lms-app { flex-direction: column; }
+    .lms-mobile-bar { display: flex; }
+
+    .lms-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 300px;
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        box-shadow: 6px 0 28px rgba(3, 61, 48, 0.16);
+        border-right: none;
+        padding-top: 0.5rem;
+    }
+
+    .lms-sidebar.open { transform: translateX(0); }
+    .lms-overlay { display: block; }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-card {
+        position: static;
+    }
+}
+
+@media (max-width: 700px) {
+    .quiz-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+        border-radius: 20px;
+    }
+
+    .hero-action {
+        width: 100%;
+    }
+
+    .rules-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-header {
+        padding: 18px 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    .question-item {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .question-content {
+        width: calc(100% - 54px);
+    }
+
+    .question-actions {
+        width: 100%;
+        margin-left: 54px;
+    }
+
+    .question-action {
+        flex: 1;
+        max-width: 60px;
+    }
+}
+
+@media (max-width: 430px) {
+    .quiz-hero {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .hero-title { font-size: 1.32rem; }
+
+    .hero-meta-item {
+        font-size: 0.68rem;
+        padding: 6px 10px;
+    }
+
+    .card-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .stat-number { font-size: 1.3rem; }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.lms-app a:focus-visible,
+.lms-app button:focus-visible,
+.lms-app input:focus-visible,
+.lms-app textarea:focus-visible,
+.lms-app select:focus-visible {
+    outline: 3px solid rgba(12, 180, 129, 0.35);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.lms-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    z-index: 999;
+    padding: 0.65rem 1.1rem;
+    background: var(--edu-deep);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.2s var(--transition-smooth);
+}
+
+.lms-skip-link:focus { top: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    .lms-app *,
+    .lms-app *::before,
+    .lms-app *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+<a class="lms-skip-link" href="#lms-main">Skip to main content</a>
+
+<div class="lms-app">
+
+    <!-- =====================================================
+         MOBILE TOP BAR
+         ===================================================== -->
+    <div class="lms-mobile-bar">
+        <div class="lms-mobile-brand">
+            <span class="brand-mark">E</span>
+            <span>EduSphere</span>
+        </div>
+        <button class="lms-menu-btn" id="lmsMenuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="lmsSidebar">
+            ☰
+        </button>
+    </div>
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+         ===================================================== -->
+    <div class="lms-overlay" id="lmsOverlay" aria-hidden="true"></div>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+    <aside class="lms-sidebar" id="lmsSidebar" aria-label="Main navigation">
+
+        <div class="lms-sidebar-brand">
+            <div class="brand-mark">E</div>
+            <div class="brand-text">
+                <h3>EduSphere</h3>
+                <p>Tutor Portal</p>
+            </div>
+        </div>
+
+        <div class="lms-sidebar-user">
+            <div class="lms-avatar">
+                {{ user.first_name|first|default:"T" }}{{ user.last_name|first|default:"" }}
+            </div>
+            <div class="lms-avatar-info">
+                <strong>{{ user.first_name|default:user.email|truncatechars:20 }}</strong>
+                <small>Tutor Account</small>
+            </div>
+        </div>
+
+        <nav class="lms-nav">
+            <span class="lms-nav-label">Tutor Menu</span>
+
+            <a class="lms-nav-item" href="{% url 'tutor-dashboard' %}">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="lms-nav-item active" href="{% url 'tutor-courses' %}" aria-current="page">
+                <span class="nav-icon">📚</span>
+                <span>My Courses</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">👥</span>
+                <span>Students</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📝</span>
+                <span>Lessons</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+
+            <span class="lms-nav-label">Account</span>
+
+            <a class="lms-nav-item" href="{% url 'profile' %}">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                {% if user.notifications.count %}
+                    <span class="nav-badge">{{ user.notifications.count }}</span>
+                {% endif %}
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="lms-sidebar-footer">
+            <a class="btn-upgrade" href="{% url 'tutor-courses' %}">
+                <span>✦</span>
+                <span>Manage Courses</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+    <main class="lms-main" id="lms-main">
+
+        <div class="quiz-page">
+
+            <!-- Breadcrumb -->
+            <nav class="quiz-breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'tutor-dashboard' %}">Dashboard</a>
+                <span class="sep">/</span>
+                <a href="{% url 'tutor-courses' %}">My Courses</a>
+                <span class="sep">/</span>
+                <a href="{% url 'tutor-course-detail' course.id %}">{{ course.title|truncatechars:22 }}</a>
+                <span class="sep">/</span>
+                <span class="current">Quiz Editor</span>
+            </nav>
+
+            <!-- Hero -->
+            <section class="quiz-hero">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">Quiz Management</div>
+
+                    <h1 class="hero-title">{{ quiz.title }}</h1>
+
+                    <p class="hero-description">
+                        Configure your quiz settings, manage questions, and control
+                        how students complete this assessment.
+                    </p>
+
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            📚 {{ course.title }}
+                        </div>
+                        <div class="hero-meta-item">
+                            📖 {{ lesson.title }}
+                        </div>
+                        <div class="hero-meta-item">
+                            📝 {{ questions|length }} Question{{ questions|length|pluralize }}
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'tutor-lesson-edit' lesson.id %}" class="hero-action">
+                    ← Back to Lesson
+                </a>
+            </section>
+
+            <!-- Messages -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+
+                <!-- =====================================================
+                     LEFT COLUMN
+                     ===================================================== -->
+                <div>
+
+                    <!-- Quiz Settings -->
+                    <section class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <div class="card-icon">⚙</div>
+                                <div>
+                                    <h2>Quiz Settings</h2>
+                                    <p>Configure the basic details and assessment rules.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <label class="form-label" for="id_title">
+                                        Quiz Title <span class="required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="id_title"
+                                        name="title"
+                                        class="form-input"
+                                        value="{{ quiz.title }}"
+                                        placeholder="Enter quiz title"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="id_description">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        id="id_description"
+                                        name="description"
+                                        class="form-textarea"
+                                        placeholder="Describe this quiz for your students..."
+                                    >{{ quiz.description }}</textarea>
+                                    <span class="form-help">
+                                        Give students a short explanation of what this quiz covers.
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Assessment Rules</label>
+
+                                    <div class="rules-grid">
+                                        <div>
+                                            <label class="mini-label" for="id_pass_mark">
+                                                Pass Mark (%)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="id_pass_mark"
+                                                name="pass_mark"
+                                                class="form-input"
+                                                min="0"
+                                                max="100"
+                                                value="{{ quiz.pass_mark|default:50 }}"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <label class="mini-label" for="id_time_limit">
+                                                Time Limit (min)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="id_time_limit"
+                                                name="time_limit"
+                                                class="form-input"
+                                                min="0"
+                                                value="{{ quiz.time_limit|default:0 }}"
+                                                required
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <label class="mini-label" for="id_max_attempts">
+                                                Max Attempts
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="id_max_attempts"
+                                                name="max_attempts"
+                                                class="form-input"
+                                                min="0"
+                                                value="{{ quiz.max_attempts|default:0 }}"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <span class="form-help">
+                                        Use 0 for no time limit or unlimited attempts.
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Publication</label>
+
+                                    <div class="publish-box">
+                                        <div class="publish-copy">
+                                            <strong>Publish this quiz</strong>
+                                            <span>Allow students to access this quiz.</span>
+                                        </div>
+
+                                        <label class="switch">
+                                            <input
+                                                type="checkbox"
+                                                name="is_published"
+                                                {% if quiz.is_published %}checked{% endif %}
+                                            >
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <a href="{% url 'tutor-course-detail' course.id %}" class="btn btn-secondary">
+                                        Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        ✓ Save Quiz Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Questions -->
+                    <section class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <div class="card-icon">?</div>
+                                <div>
+                                    <h2>Quiz Questions</h2>
+                                    <p>Add and manage questions in this quiz.</p>
+                                </div>
+                            </div>
+
+                            <a
+                                href="{% url 'tutor-quiz-question-create' lesson.id %}"
+                                class="btn btn-primary btn-small"
+                            >
+                                + Add Question
+                            </a>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% if questions %}
+                                <div class="question-list">
+                                    {% for question in questions %}
+                                        <article class="question-item">
+
+                                            <div class="question-number">
+                                                {{ forloop.counter }}
+                                            </div>
+
+                                            <div class="question-content">
+                                                <div class="question-title">
+                                                    {% if question.question %}
+                                                        {{ question.question|safe }}
+                                                    {% else %}
+                                                        <span style="color:#9aa8a3;font-style:italic;">
+                                                            No question text
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="question-meta">
+                                                    <span class="question-badge green">
+                                                        {% if question.question_type == "TF" %}
+                                                            True / False
+                                                        {% else %}
+                                                            Multiple Choice
+                                                        {% endif %}
+                                                    </span>
+
+                                                    <span class="question-badge">
+                                                        {{ question.points|default:1 }}
+                                                        point{{ question.points|default:1|pluralize }}
+                                                    </span>
+
+                                                    {% if question.options.all %}
+                                                        <span class="question-badge">
+                                                            {{ question.options.all|length }} options
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="question-actions">
+                                                <a
+                                                    href="{% url 'tutor-quiz-question-edit' question.id %}"
+                                                    class="question-action"
+                                                    title="Edit question"
+                                                    aria-label="Edit question"
+                                                >
+                                                    ✎
+                                                </a>
+
+                                                <a
+                                                    href="{% url 'tutor-quiz-question-delete' question.id %}"
+                                                    class="question-action delete"
+                                                    title="Delete question"
+                                                    aria-label="Delete question"
+                                                    onclick="return confirm('Are you sure you want to delete this question? This will also delete its answer options.');"
+                                                >
+                                                    ×
+                                                </a>
+                                            </div>
+
+                                        </article>
+                                    {% endfor %}
+                                </div>
+
+                            {% else %}
+                                <div class="empty-state">
+                                    <div class="empty-icon">?</div>
+                                    <h3>No questions yet</h3>
+                                    <p>
+                                        Start building your quiz by adding the first question.
+                                        You can use rich text, images, tables and multiple answer types.
+                                    </p>
+                                    <a
+                                        href="{% url 'tutor-quiz-question-create' lesson.id %}"
+                                        class="btn btn-primary"
+                                    >
+                                        + Create First Question
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- =====================================================
+                     RIGHT COLUMN
+                     ===================================================== -->
+                <aside>
+                    <section class="card settings-card">
+
+                        <!-- Quiz Overview -->
+                        <div class="setting-section">
+                            <h3 class="setting-title">Quiz Overview</h3>
+
+                            <div class="quiz-stats">
+                                <div class="stat-box">
+                                    <span class="stat-number">{{ questions|length }}</span>
+                                    <span class="stat-label">Questions</span>
+                                </div>
+
+                                <div class="stat-box">
+                                    <span class="stat-number">{{ quiz.pass_mark|default:50 }}%</span>
+                                    <span class="stat-label">Pass Mark</span>
+                                </div>
+
+                                <div class="stat-box">
+                                    <span class="stat-number">
+                                        {% if quiz.time_limit %}{{ quiz.time_limit }}{% else %}∞{% endif %}
+                                    </span>
+                                    <span class="stat-label">Minutes</span>
+                                </div>
+
+                                <div class="stat-box">
+                                    <span class="stat-number">
+                                        {% if quiz.max_attempts %}{{ quiz.max_attempts }}{% else %}∞{% endif %}
+                                    </span>
+                                    <span class="stat-label">Attempts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="setting-section">
+                            <h3 class="setting-title">Publication Status</h3>
+
+                            {% if quiz.is_published %}
+                                <div class="status-box published">
+                                    <div class="status-copy">
+                                        <strong>Published</strong>
+                                        <span>Students can access this quiz.</span>
+                                    </div>
+                                    <span class="status-dot"></span>
+                                </div>
+                            {% else %}
+                                <div class="status-box draft">
+                                    <div class="status-copy">
+                                        <strong>Draft</strong>
+                                        <span>Students cannot access it yet.</span>
+                                    </div>
+                                    <span class="status-dot"></span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="setting-section">
+                            <h3 class="setting-title">Quick Actions</h3>
+
+                            <div class="quick-actions-stack">
+                                <a
+                                    href="{% url 'tutor-quiz-question-create' lesson.id %}"
+                                    class="btn btn-primary full-btn"
+                                >
+                                    + Add Question
+                                </a>
+
+                                <a
+                                    href="{% url 'tutor-course-detail' course.id %}"
+                                    class="btn btn-secondary full-btn"
+                                >
+                                    ← Back to Course
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Tips -->
+                        <div class="setting-section">
+                            <h3 class="setting-title">Quiz Tips</h3>
+
+                            <div class="tips-list">
+                                <div class="tip-item">Keep questions clear and focused.</div>
+                                <div class="tip-item">Provide plausible answer options.</div>
+                                <div class="tip-item">Set a reasonable passing mark.</div>
+                                <div class="tip-item">Review all answers before publishing.</div>
+                            </div>
+                        </div>
+
+                    </section>
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    /* =====================================================
+       SIDEBAR TOGGLE
+       ===================================================== */
+
+    var menuBtn = document.getElementById("lmsMenuBtn");
+    var sidebar = document.getElementById("lmsSidebar");
+    var overlay = document.getElementById("lmsOverlay");
+
+    if (!menuBtn || !sidebar || !overlay) return;
+
+    function openSidebar() {
+        sidebar.classList.add("open");
+        overlay.classList.add("active");
+        menuBtn.setAttribute("aria-expanded", "true");
+        menuBtn.innerHTML = "✕";
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.innerHTML = "☰";
+        document.body.style.overflow = "";
+    }
+
+    function toggleSidebar() {
+        if (sidebar.classList.contains("open")) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
+
+    menuBtn.addEventListener("click", toggleSidebar);
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && sidebar.classList.contains("open")) {
+            closeSidebar();
+        }
+    });
+
+    sidebar.querySelectorAll(".lms-nav-item").forEach(function (link) {
+        link.addEventListener("click", function () {
+            if (window.innerWidth <= 900) closeSidebar();
+        });
+    });
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            if (window.innerWidth > 900 && sidebar.classList.contains("open")) {
+                closeSidebar();
+            }
+        }, 150);
+    });
+})();
+</script>
+
+{% endblock %}

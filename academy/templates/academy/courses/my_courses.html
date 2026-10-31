@@ -1,0 +1,1321 @@
+{% extends "academy/base.html" %}
+
+{% block title %}My Courses | LearnHub{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   EDUSPHERE — MY COURSES PAGE (WITH SIDEBAR)
+   Modern, mobile-first, fully responsive
+   ========================================================= */
+
+:root {
+    --edu-deep: #033d30;
+    --edu-green: #0a6c56;
+    --edu-primary: #0cb481;
+    --edu-light: #34d399;
+
+    --edu-pale: #ecfdf5;
+    --edu-pale-2: #f3fffa;
+
+    --edu-text: #17352d;
+    --edu-muted: #6b7f78;
+
+    --edu-border: rgba(3, 61, 48, 0.08);
+    --edu-radius: 14px;
+    --edu-radius-sm: 10px;
+    --edu-shadow: 0 1px 3px rgba(3, 61, 48, 0.05), 0 1px 2px rgba(3, 61, 48, 0.03);
+    --edu-shadow-md: 0 4px 14px rgba(3, 61, 48, 0.07);
+    --edu-shadow-lg: 0 10px 30px rgba(3, 61, 48, 0.10);
+
+    --sidebar-width: 260px;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.lms-app *,
+.lms-app *::before,
+.lms-app *::after {
+    box-sizing: border-box;
+}
+
+.lms-app {
+    display: flex;
+    min-height: calc(100vh - 76px);
+    background: #f4faf7;
+    color: var(--edu-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+/* =========================================================
+   MOBILE TOP BAR
+   ========================================================= */
+
+.lms-mobile-bar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    padding: 0 1rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--edu-border);
+    box-shadow: 0 1px 3px rgba(3, 61, 48, 0.04);
+}
+
+.lms-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+}
+
+.lms-mobile-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 900;
+}
+
+.lms-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--edu-border);
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--edu-deep);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-menu-btn:hover,
+.lms-menu-btn:focus-visible {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.20);
+    outline: none;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.lms-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: #ffffff;
+    border-right: 1px solid var(--edu-border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(3, 61, 48, 0.15) transparent;
+}
+
+.lms-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lms-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(3, 61, 48, 0.12);
+    border-radius: 3px;
+}
+
+.lms-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1.35rem 1.5rem 1.1rem;
+    border-bottom: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.18);
+}
+
+.lms-sidebar-brand .brand-text h3 {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 850;
+    color: var(--edu-deep);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.lms-sidebar-brand .brand-text p {
+    margin: 0.15rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--edu-muted);
+}
+
+.lms-sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 1rem 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.06), rgba(52, 211, 153, 0.10));
+    border: 1px solid rgba(12, 180, 129, 0.10);
+}
+
+.lms-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #033d30, #0cb481);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.lms-avatar-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.lms-avatar-info strong {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 750;
+    color: var(--edu-deep);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-avatar-info small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--edu-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lms-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 0.75rem 0;
+}
+
+.lms-nav-label {
+    padding: 0.85rem 0.75rem 0.4rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--edu-muted);
+}
+
+.lms-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--edu-radius-sm);
+    color: var(--edu-text);
+    font-size: 0.87rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lms-nav-item:hover {
+    background: var(--edu-pale);
+    color: var(--edu-green);
+}
+
+.lms-nav-item.active {
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.10), rgba(52, 211, 153, 0.14));
+    color: var(--edu-green);
+    font-weight: 750;
+}
+
+.lms-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    border-radius: 0 3px 3px 0;
+    background: var(--edu-primary);
+}
+
+.lms-nav-item .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.lms-nav-item .nav-badge {
+    margin-left: auto;
+    background: var(--edu-primary);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.lms-sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 1rem 1.25rem;
+    border-top: 1px solid var(--edu-border);
+}
+
+.lms-sidebar-footer .btn-upgrade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 750;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lms-sidebar-footer .btn-upgrade:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(3, 61, 48, 0.24);
+    color: #fff;
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.lms-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 61, 48, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 95;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.lms-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.lms-main {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem 2.5rem 3rem;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.courses-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+}
+
+.courses-header .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    color: var(--edu-green);
+    background: linear-gradient(135deg, rgba(12, 180, 129, 0.08), rgba(52, 211, 153, 0.14));
+    border: 1px solid rgba(12, 180, 129, 0.12);
+    font-size: 0.66rem;
+    font-weight: 850;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.courses-header h1 {
+    margin: 0;
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: var(--edu-deep);
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+}
+
+.courses-header p {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+    color: var(--edu-muted);
+    line-height: 1.5;
+}
+
+.courses-header .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1.2rem;
+    border: none;
+    border-radius: var(--edu-radius-sm);
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(3, 61, 48, 0.16);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(3, 61, 48, 0.22);
+    color: #fff;
+}
+
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius-sm);
+    background: #ffffff;
+    color: var(--edu-text);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-ghost:hover {
+    background: var(--edu-pale);
+    border-color: rgba(12, 180, 129, 0.20);
+    color: var(--edu-green);
+}
+
+.btn-ghost.danger:hover {
+    background: #fef2f2;
+    border-color: rgba(220, 38, 38, 0.20);
+    color: #dc2626;
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.courses-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.courses-search {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 380px;
+}
+
+.courses-search input {
+    width: 100%;
+    padding: 0.65rem 1rem 0.65rem 2.4rem;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius-sm);
+    background: #ffffff;
+    color: var(--edu-text);
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.courses-search input::placeholder {
+    color: #9db0a8;
+}
+
+.courses-search input:focus {
+    border-color: rgba(12, 180, 129, 0.40);
+    box-shadow: 0 0 0 3px rgba(12, 180, 129, 0.10);
+}
+
+.courses-search .search-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: var(--edu-muted);
+    pointer-events: none;
+}
+
+.courses-count {
+    font-size: 0.82rem;
+    font-weight: 650;
+    color: var(--edu-muted);
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+/* =========================================================
+   COURSE GRID
+   ========================================================= */
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+/* =========================================================
+   COURSE CARD
+   ========================================================= */
+
+.course-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid var(--edu-border);
+    border-radius: var(--edu-radius);
+    box-shadow: var(--edu-shadow);
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--edu-shadow-lg);
+    border-color: rgba(12, 180, 129, 0.18);
+}
+
+.course-thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: linear-gradient(135deg, #033d30, #0a6c56, #0cb481);
+}
+
+.course-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.course-card:hover .course-thumb img {
+    transform: scale(1.05);
+}
+
+.course-thumb .course-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.course-thumb .thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(3, 61, 48, 0.55), transparent 55%);
+    pointer-events: none;
+}
+
+.course-category {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--edu-deep);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(3, 61, 48, 0.15);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.course-pct-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(12, 180, 129, 0.95);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 850;
+    box-shadow: 0 2px 8px rgba(3, 61, 48, 0.20);
+}
+
+.course-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.1rem 1.2rem 1.2rem;
+}
+
+.course-body h3 {
+    margin: 0 0 0.85rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--edu-deep);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.7em;
+}
+
+.course-progress {
+    margin-bottom: 0.9rem;
+}
+
+.course-progress-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+    font-size: 0.78rem;
+}
+
+.course-progress-top span {
+    color: var(--edu-muted);
+    font-weight: 650;
+}
+
+.course-progress-top strong {
+    color: var(--edu-green);
+    font-weight: 850;
+    font-size: 0.82rem;
+}
+
+.course-bar {
+    width: 100%;
+    height: 7px;
+    background: #e8f2ee;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.45rem;
+}
+
+.course-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #087a60, #0cb481, #34d399);
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.course-lessons {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.74rem;
+    color: var(--edu-muted);
+}
+
+.course-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(3, 61, 48, 0.06);
+}
+
+.course-actions .btn-primary {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+}
+
+.course-actions form {
+    display: contents;
+}
+
+.course-actions .btn-ghost {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.courses-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    text-align: center;
+    background: #ffffff;
+    border: 1px dashed rgba(3, 61, 48, 0.15);
+    border-radius: var(--edu-radius);
+    color: var(--edu-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.courses-empty .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--edu-pale);
+    color: var(--edu-green);
+    font-size: 2rem;
+    margin-bottom: 1.1rem;
+}
+
+.courses-empty strong {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--edu-deep);
+    margin-bottom: 0.35rem;
+}
+
+.courses-empty span {
+    display: block;
+    max-width: 360px;
+    margin-bottom: 1.25rem;
+}
+
+/* =========================================================
+   RESPONSIVE — LARGE TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+    .lms-main {
+        padding: 1.75rem 2rem 3rem;
+    }
+
+    .course-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .lms-main {
+        padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .course-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .lms-app {
+        flex-direction: column;
+    }
+
+    .lms-mobile-bar {
+        display: flex;
+    }
+
+    .lms-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 280px;
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(3, 61, 48, 0.12);
+        border-right: none;
+        padding-top: 0.5rem;
+    }
+
+    .lms-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .lms-overlay {
+        display: block;
+    }
+
+    .lms-main {
+        padding: 1.25rem 1rem 3rem;
+    }
+
+    .courses-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .courses-header .header-actions {
+        width: 100%;
+    }
+
+    .courses-header .header-actions .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .courses-toolbar {
+        gap: 0.6rem;
+    }
+
+    .courses-search {
+        max-width: none;
+        width: 100%;
+    }
+
+    .courses-count {
+        margin-left: 0;
+        width: 100%;
+        text-align: left;
+    }
+
+    .course-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .lms-main {
+        padding: 1rem 0.85rem 2.5rem;
+    }
+
+    .courses-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .course-body {
+        padding: 1rem 1.05rem 1.1rem;
+    }
+
+    .course-body h3 {
+        font-size: 0.95rem;
+    }
+
+    .course-actions {
+        gap: 0.45rem;
+    }
+
+    .course-actions .btn-primary {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.8rem;
+    }
+
+    .course-actions .btn-ghost {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.78rem;
+    }
+
+    .courses-empty {
+        padding: 3rem 1.25rem;
+    }
+
+    .courses-empty .empty-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.7rem;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.lms-app a:focus-visible,
+.lms-app button:focus-visible,
+.lms-app input:focus-visible {
+    outline: 3px solid rgba(12, 180, 129, 0.30);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.lms-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    z-index: 999;
+    padding: 0.6rem 1rem;
+    background: var(--edu-deep);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.lms-skip-link:focus {
+    top: 1rem;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .lms-app *,
+    .lms-app *::before,
+    .lms-app *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+<!-- Skip link for accessibility -->
+<a class="lms-skip-link" href="#lms-main">Skip to main content</a>
+
+<div class="lms-app">
+
+    <!-- =====================================================
+         MOBILE TOP BAR
+         ===================================================== -->
+    <div class="lms-mobile-bar">
+        <div class="lms-mobile-brand">
+            <span class="brand-mark">E</span>
+            <span>EduSphere</span>
+        </div>
+        <button class="lms-menu-btn" id="lmsMenuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="lmsSidebar">
+            ☰
+        </button>
+    </div>
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+         ===================================================== -->
+    <div class="lms-overlay" id="lmsOverlay" aria-hidden="true"></div>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+    <aside class="lms-sidebar" id="lmsSidebar" aria-label="Main navigation">
+
+        <div class="lms-sidebar-brand">
+            <div class="brand-mark">E</div>
+            <div class="brand-text">
+                <h3>EduSphere</h3>
+                <p>Student Portal</p>
+            </div>
+        </div>
+
+        <div class="lms-sidebar-user">
+            <div class="lms-avatar">
+                {{ user.first_name|first|default:"S" }}{{ user.last_name|first|default:"" }}
+            </div>
+            <div class="lms-avatar-info">
+                <strong>{{ user.first_name|default:user.email|truncatechars:20 }}</strong>
+                <small>Student Account</small>
+            </div>
+        </div>
+
+        <nav class="lms-nav">
+            <span class="lms-nav-label">Main Menu</span>
+
+            <a class="lms-nav-item" href="{% url 'dashboard' %}">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="lms-nav-item active" href="{% url 'my-courses' %}" aria-current="page">
+                <span class="nav-icon">📚</span>
+                <span>My Courses</span>
+            </a>
+
+            <a class="lms-nav-item" href="{% url 'course-list' %}">
+                <span class="nav-icon">🔍</span>
+                <span>Browse Courses</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📝</span>
+                <span>Assignments</span>
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">📈</span>
+                <span>Grades</span>
+            </a>
+
+            <span class="lms-nav-label">Account</span>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                {% if user.notifications.count %}
+                    <span class="nav-badge">{{ user.notifications.count }}</span>
+                {% endif %}
+            </a>
+
+            <a class="lms-nav-item" href="#">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="lms-sidebar-footer">
+            <a class="btn-upgrade" href="{% url 'course-list' %}">
+                <span>✦</span>
+                <span>Enroll in a Course</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+    <main class="lms-main" id="lms-main">
+
+        <!-- Page Header -->
+        <div class="courses-header">
+            <div>
+                <span class="eyebrow">My Learning</span>
+                <h1>My Courses</h1>
+                <p>Continue where you stopped and keep building your skills.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn-primary" href="{% url 'course-list' %}">
+                    + Add Course
+                </a>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="courses-toolbar">
+            <div class="courses-search">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="search"
+                    id="courseSearch"
+                    placeholder="Search your courses..."
+                    aria-label="Search your courses"
+                >
+            </div>
+            <span class="courses-count" id="courseCount">
+                {{ course_data|length }} course{{ course_data|length|pluralize }}
+            </span>
+        </div>
+
+        <!-- Course Grid -->
+        <div class="course-grid" id="courseGrid">
+
+            {% for item in course_data %}
+            <article class="course-card" data-title="{{ item.course.title|lower }}">
+
+                <div class="course-thumb">
+                    {% if item.course.thumbnail %}
+                        <img src="{{ item.course.thumbnail.url }}" alt="{{ item.course.title }}" loading="lazy">
+                    {% else %}
+                        <div class="course-placeholder">
+                            {{ item.course.course_code|default:"COURSE" }}
+                        </div>
+                    {% endif %}
+                    <div class="thumb-overlay"></div>
+
+                    {% if item.course.get_category_display %}
+                        <span class="course-category">{{ item.course.get_category_display }}</span>
+                    {% endif %}
+
+                    <span class="course-pct-badge">{{ item.percentage }}%</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>{{ item.course.title }}</h3>
+
+                    <div class="course-progress">
+                        <div class="course-progress-top">
+                            <span>Progress</span>
+                            <strong>{{ item.percentage }}%</strong>
+                        </div>
+                        <div class="course-bar" role="progressbar" aria-valuenow="{{ item.percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            <span style="width: {{ item.percentage }}%;"></span>
+                        </div>
+                        <div class="course-lessons">
+                            <span>{{ item.completed }} / {{ item.total }} lessons</span>
+                        </div>
+                    </div>
+
+                    <div class="course-actions">
+                        <a class="btn-primary" href="{% url 'course-detail' item.course.id %}">
+                            Open Course
+                        </a>
+                        <form method="post" action="{% url 'course-unregister' item.course.id %}">
+                            {% csrf_token %}
+                            <button
+                                class="btn-ghost danger"
+                                type="submit"
+                                data-confirm="Remove this course?"
+                                aria-label="Remove {{ item.course.title }}"
+                            >
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </article>
+            {% empty %}
+
+            <div class="courses-empty">
+                <div class="empty-icon">📚</div>
+                <strong>No courses yet</strong>
+                <span>You haven't registered for any courses. Browse our catalog and start learning today.</span>
+                <a class="btn-primary" href="{% url 'course-list' %}">
+                    Browse Courses
+                </a>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    /* ---------------------------------------------
+       Sidebar toggle (mobile)
+    --------------------------------------------- */
+    var menuBtn = document.getElementById("lmsMenuBtn");
+    var sidebar = document.getElementById("lmsSidebar");
+    var overlay = document.getElementById("lmsOverlay");
+
+    if (menuBtn && sidebar && overlay) {
+
+        function openSidebar() {
+            sidebar.classList.add("open");
+            overlay.classList.add("active");
+            menuBtn.setAttribute("aria-expanded", "true");
+            menuBtn.innerHTML = "✕";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("active");
+            menuBtn.setAttribute("aria-expanded", "false");
+            menuBtn.innerHTML = "☰";
+            document.body.style.overflow = "";
+        }
+
+        function toggleSidebar() {
+            if (sidebar.classList.contains("open")) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
+
+        menuBtn.addEventListener("click", toggleSidebar);
+        overlay.addEventListener("click", closeSidebar);
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && sidebar.classList.contains("open")) {
+                closeSidebar();
+            }
+        });
+
+        var navLinks = sidebar.querySelectorAll(".lms-nav-item");
+        navLinks.forEach(function (link) {
+            link.addEventListener("click", function () {
+                if (window.innerWidth <= 900) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        var resizeTimer;
+        window.addEventListener("resize", function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                if (window.innerWidth > 900 && sidebar.classList.contains("open")) {
+                    closeSidebar();
+                }
+            }, 150);
+        });
+    }
+
+    /* ---------------------------------------------
+       Course search filter
+    --------------------------------------------- */
+    var searchInput = document.getElementById("courseSearch");
+    var grid = document.getElementById("courseGrid");
+    var countEl = document.getElementById("courseCount");
+
+    if (searchInput && grid) {
+        var cards = Array.prototype.slice.call(grid.querySelectorAll(".course-card"));
+        var emptyState = grid.querySelector(".courses-empty");
+
+        function updateCount(visible) {
+            if (!countEl) return;
+            countEl.textContent = visible + " course" + (visible === 1 ? "" : "s");
+        }
+
+        function filter() {
+            var q = searchInput.value.trim().toLowerCase();
+            var visible = 0;
+
+            cards.forEach(function (card) {
+                var title = card.getAttribute("data-title") || "";
+                var match = q === "" || title.indexOf(q) !== -1;
+                card.style.display = match ? "" : "none";
+                if (match) visible++;
+            });
+
+            if (emptyState) {
+                if (cards.length > 0 && visible === 0) {
+                    emptyState.style.display = "";
+                    var strong = emptyState.querySelector("strong");
+                    var span = emptyState.querySelector("span");
+                    if (strong) strong.textContent = "No matching courses";
+                    if (span) span.textContent = "Try a different search term.";
+                } else if (cards.length === 0) {
+                    emptyState.style.display = "";
+                } else {
+                    emptyState.style.display = "none";
+                }
+            }
+
+            updateCount(visible);
+        }
+
+        var debounceTimer;
+        searchInput.addEventListener("input", function () {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(filter, 150);
+        });
+    }
+})();
+</script>
+
+{% endblock %}

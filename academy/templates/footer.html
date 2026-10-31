@@ -1,0 +1,697 @@
+{% load static %}
+
+<footer class="relative overflow-hidden bg-[#0f1b3a] text-white">
+    
+
+    <!-- BACKGROUND DECORATIONS -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+
+        <div class="absolute -top-40 -right-32 w-[450px] h-[450px]
+                    rounded-full bg-blue-600/15 blur-[120px]"></div>
+
+        <div class="absolute -bottom-40 -left-32 w-[450px] h-[450px]
+                    rounded-full bg-indigo-500/10 blur-[120px]"></div>
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2
+                    -translate-y-1/2 w-[700px] h-[400px]
+                    rounded-full bg-blue-900/10 blur-[140px]"></div>
+
+    </div>
+
+
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+        <!-- MAIN FOOTER -->
+        <div class="py-16 lg:py-20">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-10">
+
+
+                <!-- BRAND / ABOUT -->
+                <div class="lg:col-span-5">
+
+                    <!-- LOGO -->
+                    <div class="flex items-center gap-4 mb-7">
+
+                    <div class="w-16 h-16 rounded-2xl
+            bg-gradient-to-br from-[#0f1b3a] to-[#174EA6]
+            flex items-center justify-center
+            shadow-xl shadow-blue-900/20
+            overflow-hidden p-1">
+
+                            <img
+                                src="{{ navbar.logo.url }}"
+                                alt="D-Cdr Academy Logo"
+                                class="w-full h-full object-contain"
+                            >
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-2xl sm:text-3xl font-black
+                                       tracking-tight text-white">
+                                D-CDR ACADEMY
+                            </h3>
+
+                            <p class="text-yellow-400 text-sm font-semibold
+                                      tracking-widest uppercase mt-1">
+                                    Learn • Prepare • Excel
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <p class="max-w-lg text-blue-100/75 leading-8
+                              text-sm sm:text-base mb-8">
+
+                        Inspiring Nigerian students to achieve academic success
+                        through quality learning resources, structured lessons,
+                        examination preparation and accessible educational support.
+
+                    </p>
+
+
+                    <!-- CONTACT INFORMATION -->
+                    <div class="space-y-3">
+
+
+                        <!-- EMAIL -->
+                        <a href="mailto:info@BrilliantMindAcademy.com.ng"
+                           class="flex items-center gap-4 p-4 rounded-2xl
+                                  bg-blue-950/50 border border-blue-800/40
+                                  hover:bg-blue-900/60 hover:border-blue-500/50
+                                  transition-all duration-300 group">
+
+                            <div class="w-11 h-11 flex-shrink-0 rounded-xl
+                                        bg-blue-800/60 flex items-center
+                                        justify-center text-yellow-400
+                                        group-hover:bg-yellow-400
+                                        group-hover:text-blue-950 transition-all">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     class="w-5 h-5">
+
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+
+                                </svg>
+
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <p class="text-xs text-blue-300 mb-1">
+                                    EMAIL ADDRESS
+                                </p>
+
+                                <p class="text-sm sm:text-base text-white
+                                          font-medium break-all">
+                                    info@BrilliantMindAcademy.com.ng
+                                </p>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- PHONE -->
+                        <div class="flex items-center gap-4 p-4 rounded-2xl
+                                    bg-blue-950/50 border border-blue-800/40
+                                    hover:bg-blue-900/60 hover:border-blue-500/50
+                                    transition-all duration-300">
+
+                            <div class="w-11 h-11 flex-shrink-0 rounded-xl
+                                        bg-blue-800/60 flex items-center
+                                        justify-center text-yellow-400">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     class="w-5 h-5">
+
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2
+                                             19.79 19.79 0 0 1-8.63-3.07
+                                             19.5 19.5 0 0 1-6-6
+                                             19.79 19.79 0 0 1-3.07-8.67
+                                             A2 2 0 0 1 4.11 2h3
+                                             a2 2 0 0 1 2 1.72
+                                             12.84 12.84 0 0 0 .7 2.81
+                                             2 2 0 0 1-.45 2.11L8.09 9.91
+                                             a16 16 0 0 0 6 6l1.27-1.27
+                                             a2 2 0 0 1 2.11-.45
+                                             12.84 12.84 0 0 0 2.81.7
+                                             A2 2 0 0 1 22 16.92z"/>
+
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-xs text-blue-300 mb-1">
+                                    PHONE NUMBER
+                                </p>
+
+                                <div class="flex flex-wrap gap-x-3 gap-y-1 text-sm sm:text-base">
+
+                                    <a href="tel:+23490768912"
+                                       class="text-white hover:text-yellow-400 transition">
+                                        +234 907 689 12
+                                    </a>
+
+                                    <a href="tel:+2347016683231"
+                                       class="text-white hover:text-yellow-400 transition">
+                                        +234 701 668 3231
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+                        <div class="flex items-center gap-4 p-4 rounded-2xl
+                                    bg-blue-950/50 border border-blue-800/40
+                                    hover:bg-blue-900/60 hover:border-blue-500/50
+                                    transition-all duration-300">
+
+                            <div class="w-11 h-11 flex-shrink-0 rounded-xl
+                                        bg-blue-800/60 flex items-center
+                                        justify-center text-yellow-400">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     class="w-5 h-5">
+
+                                    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-xs text-blue-300 mb-1">
+                                    OUR LOCATION
+                                </p>
+
+                                <p class="text-sm sm:text-base text-white leading-relaxed">
+
+                                    Kwara State University, Malete Campus,
+                                    Ilorin, Kwara State, Nigeria.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK LINKS -->
+                <div class="lg:col-span-3 lg:pl-8">
+
+                    <h4 class="text-lg font-extrabold text-white mb-7">
+
+                        Explore
+
+                        <span class="block w-10 h-1 bg-yellow-400
+                                     rounded-full mt-3"></span>
+
+                    </h4>
+
+                    <ul class="space-y-5">
+
+                        <li>
+                            <a href="#home"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Home
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#about"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                About Us
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#tutors"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Meet Our Tutors
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#testimonials"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Testimonials
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#contact"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Contact Us
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- LEGAL / INFORMATION -->
+                <div class="lg:col-span-2">
+
+                    <h4 class="text-lg font-extrabold text-white mb-7">
+
+                        Information
+
+                        <span class="block w-10 h-1 bg-yellow-400
+                                     rounded-full mt-3"></span>
+
+                    </h4>
+
+                    <ul class="space-y-5">
+
+                        <li>
+                            <a href="#"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Privacy Policy
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Terms of Service
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Cookie Policy
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#"
+                               class="flex items-center gap-3 text-blue-100/75
+                                      hover:text-yellow-400 transition-all group">
+
+                                <span class="text-yellow-400 group-hover:translate-x-1
+                                             transition-transform">›</span>
+
+                                Support
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+            <!-- DOWNLOAD CTA -->
+            <div class="mt-16">
+
+                <div class="relative overflow-hidden rounded-3xl
+                            border border-blue-700/50
+                            bg-gradient-to-br from-[#0B2250]
+                            via-[#0A1B40] to-[#07132E]
+                            p-7 sm:p-10">
+
+                    <!-- CTA DECORATIONS -->
+                    <div class="absolute -right-20 -top-24 w-72 h-72
+                                rounded-full bg-blue-500/15 blur-3xl"></div>
+
+                    <div class="absolute -bottom-24 -left-20 w-64 h-64
+                                rounded-full bg-yellow-400/10 blur-3xl"></div>
+
+
+                    <div class="relative flex flex-col lg:flex-row
+                                items-center justify-between gap-8">
+
+                        <div class="text-center lg:text-left">
+
+                            <span class="inline-block text-yellow-400
+                                         text-xs font-bold uppercase
+                                         tracking-[0.2em] mb-3">
+
+                                Your academic journey starts here
+
+                            </span>
+
+                            <h4 class="text-2xl sm:text-3xl font-black mb-3">
+
+                                Ready to take your learning further?
+
+                            </h4>
+
+                            <p class="text-blue-100/75 text-sm sm:text-base">
+
+                                Access quality learning resources and prepare
+                                smarter for academic excellence.
+
+                            </p>
+
+                        </div>
+
+
+                        {% if hero.download_button_link %}
+
+                        <a href="{{ hero.download_button_link }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="inline-flex items-center justify-center gap-3
+                                  flex-shrink-0 px-8 py-4 rounded-xl
+                                  bg-gradient-to-r from-yellow-400 to-yellow-500
+                                  hover:from-yellow-300 hover:to-yellow-400
+                                  text-blue-950 font-extrabold
+                                  shadow-xl shadow-yellow-500/20
+                                  hover:shadow-yellow-500/30
+                                  hover:-translate-y-1
+                                  transition-all duration-300">
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="w-5 h-5">
+
+                                <path d="M12 3v12"/>
+                                <path d="m7 10 5 5 5-5"/>
+                                <path d="M5 21h14"/>
+
+                            </svg>
+
+                            {{ hero.download_button_text|default:"Get Started" }}
+
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTTOM FOOTER -->
+        <div class="border-t border-blue-800/50">
+
+            <div class="py-8 flex flex-col md:flex-row
+                        items-center justify-between gap-7">
+
+
+                <!-- COPYRIGHT -->
+                <p class="text-sm text-blue-200/60 text-center md:text-left">
+
+                    © {% now "Y" %}
+
+                    <span class="text-white font-bold">
+                        D-Cdr Academy
+                    </span>.
+
+                    All rights reserved.
+
+                </p>
+
+
+                <!-- SOCIAL MEDIA -->
+                <div class="flex items-center gap-3">
+
+
+                    <!-- FACEBOOK -->
+                    <a href="#"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Facebook"
+                       class="w-11 h-11 rounded-xl
+                              bg-blue-950 border border-blue-800
+                              flex items-center justify-center
+                              text-blue-200
+                              hover:bg-yellow-400 hover:text-blue-950
+                              hover:border-yellow-400 hover:-translate-y-1
+                              transition-all duration-300">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="w-5 h-5">
+
+                            <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1
+                                     c0-.9.3-1.6 1.7-1.6h1.7V4.8
+                                     c-.3 0-1.3-.1-2.5-.1
+                                     -2.5 0-4.2 1.5-4.2 4.3V11H7.5v3h2.7v8h3.3Z"/>
+
+                        </svg>
+
+                    </a>
+
+
+                    <!-- WHATSAPP -->
+                    <a href="https://wa.me/2349078768912"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="WhatsApp"
+                       class="w-11 h-11 rounded-xl
+                              bg-blue-950 border border-blue-800
+                              flex items-center justify-center
+                              text-blue-200
+                              hover:bg-yellow-400 hover:text-blue-950
+                              hover:border-yellow-400 hover:-translate-y-1
+                              transition-all duration-300">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="w-5 h-5">
+
+                            <path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0
+                                     C5.6 0 .3 5.3.3 11.8
+                                     c0 2.1.5 4.1 1.6 5.9L.2 24
+                                     l6.5-1.7c1.7.9 3.5 1.4 5.4 1.4
+                                     6.5 0 11.8-5.3 11.8-11.8
+                                     0-3.2-1.3-6.2-3.4-8.4ZM12.1 21.7
+                                     c-1.7 0-3.4-.5-4.8-1.4l-.3-.2-3.8 1
+                                     1-3.7-.2-.3a9.8 9.8 0 0 1-1.5-5.2
+                                     9.7 9.7 0 0 1 16.6-6.9
+                                     9.7 9.7 0 0 1 2.9 6.9
+                                     9.8 9.8 0 0 1-9.9 9.8Zm5.4-7.3
+                                     c-.3-.2-1.8-.9-2.1-1
+                                     -.3-.1-.5-.2-.7.2
+                                     -.2.3-.8 1-.9 1.2
+                                     -.2.2-.3.2-.6.1
+                                     -.3-.2-1.3-.5-2.5-1.6
+                                     -.9-.8-1.6-1.8-1.8-2.1
+                                     -.2-.3 0-.5.1-.7
+                                     .1-.1.3-.3.4-.5
+                                     .1-.2.2-.4.3-.6
+                                     .1-.2 0-.4 0-.5
+                                     -.1-.1-.7-1.7-1-2.3
+                                     -.3-.6-.5-.5-.7-.5h-.6
+                                     c-.2 0-.5.1-.7.3
+                                     -.2.2-.9.9-.9 2.2
+                                     0 1.3.9 2.5 1 2.7
+                                     .1.2 1.8 2.8 4.4 3.9
+                                     .6.3 1.1.5 1.5.6
+                                     .6.2 1.1.2 1.5.1
+                                     .5-.1 1.8-.7 2-1.4
+                                     .3-.7.3-1.3.2-1.4
+                                     -.1-.2-.3-.2-.6-.4Z"/>
+
+                        </svg>
+
+                    </a>
+
+
+                    <!-- WEBSITE -->
+                    <a href="https://www.d-cdracademy.com.mg"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Website"
+                       class="w-11 h-11 rounded-xl
+                              bg-blue-950 border border-blue-800
+                              flex items-center justify-center
+                              text-blue-200
+                              hover:bg-yellow-400 hover:text-blue-950
+                              hover:border-yellow-400 hover:-translate-y-1
+                              transition-all duration-300">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             class="w-5 h-5">
+
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10
+                                     15.3 15.3 0 0 1-4 10
+                                     15.3 15.3 0 0 1-4-10
+                                     15.3 15.3 0 0 1 4-10Z"/>
+
+                        </svg>
+
+                    </a>
+
+
+                    <!-- YOUTUBE -->
+                    <a href="#"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="YouTube"
+                       class="w-11 h-11 rounded-xl
+                              bg-blue-950 border border-blue-800
+                              flex items-center justify-center
+                              text-blue-200
+                              hover:bg-yellow-400 hover:text-blue-950
+                              hover:border-yellow-400 hover:-translate-y-1
+                              transition-all duration-300">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="w-5 h-5">
+
+                            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1
+                                     C19.5 3.5 12 3.5 12 3.5
+                                     s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2
+                                     31.4 31.4 0 0 0 0 12
+                                     a31.4 31.4 0 0 0 .5 5.8
+                                     3 3 0 0 0 2.1 2.1
+                                     c1.9.6 9.4.6 9.4.6
+                                     s7.5 0 9.4-.6
+                                     a3 3 0 0 0 2.1-2.1
+                                     A31.4 31.4 0 0 0 24 12
+                                     a31.4 31.4 0 0 0-.5-5.8ZM9.6 15.5v-7
+                                     l6.3 3.5-6.3 3.5Z"/>
+
+                        </svg>
+
+                    </a>
+
+
+                    <!-- TELEGRAM -->
+                    <a href="#"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Telegram"
+                       class="w-11 h-11 rounded-xl
+                              bg-blue-950 border border-blue-800
+                              flex items-center justify-center
+                              text-blue-200
+                              hover:bg-yellow-400 hover:text-blue-950
+                              hover:border-yellow-400 hover:-translate-y-1
+                              transition-all duration-300">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="currentColor"
+                             class="w-5 h-5">
+
+                            <path d="M21.9 3.2 2.8 10.6c-.9.4-.9 1-.2 1.3
+                                     l4.8 1.5 1.8 5.6c.2.6.1.8.7.8
+                                     .5 0 .7-.2.9-.4l2.3-2.2
+                                     4.8 3.5c.9.5 1.5.1 1.7-.8
+                                     l3.1-14.8c.3-1.1-.4-1.6-1.5-1.2Z"/>
+
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
